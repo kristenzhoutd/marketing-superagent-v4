@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing SuperAgent - AI-Native Marketing Platform</title>
+    <link rel="stylesheet" href="css/styles.css?v=1">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="logo-content">
+                        <h1 class="app-title">Marketing SuperAgent</h1>
+                        <p class="app-tagline">One SuperAgent. Every Task. Marketing Made AI-Native.</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" id="history-btn">
+                        <i class="fas fa-history"></i>
+                        <span>History</span>
+                    </button>
+                    <button class="header-btn" id="settings-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Screen (Initial State) -->
+            <div class="home-screen" id="home-screen">
+                <div class="home-container">
+                    <!-- Central Chat Entry -->
+                    <div class="chat-entry-section">
+                        <div class="chat-entry-header">
+                            <h2>Hi Laura! What would you like to create or optimize today?</h2>
+                        </div>
+
+                        <div class="main-chat-input">
+                            <div class="input-container">
+                                <input type="text" id="main-input" placeholder="Tell me what you'd like to create or optimize…" autocomplete="off">
+                                <button class="send-button" id="main-send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Example Suggestions -->
+                        <div class="example-suggestions" id="example-suggestions">
+                            <div class="examples-grid">
+                                <!-- First Row - Scrolling Left -->
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Create a campaign brief for our holiday promotion targeting millennials">
+                                        <div class="example-icon">📋</div>
+                                        <div class="example-text">Create a campaign brief for our holiday promotion targeting millennials</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize my current email campaign performance">
+                                        <div class="example-icon">📈</div>
+                                        <div class="example-text">Optimize my current email campaign performance</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Set up a cart abandonment journey with email and SMS">
+                                        <div class="example-icon">🛒</div>
+                                        <div class="example-text">Set up a cart abandonment journey with email and SMS</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Generate creative assets for Instagram ads">
+                                        <div class="example-icon">🎨</div>
+                                        <div class="example-text">Generate creative assets for Instagram ads</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build audience segments for Gen Z customers based on social behavior">
+                                        <div class="example-icon">👥</div>
+                                        <div class="example-text">Build audience segments for Gen Z customers based on social behavior</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design a welcome email series for new subscribers">
+                                        <div class="example-icon">💌</div>
+                                        <div class="example-text">Design a welcome email series for new subscribers</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create video ad scripts for YouTube pre-roll campaigns">
+                                        <div class="example-icon">🎬</div>
+                                        <div class="example-text">Create video ad scripts for YouTube pre-roll campaigns</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build a referral program to increase customer acquisition">
+                                        <div class="example-icon">🤝</div>
+                                        <div class="example-text">Build a referral program to increase customer acquisition</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize landing pages for better conversion rates">
+                                        <div class="example-icon">🌐</div>
+                                        <div class="example-text">Optimize landing pages for better conversion rates</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create personalized product recommendations for e-commerce">
+                                        <div class="example-icon">🛍️</div>
+                                        <div class="example-text">Create personalized product recommendations for e-commerce</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design customer onboarding flow for SaaS platform">
+                                        <div class="example-icon">🚀</div>
+                                        <div class="example-text">Design customer onboarding flow for SaaS platform</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build lead scoring model for B2B prospects">
+                                        <div class="example-icon">🎯</div>
+                                        <div class="example-text">Build lead scoring model for B2B prospects</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create social media content calendar for Q1">
+                                        <div class="example-icon">📅</div>
+                                        <div class="example-text">Create social media content calendar for Q1</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Develop customer personas based on analytics data">
+                                        <div class="example-icon">👤</div>
+                                        <div class="example-text">Develop customer personas based on analytics data</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Set up retargeting campaigns for website visitors">
+                                        <div class="example-icon">🔄</div>
+                                        <div class="example-text">Set up retargeting campaigns for website visitors</div>
+                                    </div>
+                                    <!-- Complete duplicate set for seamless loop -->
+                                    <div class="example-card" data-prompt="Create a campaign brief for our holiday promotion targeting millennials">
+                                        <div class="example-icon">📋</div>
+                                        <div class="example-text">Create a campaign brief for our holiday promotion targeting millennials</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize my current email campaign performance">
+                                        <div class="example-icon">📈</div>
+                                        <div class="example-text">Optimize my current email campaign performance</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Set up a cart abandonment journey with email and SMS">
+                                        <div class="example-icon">🛒</div>
+                                        <div class="example-text">Set up a cart abandonment journey with email and SMS</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Generate creative assets for Instagram ads">
+                                        <div class="example-icon">🎨</div>
+                                        <div class="example-text">Generate creative assets for Instagram ads</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build audience segments for Gen Z customers based on social behavior">
+                                        <div class="example-icon">👥</div>
+                                        <div class="example-text">Build audience segments for Gen Z customers based on social behavior</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design a welcome email series for new subscribers">
+                                        <div class="example-icon">💌</div>
+                                        <div class="example-text">Design a welcome email series for new subscribers</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create video ad scripts for YouTube pre-roll campaigns">
+                                        <div class="example-icon">🎬</div>
+                                        <div class="example-text">Create video ad scripts for YouTube pre-roll campaigns</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build a referral program to increase customer acquisition">
+                                        <div class="example-icon">🤝</div>
+                                        <div class="example-text">Build a referral program to increase customer acquisition</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize landing pages for better conversion rates">
+                                        <div class="example-icon">🌐</div>
+                                        <div class="example-text">Optimize landing pages for better conversion rates</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create personalized product recommendations for e-commerce">
+                                        <div class="example-icon">🛍️</div>
+                                        <div class="example-text">Create personalized product recommendations for e-commerce</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design customer onboarding flow for SaaS platform">
+                                        <div class="example-icon">🚀</div>
+                                        <div class="example-text">Design customer onboarding flow for SaaS platform</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build lead scoring model for B2B prospects">
+                                        <div class="example-icon">🎯</div>
+                                        <div class="example-text">Build lead scoring model for B2B prospects</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create social media content calendar for Q1">
+                                        <div class="example-icon">📅</div>
+                                        <div class="example-text">Create social media content calendar for Q1</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Develop customer personas based on analytics data">
+                                        <div class="example-icon">👤</div>
+                                        <div class="example-text">Develop customer personas based on analytics data</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Set up retargeting campaigns for website visitors">
+                                        <div class="example-icon">🔄</div>
+                                        <div class="example-text">Set up retargeting campaigns for website visitors</div>
+                                    </div>
+                                </div>
+                                <!-- Second Row - Scrolling Right -->
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Create a TikTok advertising strategy for Q4 product launch">
+                                        <div class="example-icon">📱</div>
+                                        <div class="example-text">Create a TikTok advertising strategy for Q4 product launch</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Analyze competitor pricing strategies and market positioning">
+                                        <div class="example-icon">🔍</div>
+                                        <div class="example-text">Analyze competitor pricing strategies and market positioning</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design a loyalty program with personalized rewards">
+                                        <div class="example-icon">⭐</div>
+                                        <div class="example-text">Design a loyalty program with personalized rewards</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize budget allocation across Google, Meta, and LinkedIn">
+                                        <div class="example-icon">💰</div>
+                                        <div class="example-text">Optimize budget allocation across Google, Meta, and LinkedIn</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create A/B test plan for landing page conversion optimization">
+                                        <div class="example-icon">🧪</div>
+                                        <div class="example-text">Create A/B test plan for landing page conversion optimization</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build influencer outreach strategy for brand partnerships">
+                                        <div class="example-icon">🌟</div>
+                                        <div class="example-text">Build influencer outreach strategy for brand partnerships</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create customer feedback survey and analysis framework">
+                                        <div class="example-icon">📝</div>
+                                        <div class="example-text">Create customer feedback survey and analysis framework</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design mobile app push notification campaign">
+                                        <div class="example-icon">📲</div>
+                                        <div class="example-text">Design mobile app push notification campaign</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Analyze customer lifetime value and retention strategies">
+                                        <div class="example-icon">💎</div>
+                                        <div class="example-text">Analyze customer lifetime value and retention strategies</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create podcast advertising strategy for B2B audience">
+                                        <div class="example-icon">🎙️</div>
+                                        <div class="example-text">Create podcast advertising strategy for B2B audience</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build chatbot conversation flows for customer support">
+                                        <div class="example-icon">🤖</div>
+                                        <div class="example-text">Build chatbot conversation flows for customer support</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design seasonal marketing campaigns for retail business">
+                                        <div class="example-icon">🛍️</div>
+                                        <div class="example-text">Design seasonal marketing campaigns for retail business</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create webinar series to generate qualified leads">
+                                        <div class="example-icon">💻</div>
+                                        <div class="example-text">Create webinar series to generate qualified leads</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize Google Shopping campaigns for e-commerce">
+                                        <div class="example-icon">🛒</div>
+                                        <div class="example-text">Optimize Google Shopping campaigns for e-commerce</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build customer win-back email automation sequence">
+                                        <div class="example-icon">💌</div>
+                                        <div class="example-text">Build customer win-back email automation sequence</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create brand positioning strategy for new market entry">
+                                        <div class="example-icon">🎯</div>
+                                        <div class="example-text">Create brand positioning strategy for new market entry</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design cross-sell and upsell recommendation engine">
+                                        <div class="example-icon">📊</div>
+                                        <div class="example-text">Design cross-sell and upsell recommendation engine</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build affiliate marketing program and partner network">
+                                        <div class="example-icon">🤝</div>
+                                        <div class="example-text">Build affiliate marketing program and partner network</div>
+                                    </div>
+                                    <!-- Complete duplicate set for seamless loop -->
+                                    <div class="example-card" data-prompt="Create a TikTok advertising strategy for Q4 product launch">
+                                        <div class="example-icon">📱</div>
+                                        <div class="example-text">Create a TikTok advertising strategy for Q4 product launch</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Analyze competitor pricing strategies and market positioning">
+                                        <div class="example-icon">🔍</div>
+                                        <div class="example-text">Analyze competitor pricing strategies and market positioning</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design a loyalty program with personalized rewards">
+                                        <div class="example-icon">⭐</div>
+                                        <div class="example-text">Design a loyalty program with personalized rewards</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize budget allocation across Google, Meta, and LinkedIn">
+                                        <div class="example-icon">💰</div>
+                                        <div class="example-text">Optimize budget allocation across Google, Meta, and LinkedIn</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create A/B test plan for landing page conversion optimization">
+                                        <div class="example-icon">🧪</div>
+                                        <div class="example-text">Create A/B test plan for landing page conversion optimization</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build influencer outreach strategy for brand partnerships">
+                                        <div class="example-icon">🌟</div>
+                                        <div class="example-text">Build influencer outreach strategy for brand partnerships</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create customer feedback survey and analysis framework">
+                                        <div class="example-icon">📝</div>
+                                        <div class="example-text">Create customer feedback survey and analysis framework</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design mobile app push notification campaign">
+                                        <div class="example-icon">📲</div>
+                                        <div class="example-text">Design mobile app push notification campaign</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Analyze customer lifetime value and retention strategies">
+                                        <div class="example-icon">💎</div>
+                                        <div class="example-text">Analyze customer lifetime value and retention strategies</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create podcast advertising strategy for B2B audience">
+                                        <div class="example-icon">🎙️</div>
+                                        <div class="example-text">Create podcast advertising strategy for B2B audience</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build chatbot conversation flows for customer support">
+                                        <div class="example-icon">🤖</div>
+                                        <div class="example-text">Build chatbot conversation flows for customer support</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design seasonal marketing campaigns for retail business">
+                                        <div class="example-icon">🛍️</div>
+                                        <div class="example-text">Design seasonal marketing campaigns for retail business</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create webinar series to generate qualified leads">
+                                        <div class="example-icon">💻</div>
+                                        <div class="example-text">Create webinar series to generate qualified leads</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize Google Shopping campaigns for e-commerce">
+                                        <div class="example-icon">🛒</div>
+                                        <div class="example-text">Optimize Google Shopping campaigns for e-commerce</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build customer win-back email automation sequence">
+                                        <div class="example-icon">💌</div>
+                                        <div class="example-text">Build customer win-back email automation sequence</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create brand positioning strategy for new market entry">
+                                        <div class="example-icon">🎯</div>
+                                        <div class="example-text">Create brand positioning strategy for new market entry</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design cross-sell and upsell recommendation engine">
+                                        <div class="example-icon">📊</div>
+                                        <div class="example-text">Design cross-sell and upsell recommendation engine</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build affiliate marketing program and partner network">
+                                        <div class="example-icon">🤝</div>
+                                        <div class="example-text">Build affiliate marketing program and partner network</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Entry Shortcuts -->
+                    <div class="entry-shortcuts">
+                        <div class="shortcuts-section">
+                            <h3>AI Suites</h3>
+                            <div class="product-areas">
+                                <div class="area-card" data-area="engage">
+                                    <div class="area-icon engage">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="area-content">
+                                        <h4>Engage</h4>
+                                        <p>Journeys, segments, personalization</p>
+                                    </div>
+                                </div>
+                                <div class="area-card" data-area="paid-media">
+                                    <div class="area-icon paid-media">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                    <div class="area-content">
+                                        <h4>Paid Media</h4>
+                                        <p>Campaigns, optimization, performance</p>
+                                    </div>
+                                </div>
+                                <div class="area-card" data-area="personalization">
+                                    <div class="area-icon personalization">
+                                        <i class="fas fa-user-cog"></i>
+                                    </div>
+                                    <div class="area-content">
+                                        <h4>Personalization</h4>
+                                        <p>AI recommendations, dynamic content</p>
+                                    </div>
+                                </div>
+                                <div class="area-card" data-area="service">
+                                    <div class="area-icon service">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <div class="area-content">
+                                        <h4>Service</h4>
+                                        <p>Support flows, proactive messaging</p>
+                                    </div>
+                                </div>
+                                <div class="area-card" data-area="creative">
+                                    <div class="area-icon creative">
+                                        <i class="fas fa-palette"></i>
+                                    </div>
+                                    <div class="area-content">
+                                        <h4>Creative</h4>
+                                        <p>Assets, copy, A/B testing</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="shortcuts-section">
+                            <h3>Quick Start by Task</h3>
+                            <div class="task-shortcuts">
+                                <button class="task-btn" data-task="campaign-brief">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Create a new campaign brief</span>
+                                </button>
+                                <button class="task-btn" data-task="optimize-campaign">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Optimize an existing campaign</span>
+                                </button>
+                                <button class="task-btn" data-task="campaign-insights">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Check campaign insights</span>
+                                </button>
+                                <button class="task-btn" data-task="setup-journey">
+                                    <i class="fas fa-route"></i>
+                                    <span>Set up a journey</span>
+                                </button>
+                                <button class="task-btn" data-task="generate-creative">
+                                    <i class="fas fa-magic"></i>
+                                    <span>Generate creative assets</span>
+                                </button>
+                                <button class="task-btn" data-task="audience-segments">
+                                    <i class="fas fa-users-cog"></i>
+                                    <span>Build audience segments</span>
+                                </button>
+                                <button class="task-btn" data-task="budget-allocation">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>Optimize budget allocation</span>
+                                </button>
+                                <button class="task-btn" data-task="ab-test">
+                                    <i class="fas fa-flask"></i>
+                                    <span>Set up A/B tests</span>
+                                </button>
+                                <button class="task-btn" data-task="competitor-analysis">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Analyze competitors</span>
+                                </button>
+                                <button class="task-btn" data-task="content-calendar">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Create content calendar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Specialist Agents Showcase -->
+                    <div class="agents-showcase">
+                        <h3>Available Specialist Agents</h3>
+                        <div class="agents-grid">
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon audience"><i class="fas fa-users"></i></div>
+                                <span>Audience Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon creative"><i class="fas fa-palette"></i></div>
+                                <span>Creative Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon performance"><i class="fas fa-chart-bar"></i></div>
+                                <span>Performance Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon journey"><i class="fas fa-route"></i></div>
+                                <span>Journey Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon research"><i class="fas fa-search"></i></div>
+                                <span>Deep Research Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon historical"><i class="fas fa-history"></i></div>
+                                <span>Historical Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon personalization"><i class="fas fa-user-cog"></i></div>
+                                <span>Personalization Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon paid-media"><i class="fas fa-bullhorn"></i></div>
+                                <span>Paid Media Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon service"><i class="fas fa-headset"></i></div>
+                                <span>Service Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon persona"><i class="fas fa-user-circle"></i></div>
+                                <span>Persona Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon migration"><i class="fas fa-exchange-alt"></i></div>
+                                <span>Migration Agent</span>
+                            </div>
+                            <div class="agent-showcase-card">
+                                <div class="agent-icon analytics"><i class="fas fa-chart-pie"></i></div>
+                                <span>Analytics Agent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Working Interface (Hidden by default) -->
+            <div class="working-interface" id="working-interface" style="display: none;">
+                <!-- Left Sidebar Navigation -->
+                <div class="sidebar-nav">
+                    <div class="sidebar-header">
+                        <button class="back-btn" id="back-to-home">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div class="sidebar-title">Marketing SuperAgent</div>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-item active">
+                            <i class="fas fa-comments"></i>
+                            <span>Chat</span>
+                        </div>
+                        <div class="nav-item" id="sidebar-history-btn">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-status-sidebar">
+                        <div class="status-header">
+                            <i class="fas fa-robot"></i>
+                            <span>Active Agents</span>
+                        </div>
+                        <div class="agent-indicators">
+                            <div class="agent-indicator">
+                                <div class="agent-mini-icon research active">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <span>Research</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="agent-mini-icon creative ready">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <span>Creative</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="agent-mini-icon performance ready">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <span>Performance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="main-workspace">
+                    <!-- Content Grid -->
+                    <div class="workspace-content">
+                        <!-- Chat Thread -->
+                        <div class="chat-thread">
+                            <div class="thread-header">
+                                <h3>Conversation</h3>
+                                <div class="thread-status">
+                                    <div class="status-dot active"></div>
+                                    <span>Active</span>
+                                </div>
+                            </div>
+
+                            <div class="chat-messages" id="chat-messages">
+                                <!-- Messages will be dynamically added -->
+                            </div>
+
+                            <div class="chat-input-area">
+                                <div class="input-container">
+                                    <input type="text" id="chat-input" placeholder="Continue the conversation..." autocomplete="off">
+                                    <button class="send-btn" id="chat-send">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Output Panel -->
+                        <div class="output-workspace">
+                            <div class="output-header">
+                                <div class="output-title-section">
+                                    <h3 id="output-title">Task Output</h3>
+                                    <div class="output-meta">
+                                        <span class="meta-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span id="last-updated">Just now</span>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fas fa-robot"></i>
+                                            <span id="agents-used">3 agents</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="output-actions">
+                                    <button class="workspace-btn" id="save-output">
+                                        <i class="fas fa-save"></i>
+                                        <span>Save</span>
+                                    </button>
+                                    <button class="workspace-btn primary" id="export-output">
+                                        <i class="fas fa-download"></i>
+                                        <span>Export</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="output-content" id="output-content">
+                                <!-- Dynamic content will be loaded here -->
+                                <div class="output-placeholder">
+                                    <div class="placeholder-content">
+                                        <div class="placeholder-icon">
+                                            <i class="fas fa-sparkles"></i>
+                                        </div>
+                                        <h4>Ready to create</h4>
+                                        <p>Start a conversation to see AI-generated marketing content, analysis, and recommendations appear here.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- History Panel (Hidden by default) -->
+        <div class="history-panel" id="history-panel" style="display: none;">
+            <div class="history-header">
+                <h3>Task History</h3>
+                <button class="close-history" id="close-history">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="history-content">
+                <div class="history-empty">
+                    <i class="fas fa-history"></i>
+                    <p>No tasks completed yet</p>
+                    <small>Your completed tasks and outputs will appear here</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js?v=1"></script>
+</body>
+</html>
