@@ -339,6 +339,7 @@ body {
     animation: slideDown 0.3s ease;
     max-width: 1000px;
     margin: var(--space-lg) auto 0;
+    width: 100%;
 }
 
 @keyframes slideDown {
@@ -358,6 +359,8 @@ body {
     gap: var(--space-sm);
     overflow: hidden;
     height: 160px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .examples-row {
@@ -530,6 +533,7 @@ body {
     justify-content: center;
     max-width: 1000px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .area-card {
