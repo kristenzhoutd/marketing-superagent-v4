@@ -23,10 +23,6 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="header-btn" id="history-btn">
-                        <i class="fas fa-history"></i>
-                        <span>History</span>
-                    </button>
                     <button class="header-btn" id="settings-btn">
                         <i class="fas fa-cog"></i>
                     </button>
@@ -35,14 +31,75 @@
         </header>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content home-mode">
             <!-- Home Screen (Initial State) -->
             <div class="home-screen" id="home-screen">
+                <!-- Left Sidebar Navigation for Home -->
+                <div class="sidebar-nav">
+                    <div class="nav-section">
+                        <div class="nav-item active">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </div>
+                        <div class="nav-item" id="sidebar-knowledge-btn">
+                            <i class="fas fa-book"></i>
+                            <span>Knowledge Base</span>
+                        </div>
+                        <div class="nav-item" id="sidebar-history-btn-home">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-status-sidebar">
+                        <div class="status-header">
+                            <i class="fas fa-robot"></i>
+                            <span>Specialist Agents</span>
+                        </div>
+                        <div class="agent-indicators">
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Research Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Creative Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Performance Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Audience Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Journey Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Historical Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Personalization Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Analytics Agent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Home Content -->
                 <div class="home-container">
                     <!-- Central Chat Entry -->
                     <div class="chat-entry-section">
                         <div class="chat-entry-header">
-                            <h2>Hi Laura! What would you like to create or optimize today?</h2>
+                            <h1>Marketing SuperAgent</h1>
+                            <p class="tagline">One SuperAgent. Every Task. Marketing Made AI-Native.</p>
                         </div>
 
                         <div class="main-chat-input">
@@ -506,6 +563,10 @@
                             <i class="fas fa-comments"></i>
                             <span>Chat</span>
                         </div>
+                        <div class="nav-item" id="sidebar-knowledge-btn-working">
+                            <i class="fas fa-book"></i>
+                            <span>Knowledge Base</span>
+                        </div>
                         <div class="nav-item" id="sidebar-history-btn">
                             <i class="fas fa-history"></i>
                             <span>History</span>
@@ -519,22 +580,36 @@
                         </div>
                         <div class="agent-indicators">
                             <div class="agent-indicator">
-                                <div class="agent-mini-icon research active">
-                                    <i class="fas fa-search"></i>
-                                </div>
-                                <span>Research</span>
+                                <div class="status-indicator active"></div>
+                                <span>Research Agent</span>
                             </div>
                             <div class="agent-indicator">
-                                <div class="agent-mini-icon creative ready">
-                                    <i class="fas fa-palette"></i>
-                                </div>
-                                <span>Creative</span>
+                                <div class="status-indicator active"></div>
+                                <span>Creative Agent</span>
                             </div>
                             <div class="agent-indicator">
-                                <div class="agent-mini-icon performance ready">
-                                    <i class="fas fa-chart-bar"></i>
-                                </div>
-                                <span>Performance</span>
+                                <div class="status-indicator idle"></div>
+                                <span>Performance Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator active"></div>
+                                <span>Audience Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Journey Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Historical Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator idle"></div>
+                                <span>Personalization Agent</span>
+                            </div>
+                            <div class="agent-indicator">
+                                <div class="status-indicator active"></div>
+                                <span>Analytics Agent</span>
                             </div>
                         </div>
                     </div>
@@ -627,6 +702,316 @@
                     <i class="fas fa-history"></i>
                     <p>No tasks completed yet</p>
                     <small>Your completed tasks and outputs will appear here</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Base Page (Hidden by default) -->
+        <div class="knowledge-base-page" id="knowledge-base-page" style="display: none;">
+            <!-- Left Sidebar Navigation for Knowledge Base -->
+            <div class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-item" id="kb-back-to-home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="nav-item active">
+                        <i class="fas fa-book"></i>
+                        <span>Knowledge Base</span>
+                    </div>
+                    <div class="nav-item" id="kb-sidebar-history-btn">
+                        <i class="fas fa-history"></i>
+                        <span>History</span>
+                    </div>
+                </div>
+
+                <div class="agent-status-sidebar">
+                    <div class="status-header">
+                        <i class="fas fa-robot"></i>
+                        <span>Specialist Agents</span>
+                    </div>
+                    <div class="agent-indicators">
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Research Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Creative Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Performance Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Audience Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Journey Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Historical Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Personalization Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Analytics Agent</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Knowledge Base Content -->
+            <div class="kb-main-content">
+                <div class="kb-container">
+                    <!-- Knowledge Base Home -->
+                    <div class="kb-home" id="kb-home">
+                        <!-- Page Header -->
+                        <div class="kb-page-header">
+                            <h1>Knowledge Base</h1>
+                            <p>Secure, organization-scoped repository for your SuperAgent</p>
+                        </div>
+
+                        <!-- Search Bar -->
+                        <div class="kb-search-section">
+                            <div class="kb-search-container">
+                                <input type="text" id="kb-search" placeholder="Search your knowledge base...">
+                                <button class="kb-search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="kb-actions-section">
+                            <h4 class="actions-header">Quick Actions</h4>
+                            <div class="action-buttons">
+                                <button class="kb-action-btn primary">
+                                    <i class="fas fa-upload"></i>
+                                    <span>Upload Documents</span>
+                                </button>
+                                <button class="kb-action-btn">
+                                    <i class="fas fa-link"></i>
+                                    <span>Connect Source</span>
+                                </button>
+                                <button class="kb-action-btn">
+                                    <i class="fas fa-cog"></i>
+                                    <span>Manage Settings</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Knowledge Health Widget -->
+                        <div class="kb-health-widget">
+                            <div class="health-header">
+                                <h4>Knowledge Health</h4>
+                                <div class="health-score">
+                                    <span class="score-number">87</span>
+                                    <span class="score-label">Health Score</span>
+                                </div>
+                            </div>
+                            <div class="health-stats">
+                                <div class="health-stat">
+                                    <div class="stat-icon fresh"><i class="fas fa-check-circle"></i></div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">23</span>
+                                        <span class="stat-label">Fresh sources</span>
+                                    </div>
+                                </div>
+                                <div class="health-stat">
+                                    <div class="stat-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">2</span>
+                                        <span class="stat-label">Needs attention</span>
+                                    </div>
+                                </div>
+                                <div class="health-stat">
+                                    <div class="stat-icon secure"><i class="fas fa-shield-alt"></i></div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">0</span>
+                                        <span class="stat-label">PII flags</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kb-content-grid">
+                            <!-- Left Column -->
+                            <div class="kb-left-column">
+                                <!-- Pinned Context -->
+                                <div class="kb-pinned-section">
+                                    <h4>Pinned Context</h4>
+                                    <div class="pinned-items">
+                                        <div class="pinned-item active">
+                                            <div class="pinned-icon brand"><i class="fas fa-palette"></i></div>
+                                            <div class="pinned-content">
+                                                <span class="pinned-title">Brand Voice</span>
+                                                <span class="pinned-status">Active</span>
+                                            </div>
+                                            <button class="pinned-toggle active">
+                                                <i class="fas fa-toggle-on"></i>
+                                            </button>
+                                        </div>
+                                        <div class="pinned-item active">
+                                            <div class="pinned-icon compliance"><i class="fas fa-shield-alt"></i></div>
+                                            <div class="pinned-content">
+                                                <span class="pinned-title">Compliance Rules</span>
+                                                <span class="pinned-status">Active</span>
+                                            </div>
+                                            <button class="pinned-toggle active">
+                                                <i class="fas fa-toggle-on"></i>
+                                            </button>
+                                        </div>
+                                        <div class="pinned-item">
+                                            <div class="pinned-icon product"><i class="fas fa-box"></i></div>
+                                            <div class="pinned-content">
+                                                <span class="pinned-title">Product Catalog</span>
+                                                <span class="pinned-status">Inactive</span>
+                                            </div>
+                                            <button class="pinned-toggle">
+                                                <i class="fas fa-toggle-off"></i>
+                                            </button>
+                                        </div>
+                                        <div class="pinned-item active">
+                                            <div class="pinned-icon audience"><i class="fas fa-users"></i></div>
+                                            <div class="pinned-content">
+                                                <span class="pinned-title">Personas</span>
+                                                <span class="pinned-status">Active</span>
+                                            </div>
+                                            <button class="pinned-toggle active">
+                                                <i class="fas fa-toggle-on"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Recently Synced -->
+                                <div class="kb-recent-section">
+                                    <h4>Recently Synced</h4>
+                                    <div class="recent-items">
+                                        <div class="recent-item">
+                                            <div class="recent-icon success"><i class="fas fa-cloud-download-alt"></i></div>
+                                            <div class="recent-info">
+                                                <span class="recent-title">Google Drive: Brand Assets</span>
+                                                <span class="recent-time">2 minutes ago</span>
+                                            </div>
+                                            <div class="recent-status success">Synced</div>
+                                        </div>
+                                        <div class="recent-item">
+                                            <div class="recent-icon success"><i class="fas fa-database"></i></div>
+                                            <div class="recent-info">
+                                                <span class="recent-title">Salesforce: Lead Segments</span>
+                                                <span class="recent-time">1 hour ago</span>
+                                            </div>
+                                            <div class="recent-status success">Synced</div>
+                                        </div>
+                                        <div class="recent-item">
+                                            <div class="recent-icon error"><i class="fas fa-exclamation-circle"></i></div>
+                                            <div class="recent-info">
+                                                <span class="recent-title">SharePoint: Legal Documents</span>
+                                                <span class="recent-time">3 hours ago</span>
+                                            </div>
+                                            <div class="recent-status error">Failed</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="kb-right-column">
+                                <!-- Context Packs -->
+                                <div class="kb-packs-section">
+                                    <div class="section-header">
+                                        <h4>Context Packs</h4>
+                                        <button class="btn-secondary" id="create-pack-btn">
+                                            <i class="fas fa-plus"></i>
+                                            Create Pack
+                                        </button>
+                                    </div>
+                                    <div class="context-packs">
+                                        <div class="context-pack featured">
+                                            <div class="pack-header">
+                                                <div class="pack-icon holiday"><i class="fas fa-gift"></i></div>
+                                                <div class="pack-info">
+                                                    <h5>Holiday '25 Pack</h5>
+                                                    <span class="pack-status approved">Approved</span>
+                                                </div>
+                                                <div class="pack-actions">
+                                                    <button class="pack-toggle active">
+                                                        <i class="fas fa-toggle-on"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="pack-details">
+                                                <div class="pack-tags">
+                                                    <span class="tag creative">Creative</span>
+                                                    <span class="tag paid-media">Paid Media</span>
+                                                </div>
+                                                <div class="pack-stats">
+                                                    <span>12 documents • Updated 2 days ago</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="context-pack">
+                                            <div class="pack-header">
+                                                <div class="pack-icon brand"><i class="fas fa-palette"></i></div>
+                                                <div class="pack-info">
+                                                    <h5>Brand Voice Pack</h5>
+                                                    <span class="pack-status approved">Approved</span>
+                                                </div>
+                                                <div class="pack-actions">
+                                                    <button class="pack-toggle active">
+                                                        <i class="fas fa-toggle-on"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="pack-details">
+                                                <div class="pack-tags">
+                                                    <span class="tag creative">Creative</span>
+                                                    <span class="tag audience">Audience</span>
+                                                </div>
+                                                <div class="pack-stats">
+                                                    <span>8 documents • Updated 1 week ago</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="context-pack">
+                                            <div class="pack-header">
+                                                <div class="pack-icon compliance"><i class="fas fa-gavel"></i></div>
+                                                <div class="pack-info">
+                                                    <h5>Regulated Claims Pack</h5>
+                                                    <span class="pack-status in-review">In Review</span>
+                                                </div>
+                                                <div class="pack-actions">
+                                                    <button class="pack-toggle">
+                                                        <i class="fas fa-toggle-off"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="pack-details">
+                                                <div class="pack-tags">
+                                                    <span class="tag compliance">Compliance</span>
+                                                    <span class="tag creative">Creative</span>
+                                                </div>
+                                                <div class="pack-stats">
+                                                    <span>15 documents • Updated 3 days ago</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -6,8 +6,10 @@ class MarketingSuperAgentV4 {
         this.currentAgents = [];
         this.outputHistory = [];
         this.currentSuiteTitle = 'Creative AI Suite'; // Store current AI suite title - default to Creative
+        this.currentRoute = 'home';
         this.init();
         this.loadHistoryFromStorage();
+        this.initRouting();
     }
 
     init() {
@@ -88,11 +90,70 @@ class MarketingSuperAgentV4 {
             });
         }
 
+        // Home page sidebar history button
+        const sidebarHistoryBtnHome = document.getElementById('sidebar-history-btn-home');
+        if (sidebarHistoryBtnHome) {
+            sidebarHistoryBtnHome.addEventListener('click', () => {
+                this.toggleHistoryPanel();
+            });
+        }
+
+        // Knowledge Base buttons
+        const sidebarKnowledgeBtn = document.getElementById('sidebar-knowledge-btn');
+        if (sidebarKnowledgeBtn) {
+            console.log('Found Knowledge Base button, adding event listener');
+            sidebarKnowledgeBtn.addEventListener('click', (e) => {
+                console.log('Knowledge Base button clicked');
+                this.openKnowledgeBase();
+            });
+        } else {
+            console.log('Knowledge Base button not found');
+        }
+
+        const sidebarKnowledgeBtnWorking = document.getElementById('sidebar-knowledge-btn-working');
+        if (sidebarKnowledgeBtnWorking) {
+            console.log('Found Knowledge Base working button, adding event listener');
+            sidebarKnowledgeBtnWorking.addEventListener('click', (e) => {
+                console.log('Knowledge Base working button clicked');
+                this.openKnowledgeBase();
+            });
+        } else {
+            console.log('Knowledge Base working button not found');
+        }
+
         if (closeHistory) {
             closeHistory.addEventListener('click', () => {
                 this.closeHistoryPanel();
             });
         }
+
+        // Knowledge Base navigation
+        const kbBackToHome = document.getElementById('kb-back-to-home');
+        if (kbBackToHome) {
+            kbBackToHome.addEventListener('click', () => {
+                console.log('KB back to home clicked');
+                this.showHomeScreen();
+                window.location.hash = '';
+            });
+        }
+
+        const kbSidebarHistoryBtn = document.getElementById('kb-sidebar-history-btn');
+        if (kbSidebarHistoryBtn) {
+            kbSidebarHistoryBtn.addEventListener('click', () => {
+                this.toggleHistoryPanel();
+            });
+        }
+
+        // Knowledge Base interactions
+        this.setupKnowledgeBaseInteractions();
+
+        // Fallback event delegation for Knowledge Base buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#sidebar-knowledge-btn') || e.target.closest('#sidebar-knowledge-btn-working')) {
+                console.log('Knowledge Base button clicked via event delegation');
+                this.openKnowledgeBase();
+            }
+        });
 
         // Example cards
         document.addEventListener('click', (e) => {
@@ -498,9 +559,9 @@ class MarketingSuperAgentV4 {
         const appHeader = document.querySelector('.app-header');
         const mainContent = document.querySelector('.main-content');
 
-        if (homeScreen) homeScreen.style.display = 'flex';
+        if (homeScreen) homeScreen.style.display = 'grid';
         if (workingInterface) workingInterface.style.display = 'none';
-        if (appHeader) appHeader.style.display = 'block';
+        if (appHeader) appHeader.style.display = 'none';
         if (mainContent) mainContent.classList.remove('working-mode');
 
         this.currentView = 'home';
@@ -2542,6 +2603,308 @@ class MarketingSuperAgentV4 {
             } else {
                 this.closeHistoryPanel();
             }
+        }
+    }
+
+    openKnowledgeBase() {
+        console.log('openKnowledgeBase method called');
+        try {
+            console.log('About to navigate to knowledge-base route');
+            this.navigateToRoute('knowledge-base');
+            console.log('Navigation completed successfully');
+        } catch (error) {
+            console.error('Error in openKnowledgeBase:', error);
+        }
+    }
+
+    showKnowledgeBasePage() {
+        console.log('showKnowledgeBasePage called');
+        // Hide all other pages
+        this.hideAllPages();
+
+        // Show knowledge base page
+        const kbPage = document.getElementById('knowledge-base-page');
+        if (kbPage) {
+            console.log('Found KB page element, setting display to grid');
+            kbPage.style.display = 'grid';
+            console.log('KB page display set to:', kbPage.style.display);
+
+            // Force a reflow to ensure the change takes effect
+            kbPage.offsetHeight;
+
+            // Check if sidebar is visible within the knowledge base page
+            const kbSidebar = kbPage.querySelector('.sidebar-nav');
+            if (kbSidebar) {
+                console.log('Found KB sidebar element');
+                console.log('KB sidebar computed style:', window.getComputedStyle(kbSidebar).display);
+            } else {
+                console.error('KB sidebar not found within Knowledge Base page');
+            }
+        } else {
+            console.error('Knowledge Base page element not found');
+            // Let's check if it exists at all
+            const allKbElements = document.querySelectorAll('[id*="knowledge"]');
+            console.log('All elements with "knowledge" in ID:', allKbElements);
+        }
+
+        // Update main content class
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            console.log('Updating main content class to home-mode');
+            mainContent.className = 'main-content home-mode';
+        } else {
+            console.error('Main content element not found');
+        }
+
+        // Hide header
+        const header = document.querySelector('.app-header');
+        if (header) {
+            console.log('Hiding app header');
+            header.style.display = 'none';
+        }
+
+        // Update current view
+        this.currentView = 'knowledge-base';
+    }
+
+    navigateToRoute(route) {
+        console.log('Navigating to route:', route);
+
+        // Update current route
+        this.currentRoute = route;
+
+        // Show the appropriate page immediately
+        this.showPage(route);
+
+        // Update URL with hash-based routing
+        const url = route === 'home' ? '#' : `#${route}`;
+        window.location.hash = url;
+    }
+
+    showPage(route) {
+        console.log('showPage called with route:', route);
+        // Hide all other pages
+        this.hideAllPages();
+
+        switch(route) {
+            case 'knowledge-base':
+                console.log('Switching to Knowledge Base page');
+                // Show knowledge base page
+                const kbPage = document.getElementById('knowledge-base-page');
+                if (kbPage) {
+                    console.log('Found KB page element, setting display to grid');
+                    kbPage.style.display = 'grid';
+                    console.log('KB page display set to:', kbPage.style.display);
+                } else {
+                    console.error('Knowledge Base page element not found');
+                    // Let's check if it exists at all
+                    const allKbElements = document.querySelectorAll('[id*="knowledge"]');
+                    console.log('All elements with "knowledge" in ID:', allKbElements);
+                }
+
+                // Update main content class
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    console.log('Updating main content class to home-mode');
+                    mainContent.className = 'main-content home-mode';
+                } else {
+                    console.error('Main content element not found');
+                }
+
+                // Hide header
+                const header = document.querySelector('.app-header');
+                if (header) {
+                    console.log('Hiding app header');
+                    header.style.display = 'none';
+                }
+                break;
+
+            case 'home':
+            default:
+                console.log('Displaying Home page');
+                this.showHomePage();
+                break;
+        }
+    }
+
+    hideAllPages() {
+        const homeScreen = document.getElementById('home-screen');
+        const workingInterface = document.getElementById('working-interface');
+        const kbPage = document.getElementById('knowledge-base-page');
+
+        if (homeScreen) homeScreen.style.display = 'none';
+        if (workingInterface) workingInterface.style.display = 'none';
+        if (kbPage) kbPage.style.display = 'none';
+    }
+
+    showHomePage() {
+        // If not already on home, navigate there
+        if (this.currentRoute !== 'home') {
+            this.navigateToRoute('home');
+            return;
+        }
+
+        this.hideAllPages();
+
+        const homeScreen = document.getElementById('home-screen');
+        if (homeScreen) {
+            homeScreen.style.display = 'grid';
+        }
+
+        // Hide header (home page should not show top nav)
+        const header = document.querySelector('.app-header');
+        if (header) {
+            header.style.display = 'none';
+        }
+
+        // Update main content class
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.className = 'main-content home-mode';
+        }
+    }
+
+    setupKnowledgeBaseInteractions() {
+        // Toggle pinned context items
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.pinned-toggle')) {
+                const toggle = e.target.closest('.pinned-toggle');
+                const pinnedItem = toggle.closest('.pinned-item');
+                const icon = toggle.querySelector('i');
+
+                if (toggle.classList.contains('active')) {
+                    // Deactivate
+                    toggle.classList.remove('active');
+                    pinnedItem.classList.remove('active');
+                    icon.className = 'fas fa-toggle-off';
+                    pinnedItem.querySelector('.pinned-status').textContent = 'Inactive';
+                } else {
+                    // Activate
+                    toggle.classList.add('active');
+                    pinnedItem.classList.add('active');
+                    icon.className = 'fas fa-toggle-on';
+                    pinnedItem.querySelector('.pinned-status').textContent = 'Active';
+                }
+            }
+        });
+
+        // Toggle context packs
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.pack-toggle')) {
+                const toggle = e.target.closest('.pack-toggle');
+                const icon = toggle.querySelector('i');
+
+                if (toggle.classList.contains('active')) {
+                    // Deactivate
+                    toggle.classList.remove('active');
+                    icon.className = 'fas fa-toggle-off';
+                } else {
+                    // Activate
+                    toggle.classList.add('active');
+                    icon.className = 'fas fa-toggle-on';
+                }
+            }
+        });
+
+        // Knowledge Base search
+        const kbSearch = document.getElementById('kb-search');
+        if (kbSearch) {
+            kbSearch.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.searchKnowledgeBase(kbSearch.value);
+                }
+            });
+        }
+
+        const kbSearchBtn = document.querySelector('.kb-search-btn');
+        if (kbSearchBtn) {
+            kbSearchBtn.addEventListener('click', () => {
+                const searchValue = document.getElementById('kb-search').value;
+                this.searchKnowledgeBase(searchValue);
+            });
+        }
+
+        // Action buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.kb-action-btn')) {
+                const btn = e.target.closest('.kb-action-btn');
+                const actionText = btn.querySelector('span').textContent;
+
+                switch(actionText) {
+                    case 'Upload Documents':
+                        this.uploadDocuments();
+                        break;
+                    case 'Connect Source':
+                        this.connectSource();
+                        break;
+                    case 'Manage Settings':
+                        this.manageSettings();
+                        break;
+                }
+            }
+        });
+    }
+
+    searchKnowledgeBase(query) {
+        console.log('Searching knowledge base for:', query);
+        // Implement semantic search functionality
+        // This would integrate with your RAG system
+    }
+
+    uploadDocuments() {
+        console.log('Opening document upload dialog');
+        // Implement file upload functionality
+    }
+
+    connectSource() {
+        console.log('Opening source connection wizard');
+        // Implement OAuth connector setup
+    }
+
+    manageSettings() {
+        console.log('Opening knowledge base settings');
+        // Implement settings management
+    }
+
+    initRouting() {
+        // Handle hash changes (browser back/forward buttons and direct URL access)
+        window.addEventListener('hashchange', () => {
+            const route = this.getRouteFromURL();
+            console.log('Hash changed to route:', route);
+            this.currentRoute = route;
+            this.showPage(route);
+        });
+
+        // Handle initial page load
+        const initialRoute = this.getRouteFromURL();
+        console.log('Initial route:', initialRoute);
+        if (initialRoute !== 'home') {
+            this.currentRoute = initialRoute;
+            this.showPage(initialRoute);
+        }
+    }
+
+    getRouteFromURL() {
+        // Check for hash-based routing first
+        const hash = window.location.hash;
+        if (hash) {
+            const route = hash.substring(1); // Remove the # symbol
+            switch(route) {
+                case 'knowledge-base':
+                    return 'knowledge-base';
+                default:
+                    return 'home';
+            }
+        }
+
+        // Fallback to path-based routing
+        const path = window.location.pathname;
+        switch(path) {
+            case '/knowledge-base':
+                return 'knowledge-base';
+            case '/':
+            default:
+                return 'home';
         }
     }
 
