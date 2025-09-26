@@ -3074,24 +3074,17 @@ body {
 .journey-flow-modern {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
+    gap: 0;
     margin: var(--space-xl) 0;
-}
-
-.journey-main-flow {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-md);
-    overflow-x: auto;
-    padding: var(--space-md) 0;
 }
 
 .journey-stage {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 280px;
-    flex-shrink: 0;
+    margin: 0 auto;
+    max-width: 500px;
+    width: 100%;
 }
 
 .stage-header {
@@ -3099,12 +3092,13 @@ body {
     align-items: center;
     gap: var(--space-sm);
     margin-bottom: var(--space-md);
+    width: 100%;
     justify-content: center;
 }
 
 .stage-number {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     background: var(--accent-primary);
     color: white;
     border-radius: var(--radius-full);
@@ -3112,12 +3106,11 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-size: var(--label);
-    flex-shrink: 0;
+    font-size: var(--font-base);
 }
 
 .stage-title {
-    font-size: var(--font-base);
+    font-size: var(--h3);
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -3126,14 +3119,11 @@ body {
     background: var(--card-bg);
     border: var(--border);
     border-radius: var(--radius-lg);
-    padding: var(--space-md);
+    padding: var(--space-lg);
     width: 100%;
-    min-height: 180px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: var(--space-sm);
+    align-items: flex-start;
+    gap: var(--space-md);
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-fast);
 }
@@ -3144,33 +3134,28 @@ body {
 }
 
 .entry-card {
-    border-top: 4px solid var(--accent-green);
+    border-left: 4px solid var(--accent-green);
 }
 
 .wait-card {
-    border-top: 4px solid var(--accent-orange);
+    border-left: 4px solid var(--accent-orange);
 }
 
 .email-card {
-    border-top: 4px solid var(--accent-primary);
-}
-
-.decision-card {
-    border-top: 4px solid var(--accent-purple);
+    border-left: 4px solid var(--accent-primary);
 }
 
 .card-icon {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     background: var(--gray-100);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--accent-primary);
-    font-size: 24px;
+    font-size: 20px;
     flex-shrink: 0;
-    margin-bottom: var(--space-xs);
 }
 
 .entry-card .card-icon {
@@ -3188,42 +3173,26 @@ body {
     color: var(--accent-primary);
 }
 
-.decision-card .card-icon {
-    background: rgba(146, 86, 217, 0.1);
-    color: var(--accent-purple);
-}
-
-.horizontal-connector {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--border-color);
-    font-size: 20px;
-    margin: 0 var(--space-sm);
-    align-self: center;
-    margin-top: 40px;
-}
-
 .card-content {
     flex: 1;
 }
 
 .card-content h4 {
-    font-size: var(--font-base);
+    font-size: var(--body-large);
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 var(--space-xs) 0;
 }
 
 .card-content h5 {
-    font-size: var(--label);
+    font-size: var(--font-base);
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 var(--space-xxs) 0;
 }
 
 .card-content p {
-    font-size: var(--label);
+    font-size: var(--font-base);
     color: var(--text-secondary);
     margin: 0 0 var(--space-sm) 0;
     line-height: 1.4;
@@ -3349,11 +3318,11 @@ body {
 }
 
 .small-card.success {
-    border-top: 4px solid var(--accent-green);
+    border-left: 4px solid var(--accent-green);
 }
 
 .small-card.warning {
-    border-top: 4px solid var(--accent-orange);
+    border-left: 4px solid var(--accent-orange);
 }
 
 .small-connector {
