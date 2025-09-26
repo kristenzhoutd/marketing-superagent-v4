@@ -3443,168 +3443,243 @@ class MarketingSuperAgentV4 {
         const lowerMessage = userMessage.toLowerCase();
 
         // Determine journey type based on message
-        let journeyType = 'Hotel Stay Purchase';
-        let journeyDescription = 'Corporate Retreat Targeting - Zenith Tech';
+        let journeyType = 'Customer Journey Flow';
+        let journeyDescription = 'Automated marketing journey';
 
         if (lowerMessage.includes('hotel') || lowerMessage.includes('travel')) {
-            journeyType = 'Hotel Stay Purchase';
-            journeyDescription = 'Corporate Retreat Targeting - Zenith Tech';
+            journeyType = 'Hotel Booking Journey';
+            journeyDescription = 'Travel booking engagement flow';
         } else if (lowerMessage.includes('abandonment') || lowerMessage.includes('cart')) {
-            journeyType = 'Cart Abandonment Recovery';
-            journeyDescription = 'E-commerce Recovery Campaign';
+            journeyType = 'Cart Recovery Journey';
+            journeyDescription = 'Abandoned cart recovery flow';
         } else if (lowerMessage.includes('welcome') || lowerMessage.includes('onboarding')) {
-            journeyType = 'Welcome Series';
-            journeyDescription = 'New Subscriber Onboarding';
+            journeyType = 'Welcome Journey';
+            journeyDescription = 'New subscriber onboarding';
         } else if (lowerMessage.includes('retention') || lowerMessage.includes('win-back')) {
-            journeyType = 'Customer Reactivation';
-            journeyDescription = 'Win-Back Campaign Flow';
+            journeyType = 'Retention Journey';
+            journeyDescription = 'Customer win-back campaign';
         }
 
         return `
-            <div class="journey-flow-container">
+            <div class="modern-journey-container">
                 <div class="journey-header">
-                    <div class="journey-title">
-                        <h3>1 ${journeyType}</h3>
-                        <div class="journey-actions">
-                            <button class="journey-btn secondary">Set milestone</button>
-                            <button class="journey-btn secondary">Add exit criteria</button>
+                    <h3>${journeyType}</h3>
+                    <p class="journey-subtitle">${journeyDescription}</p>
+                    <div class="journey-stats">
+                        <div class="stat">
+                            <span class="stat-value">127</span>
+                            <span class="stat-label">Active customers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">73%</span>
+                            <span class="stat-label">Completion rate</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">4.2x</span>
+                            <span class="stat-label">ROI</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="journey-description">
-                    <p>Customers enter this journey when they subscribe to the campaign or meet segment criteria. After a wait step, they receive the Solis Hotel Email and are tracked for engagement.</p>
-                </div>
-
-                <div class="journey-flow-exact">
-                    <!-- Main horizontal flow -->
-                    <div class="main-flow">
-                        <div class="flow-step">
-                            <div class="step-icon entry">
-                                <i class="fas fa-play"></i>
-                            </div>
-                            <div class="step-label">Entry Criteria<br><small>Segment qualification</small></div>
+                <div class="journey-flow-modern">
+                    <!-- Stage 1: Entry -->
+                    <div class="journey-stage">
+                        <div class="stage-header">
+                            <span class="stage-number">1</span>
+                            <span class="stage-title">Entry Point</span>
                         </div>
+                        <div class="journey-card entry-card">
+                            <div class="card-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <div class="card-content">
+                                <h4>Campaign Subscribe</h4>
+                                <p>Customer subscribes to campaign or meets segment criteria</p>
+                                <div class="card-metrics">
+                                    <span class="metric">1,240 entries</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <div class="dotted-connector"></div>
+                    <!-- Connector -->
+                    <div class="journey-connector">
+                        <div class="connector-line"></div>
+                        <div class="connector-arrow">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
 
-                        <div class="flow-step">
-                            <div class="step-icon wait">
+                    <!-- Stage 2: Wait -->
+                    <div class="journey-stage">
+                        <div class="stage-header">
+                            <span class="stage-number">2</span>
+                            <span class="stage-title">Wait Period</span>
+                        </div>
+                        <div class="journey-card wait-card">
+                            <div class="card-icon">
                                 <i class="fas fa-clock"></i>
                             </div>
-                            <div class="step-label">Wait Step<br><small>Delay before email</small></div>
+                            <div class="card-content">
+                                <h4>24 Hour Wait</h4>
+                                <p>Strategic delay for optimal engagement timing</p>
+                                <div class="card-metrics">
+                                    <span class="metric">Processing 892 customers</span>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="dotted-connector"></div>
+                    <!-- Connector -->
+                    <div class="journey-connector">
+                        <div class="connector-line"></div>
+                        <div class="connector-arrow">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
 
-                        <div class="flow-step">
-                            <div class="step-icon email">
+                    <!-- Stage 3: Email -->
+                    <div class="journey-stage">
+                        <div class="stage-header">
+                            <span class="stage-number">3</span>
+                            <span class="stage-title">Engagement</span>
+                        </div>
+                        <div class="journey-card email-card">
+                            <div class="card-icon">
                                 <i class="fas fa-envelope"></i>
                             </div>
-                            <div class="step-label">Solis Hotel Email<br><small>Track clicks</small></div>
-                        </div>
-
-                        <div class="dotted-connector"></div>
-
-                        <div class="decision-split">
-                            <div class="decision-card clicked">
-                                Clicked
-                            </div>
-
-                            <!-- Vertical lines down to branches -->
-                            <div class="vertical-connectors">
-                                <div class="vertical-line to-branch-1"></div>
-                                <div class="vertical-line to-branch-2"></div>
-                                <div class="vertical-line to-branch-3"></div>
+                            <div class="card-content">
+                                <h4>Welcome Email</h4>
+                                <p>Personalized email with tracking enabled</p>
+                                <div class="card-metrics">
+                                    <span class="metric">67% open rate</span>
+                                    <span class="metric">34% click rate</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Interest segmentation label -->
-                    <div class="interest-segmentation">
-                        <div class="segmentation-label">
-                            <div class="step-icon customer-interest">
+                    <!-- Decision Split -->
+                    <div class="journey-connector">
+                        <div class="connector-line"></div>
+                        <div class="decision-split-modern">
+                            <div class="split-icon">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <span class="split-label">Engagement Decision</span>
+                        </div>
+                    </div>
+
+                    <!-- Stage 4: Branches -->
+                    <div class="journey-branches">
+                        <!-- Engaged Branch -->
+                        <div class="journey-branch engaged">
+                            <div class="branch-header">
+                                <span class="branch-label">Engaged (34%)</span>
+                            </div>
+                            <div class="branch-steps">
+                                <div class="journey-card small-card success">
+                                    <div class="card-icon">
+                                        <i class="fas fa-user-check"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h5>Interest Segmentation</h5>
+                                        <p>Categorize by click behavior</p>
+                                    </div>
+                                </div>
+                                <div class="small-connector">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="journey-card small-card">
+                                    <div class="card-icon">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h5>Targeted Ads</h5>
+                                        <p>Personalized Google Ads</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Not Engaged Branch -->
+                        <div class="journey-branch not-engaged">
+                            <div class="branch-header">
+                                <span class="branch-label">Not Engaged (66%)</span>
+                            </div>
+                            <div class="branch-steps">
+                                <div class="journey-card small-card warning">
+                                    <div class="card-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h5>48 Hour Wait</h5>
+                                        <p>Cool-down period</p>
+                                    </div>
+                                </div>
+                                <div class="small-connector">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="journey-card small-card">
+                                    <div class="card-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h5>Push Notification</h5>
+                                        <p>Re-engagement attempt</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="journey-insights">
+                    <h4>Key Insights</h4>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h5>Performance</h5>
+                                <p>34% email engagement rate exceeds industry average of 22%</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-target"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h5>Optimization</h5>
+                                <p>Consider A/B testing subject lines to improve open rates</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">
                                 <i class="fas fa-users"></i>
                             </div>
-                            <div class="step-label">Customer Interest<br><small>Content-based segmentation</small></div>
-                        </div>
-                    </div>
-
-                    <!-- Branch paths -->
-                    <div class="branch-flows">
-                        <!-- Branch 1: Beachfront Interest → Google Ads -->
-                        <div class="branch-flow">
-                            <div class="decision-card beachfront">
-                                Beachfront
+                            <div class="insight-content">
+                                <h5>Segmentation</h5>
+                                <p>Interest-based targeting shows 2.3x higher conversion</p>
                             </div>
-                            <div class="dotted-connector"></div>
-                            <div class="branch-step">
-                                <div class="step-icon send-ads">
-                                    <i class="fas fa-bullhorn"></i>
-                                </div>
-                                <div class="step-label">Send Google Ads<br><small>Beachfront offers</small></div>
-                            </div>
-                        </div>
-
-                        <!-- Branch 2: Adventures Interest → Follow-up Email -->
-                        <div class="branch-flow">
-                            <div class="decision-card adventures">
-                                Adventures
-                            </div>
-                            <div class="dotted-connector"></div>
-                            <div class="branch-step">
-                                <div class="step-icon send-email">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="step-label">Send Email<br><small>Adventure offerings</small></div>
-                            </div>
-                        </div>
-
-                        <!-- Branch 3: Home & Comfort Interest → Google Ads -->
-                        <div class="branch-flow">
-                            <div class="decision-card home-comfort">
-                                Home & Comfort
-                            </div>
-                            <div class="dotted-connector"></div>
-                            <div class="branch-step">
-                                <div class="step-icon send-ads">
-                                    <i class="fas fa-bullhorn"></i>
-                                </div>
-                                <div class="step-label">Send Google Ads<br><small>Comfort experiences</small></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottom flow for "Not Clicked" -->
-                    <div class="bottom-flow">
-                        <div class="decision-card not-clicked">
-                            Not Clicked
-                        </div>
-                        <div class="dotted-connector"></div>
-                        <div class="branch-step">
-                            <div class="step-icon mobile-push">
-                                <i class="fas fa-mobile-alt"></i>
-                            </div>
-                            <div class="step-label">Mobile Push<br><small>Re-engagement</small></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="journey-logic-explanation">
-                    <h4>Journey Logic:</h4>
-                    <ul>
-                        <li><strong>Entry:</strong> Customers qualify through campaign subscription or segment criteria</li>
-                        <li><strong>Wait:</strong> Strategic delay allows for optimal email engagement timing</li>
-                        <li><strong>Email Tracking:</strong> Solis Hotel Email tracks recipient click behavior</li>
-                        <li><strong>Interest Segmentation:</strong> Click patterns determine content preference</li>
-                        <li><strong>Personalized Follow-up:</strong> Targeted messaging based on expressed interest</li>
-                        <li><strong>Re-engagement:</strong> Non-clickers receive mobile push to maintain engagement</li>
-                    </ul>
-                </div>
-
-                <div class="journey-actions-bottom">
-                    <button class="journey-btn cancel">Cancel</button>
-                    <button class="journey-btn primary">Launch Journey</button>
+                <div class="journey-actions">
+                    <button class="btn-secondary">
+                        <i class="fas fa-edit"></i>
+                        Edit Journey
+                    </button>
+                    <button class="btn-secondary">
+                        <i class="fas fa-copy"></i>
+                        Duplicate
+                    </button>
+                    <button class="btn-primary">
+                        <i class="fas fa-play"></i>
+                        Activate Journey
+                    </button>
                 </div>
             </div>
         `;
