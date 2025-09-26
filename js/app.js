@@ -161,7 +161,7 @@ class MarketingSuperAgentV4 {
                 const card = e.target.closest('.example-card');
                 const prompt = card.dataset.prompt;
                 if (prompt) {
-                    this.handleMainInput(prompt);
+                    this.handleExamplePrompt(prompt);
                 }
             }
         });
@@ -188,21 +188,12 @@ class MarketingSuperAgentV4 {
             }
         });
 
-        // Output actions
-        const saveBtn = document.getElementById('save-output');
-        const exportBtn = document.getElementById('export-output');
-
-        if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                this.saveOutput();
-            });
-        }
-
-        if (exportBtn) {
-            exportBtn.addEventListener('click', () => {
+        // Output actions - using event delegation since export button is dynamically added
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#export-output')) {
                 this.exportOutput();
-            });
-        }
+            }
+        });
     }
 
     initializeInterface() {
@@ -210,7 +201,157 @@ class MarketingSuperAgentV4 {
         this.showHomeScreen();
     }
 
+    handleExamplePrompt(prompt) {
+        // Map example prompts to specific agents and output types
+        const examplePromptConfig = this.getExamplePromptConfig(prompt);
+
+        // Set context for this specific example
+        this.currentTask = examplePromptConfig.task;
+        this.currentTaskAgents = examplePromptConfig.agents;
+        this.currentSuiteTitle = examplePromptConfig.suiteTitle;
+
+        // Transition to working interface
+        this.showWorkingInterface();
+
+        // Add initial message to chat
+        this.addMessage(prompt, 'user');
+
+        // Show processing indicator
+        this.showProcessingIndicator();
+
+        // Show specific agents for this example
+        setTimeout(() => {
+            this.showAgentProgress(examplePromptConfig.messageType, prompt);
+        }, 500);
+
+        // Generate response with specific agents
+        setTimeout(() => {
+            this.generateResponse(prompt, examplePromptConfig.messageType);
+        }, 3000);
+
+        // Update output panel with specific content
+        setTimeout(() => {
+            this.updateOutputPanel(examplePromptConfig.messageType, prompt);
+        }, 2000);
+
+        // Clear task context after processing completes
+        setTimeout(() => {
+            this.clearTaskContext();
+        }, 8000);
+    }
+
+    getExamplePromptConfig(prompt) {
+        const lowerPrompt = prompt.toLowerCase();
+
+        // Creative & Asset Generation prompts
+        if (lowerPrompt.includes('creative assets') || lowerPrompt.includes('instagram ads') ||
+            lowerPrompt.includes('video ad scripts') || lowerPrompt.includes('creative')) {
+            return {
+                task: 'generate-creative',
+                agents: ['Creative Agent', 'Research Agent', 'Audience Agent'],
+                suiteTitle: 'Creative AI Suite',
+                messageType: 'creative'
+            };
+        }
+
+        // Campaign Strategy prompts
+        if (lowerPrompt.includes('campaign brief') || lowerPrompt.includes('holiday promotion') ||
+            lowerPrompt.includes('brand positioning') || lowerPrompt.includes('tiktok advertising strategy')) {
+            return {
+                task: 'campaign-brief',
+                agents: ['Research Agent', 'Audience Agent', 'Performance Agent'],
+                suiteTitle: 'Strategic Planning Suite',
+                messageType: 'brief'
+            };
+        }
+
+        // Journey & Automation prompts
+        if (lowerPrompt.includes('cart abandonment') || lowerPrompt.includes('email campaign') ||
+            lowerPrompt.includes('welcome email') || lowerPrompt.includes('customer onboarding') ||
+            lowerPrompt.includes('win-back email')) {
+            return {
+                task: 'setup-journey',
+                agents: ['Journey Agent', 'Audience Agent', 'Performance Agent'],
+                suiteTitle: 'Engage AI Suite',
+                messageType: 'journey'
+            };
+        }
+
+        // Performance & Optimization prompts
+        if (lowerPrompt.includes('optimize') || lowerPrompt.includes('performance') ||
+            lowerPrompt.includes('budget allocation') || lowerPrompt.includes('landing pages') ||
+            lowerPrompt.includes('conversion')) {
+            return {
+                task: 'optimize-campaign',
+                agents: ['Performance Agent', 'Analytics Agent', 'Research Agent'],
+                suiteTitle: 'Performance AI Suite',
+                messageType: 'performance'
+            };
+        }
+
+        // Audience & Segmentation prompts
+        if (lowerPrompt.includes('audience segments') || lowerPrompt.includes('gen z') ||
+            lowerPrompt.includes('customer personas') || lowerPrompt.includes('targeting') ||
+            lowerPrompt.includes('behavioral')) {
+            return {
+                task: 'audience-segments',
+                agents: ['Audience Agent', 'Research Agent', 'Analytics Agent'],
+                suiteTitle: 'Audience Intelligence Suite',
+                messageType: 'audience'
+            };
+        }
+
+        // Research & Analysis prompts
+        if (lowerPrompt.includes('competitor') || lowerPrompt.includes('market') ||
+            lowerPrompt.includes('pricing strategies') || lowerPrompt.includes('analyze')) {
+            return {
+                task: 'competitor-analysis',
+                agents: ['Research Agent', 'Performance Agent', 'Historical Agent'],
+                suiteTitle: 'Market Research Suite',
+                messageType: 'research'
+            };
+        }
+
+        // Paid Media prompts
+        if (lowerPrompt.includes('google') || lowerPrompt.includes('meta') || lowerPrompt.includes('linkedin') ||
+            lowerPrompt.includes('shopping campaigns') || lowerPrompt.includes('retargeting') ||
+            lowerPrompt.includes('budget allocation')) {
+            return {
+                task: 'budget-allocation',
+                agents: ['Paid Media Agent', 'Performance Agent', 'Analytics Agent'],
+                suiteTitle: 'Paid Media AI Suite',
+                messageType: 'paid-media'
+            };
+        }
+
+        // Content & Planning prompts
+        if (lowerPrompt.includes('content calendar') || lowerPrompt.includes('social media') ||
+            lowerPrompt.includes('webinar') || lowerPrompt.includes('podcast')) {
+            return {
+                task: 'content-calendar',
+                agents: ['Creative Agent', 'Research Agent', 'Journey Agent'],
+                suiteTitle: 'Content Strategy Suite',
+                messageType: 'content'
+            };
+        }
+
+        // Default fallback
+        return {
+            task: 'campaign-brief',
+            agents: ['Research Agent', 'Performance Agent', 'Creative Agent'],
+            suiteTitle: 'Marketing AI Suite',
+            messageType: 'general'
+        };
+    }
+
     handleMainInput(message) {
+        // Clear any previous task-specific context for new general inputs
+        // (Task buttons set their own context)
+        if (!this.currentTask) {
+            this.currentTaskAgents = null;
+            this.currentTask = null;
+        }
+
         // Detect relevant AI suite based on the input
         const relevantSuite = this.detectRelevantAISuite(message);
         if (relevantSuite) {
@@ -241,6 +382,11 @@ class MarketingSuperAgentV4 {
         setTimeout(() => {
             this.routeToAgents(message);
         }, 1000);
+
+        // Clear task context after processing completes
+        setTimeout(() => {
+            this.clearTaskContext();
+        }, 8000); // Clear after all processing is done (increased to ensure completion)
     }
 
     handleChatInput(message) {
@@ -509,6 +655,7 @@ class MarketingSuperAgentV4 {
     }
 
     handleTaskClick(task) {
+        console.log('Task clicked:', task);
         const taskPrompts = {
             'campaign-brief': 'Create a comprehensive campaign brief with objectives, target audience, and strategy',
             'optimize-campaign': 'Analyze my current campaign performance and provide optimization recommendations',
@@ -520,6 +667,20 @@ class MarketingSuperAgentV4 {
             'ab-test': 'Set up A/B testing framework for campaigns with statistical significance tracking',
             'competitor-analysis': 'Analyze competitor marketing strategies, positioning, and performance benchmarks',
             'content-calendar': 'Create a strategic content calendar with scheduling and theme planning'
+        };
+
+        // Task-to-agents mapping - specify which agents are most relevant for each task
+        const taskToAgents = {
+            'campaign-brief': ['Research Agent', 'Audience Agent', 'Performance Agent'],
+            'optimize-campaign': ['Performance Agent', 'Analytics Agent', 'Historical Agent'],
+            'campaign-insights': ['Analytics Agent', 'Performance Agent', 'Historical Agent'],
+            'setup-journey': ['Journey Agent', 'Audience Agent', 'Personalization Agent'],
+            'generate-creative': ['Creative Agent', 'Research Agent', 'Audience Agent'],
+            'audience-segments': ['Audience Agent', 'Analytics Agent', 'Research Agent'],
+            'budget-allocation': ['Performance Agent', 'Analytics Agent', 'Historical Agent'],
+            'ab-test': ['Creative Agent', 'Performance Agent', 'Analytics Agent'],
+            'competitor-analysis': ['Research Agent', 'Performance Agent', 'Historical Agent'],
+            'content-calendar': ['Creative Agent', 'Research Agent', 'Journey Agent']
         };
 
         // Direct task-to-suite mapping for higher accuracy
@@ -548,6 +709,10 @@ class MarketingSuperAgentV4 {
             };
             this.currentSuiteTitle = areaTitles[directSuite];
         }
+
+        // Set the specific agents for this task
+        this.currentTaskAgents = taskToAgents[task] || [];
+        this.currentTask = task;
 
         const prompt = taskPrompts[task] || `Help me ${task.replace(/-/g, ' ')}`;
         this.handleMainInput(prompt);
@@ -722,26 +887,39 @@ class MarketingSuperAgentV4 {
 
     showAgentProgress(messageType, userMessage = '') {
         const agentConfigs = {
-            brief: ['Deep Research', 'Performance', 'Audience', 'Creative'],
-            creative: ['Creative', 'Deep Research', 'Performance'],
-            journey: ['Journey', 'Audience', 'Deep Research', 'Performance'],
-            performance: ['Performance', 'Deep Research', 'Audience'],
-            audience: ['Audience', 'Deep Research', 'Performance'],
-            'paid-media': ['Paid Media', 'Performance', 'Deep Research', 'Audience'],
+            brief: ['Deep Research', 'Performance', 'Audience'],
+            creative: ['Creative', 'Research Agent', 'Audience'],
+            journey: ['Journey', 'Audience', 'Performance'],
+            performance: ['Performance', 'Analytics', 'Research Agent'],
+            audience: ['Audience', 'Research Agent', 'Analytics'],
+            'paid-media': ['Paid Media', 'Performance', 'Analytics'],
+            research: ['Research Agent', 'Performance', 'Historical'],
+            content: ['Creative', 'Research Agent', 'Journey'],
             general: ['Deep Research', 'Performance']
         };
 
-        const activeAgents = agentConfigs[messageType] || agentConfigs.general;
+        // Use task-specific agents if available, otherwise fall back to message type
+        const activeAgents = this.currentTaskAgents && this.currentTaskAgents.length > 0
+            ? this.currentTaskAgents
+            : (agentConfigs[messageType] || agentConfigs.general);
 
         const agentDetails = {
             'Deep Research': { icon: 'fas fa-search', color: '#8b5cf6', task: 'Analyzing market trends and competitor data' },
+            'Research Agent': { icon: 'fas fa-search', color: '#8b5cf6', task: 'Analyzing market trends and competitor data' },
             'Creative': { icon: 'fas fa-palette', color: '#ec4899', task: 'Generating creative concepts and assets' },
+            'Creative Agent': { icon: 'fas fa-palette', color: '#ec4899', task: 'Generating creative concepts and assets' },
             'Journey': { icon: 'fas fa-route', color: '#f59e0b', task: 'Mapping customer touchpoints and flows' },
+            'Journey Agent': { icon: 'fas fa-route', color: '#f59e0b', task: 'Mapping customer touchpoints and flows' },
             'Performance': { icon: 'fas fa-chart-bar', color: '#3b82f6', task: 'Reviewing campaign performance data' },
+            'Performance Agent': { icon: 'fas fa-chart-bar', color: '#3b82f6', task: 'Reviewing campaign performance data' },
             'Audience': { icon: 'fas fa-users', color: '#10b981', task: 'Identifying target segments' },
+            'Audience Agent': { icon: 'fas fa-users', color: '#10b981', task: 'Identifying target segments' },
             'Paid Media': { icon: 'fas fa-dollar-sign', color: '#14b8a6', task: 'Optimizing budget allocation' },
             'Historical': { icon: 'fas fa-history', color: '#6366f1', task: 'Analyzing past campaign learnings' },
-            'AI Decisioning': { icon: 'fas fa-brain', color: '#ef4444', task: 'Processing strategic recommendations' }
+            'Historical Agent': { icon: 'fas fa-history', color: '#6366f1', task: 'Analyzing past campaign learnings' },
+            'AI Decisioning': { icon: 'fas fa-brain', color: '#ef4444', task: 'Processing strategic recommendations' },
+            'Analytics Agent': { icon: 'fas fa-chart-pie', color: '#2563eb', task: 'Analyzing data and metrics' },
+            'Personalization Agent': { icon: 'fas fa-user-cog', color: '#9256d9', task: 'Optimizing personalized experiences' }
         };
 
         // Generate a unique timestamp for this progress session
@@ -749,9 +927,9 @@ class MarketingSuperAgentV4 {
 
         const progressHTML = `
             <div class="agent-progress-display">
-                <div class="progress-header">
-                    <i class="fas fa-cog fa-spin"></i>
-                    <span>Activating ${activeAgents.length} specialist agents</span>
+                <div class="progress-header" id="progress-header-${timestamp}">
+                    <i class="fas fa-cog fa-spin" id="progress-icon-${timestamp}"></i>
+                    <span id="progress-text-${timestamp}">Activating ${activeAgents.length} specialist agents</span>
                 </div>
                 <div class="agent-progress-list">
                     ${activeAgents.map((agentName, index) => {
@@ -777,6 +955,9 @@ class MarketingSuperAgentV4 {
         `;
 
         this.addMessage(progressHTML, 'agent', 'Agent Coordinator');
+
+        // Store current agents for this session
+        this.currentAgents = activeAgents;
 
         // Simulate agent progress with v3 style
         this.simulateAgentProgressV3(activeAgents, timestamp, userMessage);
@@ -821,6 +1002,12 @@ class MarketingSuperAgentV4 {
                 }
             }, (index + 1) * 500 + 1000);
         });
+
+        // Check if all agents are complete and update header
+        const maxCompletionTime = (agents.length) * 500 + 1500; // A bit after the last agent completes
+        setTimeout(() => {
+            this.updateProgressHeaderOnCompletion(timestamp, agents.length);
+        }, maxCompletionTime);
     }
 
     showAgentThoughtProcess(agentName, itemId, index, userMessage = '') {
@@ -943,14 +1130,14 @@ class MarketingSuperAgentV4 {
                 if (item) {
                     const taskDiv = item.querySelector('.agent-progress-task');
                     if (taskDiv) {
-                        taskDiv.innerHTML = `<i class="fas fa-brain" style="margin-right: 6px; color: var(--accent-purple);"></i>${thought}`;
+                        // Create shorter status messages for better display
+                        const shortStatus = this.getShortStatusMessage(thought, thoughtIndex);
+                        taskDiv.innerHTML = `<i class="fas fa-brain" style="margin-right: 6px; color: var(--accent-purple);"></i>${shortStatus}`;
                     }
                 }
 
-                // Also add thought process to chat for transparency
-                if (thoughtIndex < 3) { // Show only first 3 thoughts to avoid spam
-                    this.addMessage(`🧠 **${agentName} Agent thinking:** ${thought}`, 'agent', `${agentName} Agent`);
-                }
+                // Update agent status with current thinking process instead of chat spam
+                this.updateAgentStatusWithThought(agentName, thought, thoughtIndex);
             }, (thoughtIndex * 350) + 200);
         });
 
@@ -1036,19 +1223,36 @@ class MarketingSuperAgentV4 {
 
         const summaries = {
             'Deep Research': 'Research complete: Comprehensive market analysis generated with actionable insights and competitive intelligence.',
+            'Research Agent': 'Research complete: Comprehensive market analysis generated with actionable insights and competitive intelligence.',
             'Creative': 'Creative analysis complete: Multi-variant creative concepts generated with performance predictions and A/B testing framework.',
+            'Creative Agent': 'Creative analysis complete: Multi-variant creative concepts generated with performance predictions and A/B testing framework.',
             'Journey': 'Journey mapping complete: Optimized customer touchpoint sequence designed with personalization triggers and timing optimization.',
+            'Journey Agent': 'Journey mapping complete: Optimized customer touchpoint sequence designed with personalization triggers and timing optimization.',
             'Performance': 'Performance analysis complete: Statistical models processed with optimization recommendations and confidence intervals.',
+            'Performance Agent': 'Performance analysis complete: Statistical models processed with optimization recommendations and confidence intervals.',
             'Audience': 'Audience analysis complete: Behavioral segments identified with targeting strategies and lifetime value projections.',
+            'Audience Agent': 'Audience analysis complete: Behavioral segments identified with targeting strategies and lifetime value projections.',
             'Paid Media': 'Media optimization complete: Budget allocation strategy finalized with scaling opportunities and efficiency gains.',
             'Historical': 'Historical analysis complete: Past campaign learnings synthesized with proven strategies adapted for current context.',
+            'Historical Agent': 'Historical analysis complete: Past campaign learnings synthesized with proven strategies adapted for current context.',
+            'Analytics Agent': 'Analytics processing complete: Data patterns identified with statistical insights and trend projections.',
+            'Personalization Agent': 'Personalization complete: Dynamic content strategies designed with behavioral triggers and customer preference mapping.',
             'AI Decisioning': 'Strategic synthesis complete: Multi-agent recommendations integrated into cohesive action plan with risk-adjusted projections.'
         };
 
         const taskDiv = item.querySelector('.agent-progress-task');
+        const completionMessage = summaries[agentName] || 'Analysis completed successfully';
+
         if (taskDiv) {
-            taskDiv.innerHTML = `<i class="fas fa-check-circle" style="margin-right: 6px; color: var(--success-green);"></i>${summaries[agentName] || 'Analysis completed successfully'}`;
+            taskDiv.innerHTML = `<i class="fas fa-check-circle" style="margin-right: 6px; color: var(--success-green);"></i>${completionMessage}`;
         }
+
+        // Completion message is shown in the agent status box only
+
+        // Check if all agents are complete and update header
+        setTimeout(() => {
+            this.checkAndUpdateProgressHeader();
+        }, 100);
 
         // Add reasoning thought process to main agent responses after completion
         setTimeout(() => {
@@ -1487,8 +1691,8 @@ class MarketingSuperAgentV4 {
                     transition: all var(--transition-fast);
                     font-family: inherit;
                 ">
-                    <i class="fas fa-expand-alt" id="toggle-all-icon"></i>
-                    <span id="toggle-all-text">Expand All</span>
+                    <i class="fas fa-compress-alt" id="toggle-all-icon"></i>
+                    <span id="toggle-all-text">Collapse All</span>
                 </button>
             `;
 
@@ -1578,7 +1782,8 @@ class MarketingSuperAgentV4 {
         if (allContents.length === 0) return;
 
         // Check current state based on first item
-        const isCurrentlyExpanded = allContents[0].style.display === 'block' || allContents[0].style.display === '';
+        // Since we auto-expand by default, check if display is not 'none'
+        const isCurrentlyExpanded = allContents[0].style.display !== 'none';
 
         // Toggle all items
         allContents.forEach(content => {
@@ -1601,6 +1806,19 @@ class MarketingSuperAgentV4 {
 
     generateResponse(message, messageType) {
         const lowerMessage = message.toLowerCase();
+
+        // Check if this is a task-specific request
+        if (this.currentTask && this.currentTaskAgents) {
+            console.log('Generating task-specific response for:', this.currentTask, 'with agents:', this.currentTaskAgents);
+            const response = this.generateTaskSpecificResponse(this.currentTask, message);
+            this.addMessage(response.content, 'agent', response.agent);
+
+            // Add follow-up suggestions for the specific task
+            setTimeout(() => {
+                this.addTaskSpecificSuggestions(this.currentTask);
+            }, 1000);
+            return;
+        }
 
         // Generate more specific responses based on actual content
         const responses = {
@@ -1644,6 +1862,7 @@ class MarketingSuperAgentV4 {
     }
 
     updateOutputPanel(messageType, userMessage = '') {
+        console.log('updateOutputPanel called with:', messageType, 'currentTask:', this.currentTask, 'currentTaskAgents:', this.currentTaskAgents);
         const outputTitle = document.getElementById('output-title');
         const outputContent = document.getElementById('output-content');
         const workspaceTitle = document.getElementById('workspace-title');
@@ -1697,7 +1916,12 @@ class MarketingSuperAgentV4 {
 
         // Generate comprehensive collective output
         const content = this.generateCollectiveAgentOutput(messageType, userMessage);
+
+        // Add export button to the output content
         outputContent.innerHTML = content;
+
+        // Add Export and Share buttons to output header
+        this.addOutputActionButtons();
 
         // Save to output history
         const displayTitle = this.currentSuiteTitle || titles[messageType] || titles.general;
@@ -1721,6 +1945,12 @@ class MarketingSuperAgentV4 {
     generateCollectiveAgentOutput(messageType, userMessage = '') {
         // Extract key elements from user message for context
         const context = this.extractContextFromMessage(userMessage);
+
+        // Check if this is a task-specific request
+        if (this.currentTask && this.currentTaskAgents) {
+            console.log('Generating task-specific output for task:', this.currentTask);
+            return this.generateTaskSpecificOutput(this.currentTask, context, userMessage);
+        }
 
         // For journey type, show visual journey flow
         if (messageType === 'journey') {
@@ -1780,6 +2010,1743 @@ class MarketingSuperAgentV4 {
         else if (lowerMessage.includes('budget')) context.budget = 'Budget optimization';
 
         return context;
+    }
+
+    generateTaskSpecificOutput(task, context, userMessage) {
+        console.log('generateTaskSpecificOutput called for task:', task);
+        const taskOutputGenerators = {
+            'campaign-brief': () => this.generateCampaignBriefOutput(context, userMessage),
+            'optimize-campaign': () => this.generateOptimizationOutput(context, userMessage),
+            'campaign-insights': () => this.generateInsightsOutput(context, userMessage),
+            'setup-journey': () => this.generateJourneySetupOutput(context, userMessage),
+            'generate-creative': () => this.generateCreativeOutput(context, userMessage),
+            'audience-segments': () => this.generateAudienceSegmentsOutput(context, userMessage),
+            'budget-allocation': () => this.generateBudgetAllocationOutput(context, userMessage),
+            'ab-test': () => this.generateABTestOutput(context, userMessage),
+            'competitor-analysis': () => this.generateCompetitorAnalysisOutput(context, userMessage),
+            'content-calendar': () => this.generateContentCalendarOutput(context, userMessage)
+        };
+
+        const generator = taskOutputGenerators[task];
+        return generator ? generator() : this.generateDefaultTaskOutput(task, context, userMessage);
+    }
+
+    generateCampaignBriefOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-rocket" style="color: var(--accent-primary);"></i> Campaign Brief & Strategy</h2>
+                        <p class="output-subtitle">Comprehensive campaign strategy developed by our specialist agents</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">3.2x</div>
+                            <div class="stat-label">Projected ROI</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">25%</div>
+                            <div class="stat-label">Awareness Lift</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">1,000+</div>
+                            <div class="stat-label">Qualified Leads</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-search"></i></div>
+                            <h4>Research Agent Analysis</h4>
+                        </div>
+                        <div class="analysis-content">
+                            <div class="insight-highlight">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Market Opportunity Identified</span>
+                            </div>
+                            <p>Comprehensive market analysis reveals strong potential with ${context.audience || 'target demographic'} showing ${context.engagement || '34% higher engagement'} during ${context.timeframe || 'Q4 2024'}.</p>
+                            <div class="key-metrics">
+                                <div class="metric-item">
+                                    <span class="metric-value">+18%</span>
+                                    <span class="metric-desc">Market growth YoY</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-value">67%</span>
+                                    <span class="metric-desc">Competitive advantage</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-users"></i></div>
+                            <h4>Audience Agent Insights</h4>
+                        </div>
+                        <div class="analysis-content">
+                            <div class="audience-breakdown">
+                                <h5>Primary Audience Segments</h5>
+                                <div class="segment-bars">
+                                    <div class="segment-bar">
+                                        <div class="segment-info">
+                                            <span class="segment-name">${context.demographic || 'Millennials (25-34)'}</span>
+                                            <span class="segment-percentage">42%</span>
+                                        </div>
+                                        <div class="segment-progress">
+                                            <div class="segment-fill" style="width: 42%; background: var(--accent-green);"></div>
+                                        </div>
+                                    </div>
+                                    <div class="segment-bar">
+                                        <div class="segment-info">
+                                            <span class="segment-name">Gen Z (18-28)</span>
+                                            <span class="segment-percentage">35%</span>
+                                        </div>
+                                        <div class="segment-progress">
+                                            <div class="segment-fill" style="width: 35%; background: var(--accent-primary);"></div>
+                                        </div>
+                                    </div>
+                                    <div class="segment-bar">
+                                        <div class="segment-info">
+                                            <span class="segment-name">Gen X (35-50)</span>
+                                            <span class="segment-percentage">23%</span>
+                                        </div>
+                                        <div class="segment-progress">
+                                            <div class="segment-fill" style="width: 23%; background: var(--accent-orange);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="platform-preferences">
+                                <h5>Platform Engagement</h5>
+                                <div class="platform-chips">
+                                    <span class="platform-chip high">Instagram <span class="engagement">89%</span></span>
+                                    <span class="platform-chip high">TikTok <span class="engagement">76%</span></span>
+                                    <span class="platform-chip medium">YouTube <span class="engagement">64%</span></span>
+                                    <span class="platform-chip medium">Facebook <span class="engagement">52%</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Performance Agent Projections</h4>
+                        </div>
+                        <div class="analysis-content">
+                            <div class="performance-forecast">
+                                <h5>Campaign Performance Forecast</h5>
+                                <div class="forecast-grid">
+                                    <div class="forecast-item">
+                                        <div class="forecast-icon awareness"><i class="fas fa-eye"></i></div>
+                                        <div class="forecast-details">
+                                            <span class="forecast-metric">Brand Awareness</span>
+                                            <span class="forecast-value">+25% lift</span>
+                                            <div class="forecast-bar">
+                                                <div class="forecast-progress" style="width: 75%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="forecast-item">
+                                        <div class="forecast-icon conversions"><i class="fas fa-shopping-cart"></i></div>
+                                        <div class="forecast-details">
+                                            <span class="forecast-metric">Conversion Rate</span>
+                                            <span class="forecast-value">${context.goal || '15% improvement'}</span>
+                                            <div class="forecast-bar">
+                                                <div class="forecast-progress" style="width: 60%; background: linear-gradient(90deg, var(--accent-green), #059669);"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="forecast-item">
+                                        <div class="forecast-icon roi"><i class="fas fa-dollar-sign"></i></div>
+                                        <div class="forecast-details">
+                                            <span class="forecast-metric">ROI Potential</span>
+                                            <span class="forecast-value">${context.roi || '3.2x return'}</span>
+                                            <div class="forecast-bar">
+                                                <div class="forecast-progress" style="width: 85%; background: linear-gradient(90deg, var(--accent-orange), #d97706);"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategic-recommendations">
+                    <h3><i class="fas fa-compass" style="color: var(--accent-purple);"></i> Strategic Recommendations</h3>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Multi-Platform Creative Strategy</h5>
+                            <p>Develop platform-specific creative assets with ${context.creative_focus || 'video-first approach'} for maximum engagement across Instagram and TikTok.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Audience Segmentation</h5>
+                            <p>Implement advanced audience segmentation to deliver personalized messaging based on platform behavior and engagement patterns.</p>
+                        </div>
+                        <div class="recommendation-card priority-low">
+                            <div class="rec-priority">Low Priority</div>
+                            <h5>Budget Optimization</h5>
+                            <p>Allocate ${context.budget_split || '60% to high-performing platforms'} with 20% reserved for testing and optimization.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-section">
+                    <h3><i class="fas fa-calendar-alt" style="color: var(--accent-green);"></i> Implementation Timeline</h3>
+                    <div class="timeline-track">
+                        <div class="timeline-item active">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Week 1-2: Campaign Setup</h5>
+                                <p>Creative development, audience configuration, and platform setup</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Week 3-4: Launch & Optimization</h5>
+                                <p>Campaign launch with daily monitoring and initial optimizations</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Week 5-8: Scale & Iterate</h5>
+                                <p>Performance analysis, budget scaling, and creative iteration</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="knowledge-base-section">
+                    <h3><i class="fas fa-database" style="color: var(--accent-primary);"></i> Knowledge Sources Used</h3>
+                    <div class="knowledge-sources">
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon brand"><i class="fas fa-palette"></i></div>
+                                <div class="source-info">
+                                    <h4>Brand Voice Guidelines</h4>
+                                    <div class="source-status active">Active</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Brand tone, messaging framework, and visual identity standards for consistent creative output.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>12</strong> documents</div>
+                                <div class="source-metric"><strong>Updated:</strong> 2 days ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon customer"><i class="fas fa-users"></i></div>
+                                <div class="source-info">
+                                    <h4>Customer Research Data</h4>
+                                    <div class="source-status synced">Synced</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Audience insights, behavioral patterns, and preference data to optimize creative resonance.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>8</strong> segments</div>
+                                <div class="source-metric"><strong>Updated:</strong> 1 week ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon performance"><i class="fas fa-chart-bar"></i></div>
+                                <div class="source-info">
+                                    <h4>Performance Benchmarks</h4>
+                                    <div class="source-status active">Active</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Historical campaign performance data and industry benchmarks for creative optimization.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>24</strong> campaigns</div>
+                                <div class="source-metric"><strong>Updated:</strong> 3 days ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon compliance"><i class="fas fa-shield-alt"></i></div>
+                                <div class="source-info">
+                                    <h4>Compliance Guidelines</h4>
+                                    <div class="source-status active">Active</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Legal requirements, platform policies, and industry regulations for compliant creative content.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>6</strong> policies</div>
+                                <div class="source-metric"><strong>Updated:</strong> 1 week ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    generateOptimizationOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-chart-line" style="color: var(--accent-primary);"></i> Campaign Optimization Report</h2>
+                        <p class="output-subtitle">AI-driven performance analysis and strategic recommendations</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">+32%</div>
+                            <div class="stat-label">Potential Uplift</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">$12.5K</div>
+                            <div class="stat-label">Est. Monthly Savings</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">85%</div>
+                            <div class="stat-label">Confidence Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Performance Analysis</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Performance gaps identified across 3 key areas requiring immediate attention</span>
+                        </div>
+                        <div class="key-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value" style="color: var(--accent-orange);">${context.ctr || '2.4%'}</span>
+                                <span class="metric-desc">Current CTR</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value" style="color: var(--accent-red);">$${context.cpa || '4.20'}</span>
+                                <span class="metric-desc">Cost per Acquisition</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value" style="color: var(--accent-orange);">${context.cvr || '1.8%'}</span>
+                                <span class="metric-desc">Conversion Rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-pie"></i></div>
+                            <h4>Analytics Agent Insights</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-clock"></i>
+                            <span>Peak engagement windows identified with 60% higher conversion rates</span>
+                        </div>
+                        <div class="platform-preferences">
+                            <h5>Audience Behavior Analysis</h5>
+                            <div class="platform-chips">
+                                <div class="platform-chip high">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>Mobile: ${context.mobile_traffic || '73%'}</span>
+                                    <div class="engagement">High Conversion</div>
+                                </div>
+                                <div class="platform-chip medium">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Peak: ${context.optimal_times || '6-8 PM weekdays'}</span>
+                                    <div class="engagement">Best Times</div>
+                                </div>
+                                <div class="platform-chip high">
+                                    <i class="fas fa-calendar-week"></i>
+                                    <span>Days: ${context.peak_days || 'Tue-Thu'}</span>
+                                    <div class="engagement">Peak Days</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-history"></i></div>
+                            <h4>Historical Agent Insights</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-trending-up"></i>
+                            <span>Similar campaigns achieved ${context.historical_lift || '40% performance lift'} with strategic optimizations</span>
+                        </div>
+                        <div class="key-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value">40%</span>
+                                <span class="metric-desc">Historical Lift</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">85%</span>
+                                <span class="metric-desc">Success Rate</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">3.2x</span>
+                                <span class="metric-desc">ROI Improvement</span>
+                            </div>
+                        </div>
+                        <div class="historical-learnings">
+                            <h5>Key Learnings from Similar Campaigns</h5>
+                            <ul>
+                                <li><strong>Creative Refresh Impact:</strong> ${context.top_creative || 'Video carousel format'} outperformed static by 65%</li>
+                                <li><strong>Budget Reallocation:</strong> Shifting to ${context.recommended_channels || 'high-performing channels'} improved ROAS</li>
+                                <li><strong>Testing Opportunities:</strong> ${context.test_element || 'Headline variations'} showed significant impact on CTR</li>
+                                <li><strong>Seasonal Patterns:</strong> Q4 campaigns benefit from 30% budget increase in winning segments</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategic-recommendations">
+                    <h3><i class="fas fa-rocket"></i> Strategic Recommendations</h3>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Budget Reallocation</h5>
+                            <p>Shift 30% of Facebook budget to Google Ads and LinkedIn. These channels showing 45% better ROAS for your target audience.</p>
+                        </div>
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Creative Optimization</h5>
+                            <p>Launch video creative tests against current static ads. Historical data shows 65% higher engagement for video formats.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Audience Refinement</h5>
+                            <p>Narrow targeting to high-intent segments identified by AI analysis. Projected 35% CTR improvement.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Bid Strategy Update</h5>
+                            <p>Switch to Target CPA bidding at $25. AI optimization will reduce acquisition costs by estimated 25%.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-section">
+                    <h3><i class="fas fa-calendar-check"></i> Implementation Timeline</h3>
+                    <div class="timeline-track">
+                        <div class="timeline-item active">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Week 1: Foundation & Testing</h5>
+                                <p>Implement audience refinements and launch creative A/B tests to establish baseline performance improvements.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Week 2: Budget Optimization</h5>
+                                <p>Adjust budget allocation based on initial test results and implement Target CPA bidding strategy.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Week 3: Scale Winning Elements</h5>
+                                <p>Scale successful variations, optimize underperforming segments, and implement advanced targeting.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Week 4: Performance Review</h5>
+                                <p>Comprehensive analysis of optimization results and planning for next iteration cycle.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="output-section">
+                    <h3>Campaign Optimization Recommendations</h3>
+
+                    <h4>Performance Agent Analysis</h4>
+                    <ul>
+                        <li>Current CTR: ${context.ctr || '2.4%'} - Opportunity to improve by 35%</li>
+                        <li>Cost per acquisition trending ${context.cpa_trend || '15% lower'} than industry average</li>
+                        <li>Top performing ad creative: ${context.top_creative || 'Video carousel format'}</li>
+                    </ul>
+
+                    <h4>Analytics Agent Insights</h4>
+                    <ul>
+                        <li>Optimal posting times: ${context.optimal_times || '6-8 PM weekdays'}</li>
+                        <li>Audience engagement peaks during ${context.peak_days || 'Tuesday-Thursday'}</li>
+                        <li>Mobile traffic accounts for ${context.mobile_traffic || '73%'} of conversions</li>
+                    </ul>
+
+                    <h4>Historical Agent Recommendations</h4>
+                    <ul>
+                        <li>Similar campaigns saw ${context.historical_lift || '40% performance lift'} with creative refresh</li>
+                        <li>Budget reallocation to ${context.recommended_channels || 'high-performing channels'} recommended</li>
+                    </ul>
+                </div>
+
+                <div class="knowledge-base-section">
+                    <h3><i class="fas fa-database" style="color: var(--accent-primary);"></i> Knowledge Sources Used</h3>
+                    <div class="knowledge-sources">
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon performance"><i class="fas fa-chart-bar"></i></div>
+                                <div class="source-info">
+                                    <h4>Campaign Performance Data</h4>
+                                    <div class="source-status active">Active</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Historical campaign metrics, conversion tracking, and performance benchmarks for optimization insights.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>156</strong> campaigns</div>
+                                <div class="source-metric"><strong>Updated:</strong> 1 hour ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon customer"><i class="fas fa-users"></i></div>
+                                <div class="source-info">
+                                    <h4>Audience Analytics</h4>
+                                    <div class="source-status synced">Synced</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                User behavior data, demographic insights, and engagement patterns for targeted optimization.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>24</strong> segments</div>
+                                <div class="source-metric"><strong>Updated:</strong> 30 mins ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon research"><i class="fas fa-search"></i></div>
+                                <div class="source-info">
+                                    <h4>Industry Benchmarks</h4>
+                                    <div class="source-status active">Active</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Market research, competitor analysis, and industry performance standards for strategic comparisons.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>48</strong> reports</div>
+                                <div class="source-metric"><strong>Updated:</strong> 2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    generateCreativeOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-palette" style="color: var(--accent-red);"></i> Creative Asset Generation</h2>
+                        <p class="output-subtitle">AI-generated creative assets optimized for your brand and audience</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Assets Generated</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">4</div>
+                            <div class="stat-label">Formats</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">92%</div>
+                            <div class="stat-label">Brand Alignment</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">85%</div>
+                            <div class="stat-label">Predicted CTR</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card creative">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-palette"></i></div>
+                            <h4>Creative Strategy Analysis</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Brand voice analysis reveals opportunity for more conversational, benefit-focused messaging</span>
+                        </div>
+                        <div class="key-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value">65%</span>
+                                <span class="metric-desc">Video Performance Lift</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">23%</span>
+                                <span class="metric-desc">CTR Boost</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">31%</span>
+                                <span class="metric-desc">Social Proof Impact</span>
+                            </div>
+                        </div>
+                        <div class="creative-insights">
+                            <h5>Creative Elements Analysis</h5>
+                            <ul>
+                                <li><strong>Visual Style:</strong> ${context.visual_style || 'Modern, minimalist with bold accent colors'}</li>
+                                <li><strong>Messaging Tone:</strong> ${context.messaging_tone || 'Conversational and benefit-focused'}</li>
+                                <li><strong>CTA Strategy:</strong> ${context.cta_strategy || 'Action-oriented with urgency elements'}</li>
+                                <li><strong>Format Optimization:</strong> Video content shows 65% higher engagement rates</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-search"></i></div>
+                            <h4>Market Research Intelligence</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-trending-up"></i>
+                            <span>Trending formats and competitor analysis identify creative opportunities</span>
+                        </div>
+                        <div class="research-findings">
+                            <h5>Platform Trends & Insights</h5>
+                            <div class="platform-chips">
+                                <div class="platform-chip high">
+                                    <i class="fab fa-instagram"></i>
+                                    <span>Instagram</span>
+                                    <span class="engagement">High engagement</span>
+                                </div>
+                                <div class="platform-chip medium">
+                                    <i class="fab fa-facebook"></i>
+                                    <span>Facebook</span>
+                                    <span class="engagement">Medium engagement</span>
+                                </div>
+                                <div class="platform-chip high">
+                                    <i class="fab fa-tiktok"></i>
+                                    <span>TikTok</span>
+                                    <span class="engagement">High engagement</span>
+                                </div>
+                            </div>
+                            <ul style="margin-top: var(--space-md);">
+                                <li><strong>Trending Formats:</strong> ${context.trending_formats || 'Short-form video, carousel posts, UGC-style content'}</li>
+                                <li><strong>Competitor Gap:</strong> ${context.content_gap || 'Educational content and behind-the-scenes storytelling'}</li>
+                                <li><strong>Audience Preference:</strong> ${context.content_preference || '75% prefer authentic, relatable content over polished ads'}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-users"></i></div>
+                            <h4>Audience Targeting Optimization</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Multi-segment targeting strategy with personalized creative variations</span>
+                        </div>
+                        <div class="audience-breakdown">
+                            <h5>Target Segment Analysis</h5>
+                            <div class="segment-bars">
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Primary (Ages 25-34)</span>
+                                        <span class="segment-percentage">45%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 45%; background: var(--accent-primary);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Secondary (Ages 35-44)</span>
+                                        <span class="segment-percentage">30%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 30%; background: var(--accent-green);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Growth (Ages 18-24)</span>
+                                        <span class="segment-percentage">25%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 25%; background: var(--accent-orange);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: var(--space-md);">
+                                <h5>Creative Personalization Strategy</h5>
+                                <ul>
+                                    <li><strong>Primary Segment:</strong> ${context.primary_messaging || 'Professional achievement and lifestyle enhancement focus'}</li>
+                                    <li><strong>Secondary Segment:</strong> ${context.secondary_messaging || 'Family-oriented benefits and time-saving solutions'}</li>
+                                    <li><strong>Growth Segment:</strong> ${context.growth_messaging || 'Social validation and trend-forward positioning'}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creative-concepts-section">
+                    <h3><i class="fas fa-magic"></i> Generated Creative Concepts</h3>
+                    <div class="concepts-grid">
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Concept A: ${context.concept_a || 'Lifestyle Integration'}</h4>
+                                <span class="concept-type">Emotional Approach</span>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80"
+                                     alt="Lifestyle Integration Concept"
+                                     class="concept-image">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Strategy:</strong> Emotional storytelling targeting ${context.primary_emotion || 'aspiration and success'}. Features ${context.visual_style || 'bright, energetic visuals'} with ${context.cta || 'strong call-to-action'}.</p>
+                                <div class="concept-metrics">
+                                    <span class="metric">Predicted CTR: <strong>3.2%</strong></span>
+                                    <span class="metric">Engagement Score: <strong>87</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Concept B: ${context.concept_b || 'Problem-Solution Focus'}</h4>
+                                <span class="concept-type">Direct Response</span>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80"
+                                     alt="Problem-Solution Focus Concept"
+                                     class="concept-image">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Strategy:</strong> Direct response approach highlighting ${context.pain_point || 'key pain points'} and positioning ${context.solution || 'product as the solution'}.</p>
+                                <div class="concept-metrics">
+                                    <span class="metric">Predicted CTR: <strong>2.8%</strong></span>
+                                    <span class="metric">Conversion Score: <strong>92</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Concept C: Social Proof Focus</h4>
+                                <span class="concept-type">Trust Building</span>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80"
+                                     alt="Social Proof Focus Concept"
+                                     class="concept-image">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Strategy:</strong> Customer testimonials and user-generated content showcasing real results and community validation.</p>
+                                <div class="concept-metrics">
+                                    <span class="metric">Predicted CTR: <strong>2.5%</strong></span>
+                                    <span class="metric">Trust Score: <strong>94</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategic-recommendations">
+                    <h3><i class="fas fa-lightbulb"></i> Creative Optimization Recommendations</h3>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>A/B Test Creative Concepts</h5>
+                            <p>Test all three concepts with equal traffic split to identify top performer. Focus on CTR and conversion metrics for statistical significance.</p>
+                        </div>
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Platform-Specific Optimization</h5>
+                            <p>Adapt each concept for platform-specific requirements: Instagram Stories, Facebook Feed, TikTok native format variations.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Dynamic Creative Elements</h5>
+                            <p>Implement dynamic headlines and CTAs based on audience segment for increased personalization and performance.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Creative Refresh Strategy</h5>
+                            <p>Plan 3-week creative rotation cycle to prevent ad fatigue. Monitor frequency caps and performance decay indicators.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    generateAudienceSegmentsOutput(context, userMessage) {
+        return `
+            <div class="task-specific-output">
+                <div class="output-section">
+                    <h3>Audience Segmentation Analysis</h3>
+
+                    <h4>Audience Agent Segmentation</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <div style="padding: 1rem; background: var(--content-bg); border-radius: 8px; border-left: 4px solid #10b981;">
+                            <strong>High-Value Segment</strong>
+                            <p>Size: ${context.segment_1_size || '24%'}<br>
+                            LTV: ${context.segment_1_ltv || '$2,400'}<br>
+                            Behavior: ${context.segment_1_behavior || 'Frequent buyers, brand advocates'}</p>
+                        </div>
+                        <div style="padding: 1rem; background: var(--content-bg); border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <strong>Growth Potential</strong>
+                            <p>Size: ${context.segment_2_size || '35%'}<br>
+                            LTV: ${context.segment_2_ltv || '$1,200'}<br>
+                            Behavior: ${context.segment_2_behavior || 'Occasional buyers, price-sensitive'}</p>
+                        </div>
+                        <div style="padding: 1rem; background: var(--content-bg); border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <strong>Nurture Segment</strong>
+                            <p>Size: ${context.segment_3_size || '41%'}<br>
+                            LTV: ${context.segment_3_ltv || '$400'}<br>
+                            Behavior: ${context.segment_3_behavior || 'Browsers, need education'}</p>
+                        </div>
+                    </div>
+
+                    <h4>Analytics Agent Behavioral Insights</h4>
+                    <ul>
+                        <li>Primary engagement hours: ${context.engagement_hours || '7-9 PM EST'}</li>
+                        <li>Preferred content types: ${context.content_types || 'Video tutorials, product demos'}</li>
+                        <li>Channel preferences: ${context.channel_prefs || 'Email (67%), Social Media (45%), SMS (23%)'}</li>
+                    </ul>
+
+                    <h4>Research Agent Market Context</h4>
+                    <ul>
+                        <li>Market penetration opportunity: ${context.market_opportunity || '15% untapped in target demo'}</li>
+                        <li>Competitive positioning: ${context.competitive_pos || 'Strong differentiation in quality segment'}</li>
+                        <li>Growth trends: ${context.growth_trends || 'Segment expanding 12% annually'}</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    generateJourneySetupOutput(context, userMessage) {
+        // Use the full journey flow output for journey tasks
+        return this.generateJourneyFlowOutput(context, userMessage);
+    }
+
+    generateABTestOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-flask" style="color: var(--accent-green);"></i> A/B Testing Framework</h2>
+                        <p class="output-subtitle">Statistical testing framework designed for reliable, actionable insights</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Confidence Level</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">14</div>
+                            <div class="stat-label">Days Runtime</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">2,500+</div>
+                            <div class="stat-label">Sample Size</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-hypothesis-section">
+                    <div class="hypothesis-card">
+                        <div class="hypothesis-header">
+                            <i class="fas fa-lightbulb" style="color: var(--accent-orange);"></i>
+                            <h3>Test Hypothesis</h3>
+                        </div>
+                        <div class="hypothesis-content">
+                            <p class="hypothesis-statement">Testing ${context.test_element || 'creative variations'} will improve ${context.metric || 'conversion rates'} by <strong>15-25%</strong></p>
+                            <div class="hypothesis-metrics">
+                                <div class="hypothesis-metric">
+                                    <span class="metric-label">Expected Lift</span>
+                                    <span class="metric-value positive">+20%</span>
+                                </div>
+                                <div class="hypothesis-metric">
+                                    <span class="metric-label">Significance Level</span>
+                                    <span class="metric-value">α = 0.05</span>
+                                </div>
+                                <div class="hypothesis-metric">
+                                    <span class="metric-label">Statistical Power</span>
+                                    <span class="metric-value">80%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-variations-section">
+                    <h3><i class="fas fa-code-branch" style="color: var(--accent-primary);"></i> Test Variations</h3>
+                    <div class="variations-grid">
+                        <div class="variation-card control">
+                            <div class="variation-header">
+                                <span class="variation-badge control">Control</span>
+                                <h4>Variation A (Current)</h4>
+                            </div>
+                            <div class="variation-preview">
+                                <div class="preview-placeholder">
+                                    <i class="fas fa-image"></i>
+                                    <span>Current Creative</span>
+                                </div>
+                            </div>
+                            <div class="variation-metrics">
+                                <div class="traffic-allocation">
+                                    <span class="allocation-label">Traffic:</span>
+                                    <span class="allocation-value">50%</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill control" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="variation-card test">
+                            <div class="variation-header">
+                                <span class="variation-badge test">Test</span>
+                                <h4>Variation B (New)</h4>
+                            </div>
+                            <div class="variation-preview">
+                                <div class="preview-placeholder">
+                                    <i class="fas fa-magic"></i>
+                                    <span>Test Creative</span>
+                                </div>
+                            </div>
+                            <div class="variation-metrics">
+                                <div class="traffic-allocation">
+                                    <span class="allocation-label">Traffic:</span>
+                                    <span class="allocation-value">50%</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill test" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card creative">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-palette"></i></div>
+                            <h4>Creative Agent Analysis</h4>
+                        </div>
+                        <div class="analysis-content">
+                            <div class="insight-highlight">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Test Variation Concepts Generated</span>
+                            </div>
+                            <p>Multiple test variations developed with performance potential analysis across formats and platforms.</p>
+                            <div class="creative-variations">
+                                <h5>Variation Elements</h5>
+                                <div class="element-tags">
+                                    <span class="element-tag">Headlines</span>
+                                    <span class="element-tag">CTA Buttons</span>
+                                    <span class="element-tag">Color Schemes</span>
+                                    <span class="element-tag">Images</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Performance Agent Framework</h4>
+                        </div>
+                        <div class="analysis-content">
+                            <div class="statistical-framework">
+                                <h5>Statistical Configuration</h5>
+                                <div class="framework-grid">
+                                    <div class="framework-item">
+                                        <span class="framework-label">Sample Size</span>
+                                        <span class="framework-value">${context.sample_size || '2,500 per variation'}</span>
+                                    </div>
+                                    <div class="framework-item">
+                                        <span class="framework-label">Confidence Level</span>
+                                        <span class="framework-value">95%</span>
+                                    </div>
+                                    <div class="framework-item">
+                                        <span class="framework-label">Minimum Detectable Effect</span>
+                                        <span class="framework-value">5%</span>
+                                    </div>
+                                    <div class="framework-item">
+                                        <span class="framework-label">Test Duration</span>
+                                        <span class="framework-value">${context.duration || '14 days'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card analytics">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-pie"></i></div>
+                            <h4>Analytics Agent Monitoring</h4>
+                        </div>
+                        <div class="analysis-content">
+                            <div class="monitoring-setup">
+                                <h5>Real-time Monitoring</h5>
+                                <div class="monitoring-features">
+                                    <div class="feature-item">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                        <span>Live performance dashboard</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fas fa-bell"></i>
+                                        <span>Automated significance alerts</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fas fa-stop-circle"></i>
+                                        <span>Early stopping protocols</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>Audience segment analysis</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-metrics-section">
+                    <h3><i class="fas fa-target" style="color: var(--accent-red);"></i> Success Metrics</h3>
+                    <div class="metrics-breakdown">
+                        <div class="primary-metrics">
+                            <h4>Primary Metrics</h4>
+                            <div class="metric-cards">
+                                <div class="metric-card primary">
+                                    <div class="metric-icon"><i class="fas fa-shopping-cart"></i></div>
+                                    <div class="metric-info">
+                                        <span class="metric-name">${context.primary_metric || 'Conversion Rate'}</span>
+                                        <span class="metric-description">Main success indicator</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-metrics">
+                            <h4>Secondary Metrics</h4>
+                            <div class="metric-cards">
+                                <div class="metric-card secondary">
+                                    <div class="metric-icon"><i class="fas fa-mouse-pointer"></i></div>
+                                    <div class="metric-info">
+                                        <span class="metric-name">Click-through Rate</span>
+                                        <span class="metric-description">Engagement quality</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card secondary">
+                                    <div class="metric-icon"><i class="fas fa-dollar-sign"></i></div>
+                                    <div class="metric-info">
+                                        <span class="metric-name">Cost per Acquisition</span>
+                                        <span class="metric-description">Efficiency measure</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-section">
+                    <h3><i class="fas fa-calendar-check" style="color: var(--accent-green);"></i> Testing Timeline</h3>
+                    <div class="timeline-track">
+                        <div class="timeline-item active">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Day 1-3: Test Setup & Launch</h5>
+                                <p>Configure variations, implement tracking, and launch test with traffic allocation</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Day 4-10: Data Collection</h5>
+                                <p>Monitor performance metrics and statistical significance progress</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Day 11-14: Analysis & Decision</h5>
+                                <p>Evaluate results, determine winning variation, and plan implementation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    generateInsightsOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-chart-pie" style="color: var(--accent-purple);"></i> Campaign Insights & Analytics</h2>
+                        <p class="output-subtitle">Comprehensive data analysis and performance intelligence</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">15</div>
+                            <div class="stat-label">Data Sources</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">2.8M</div>
+                            <div class="stat-label">Data Points</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">94%</div>
+                            <div class="stat-label">Accuracy Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-pie"></i></div>
+                            <h4>Analytics Intelligence</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-trending-up"></i>
+                            <span>Performance analysis reveals 34% higher engagement in key demographic segments</span>
+                        </div>
+                        <div class="audience-breakdown">
+                            <h5>Top Performing Segments</h5>
+                            <div class="segment-bars">
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">${context.top_segment || 'Millennials 25-34'}</span>
+                                        <span class="segment-percentage">${context.performance || '34% higher engagement'}</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 90%; background: var(--accent-green);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Gen Z 18-24</span>
+                                        <span class="segment-percentage">28% engagement rate</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 85%; background: var(--accent-primary);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Gen X 35-50</span>
+                                        <span class="segment-percentage">21% engagement rate</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 70%; background: var(--accent-orange);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="key-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value">3.2x</span>
+                                <span class="metric-desc">ROI on Instagram</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">42%</span>
+                                <span class="metric-desc">Peak Time Lift</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">28%</span>
+                                <span class="metric-desc">Video vs Static</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Performance Trends</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-clock"></i>
+                            <span>Optimal timing analysis shows ${context.best_time || 'Tuesday-Thursday 7-9 PM'} generating peak performance</span>
+                        </div>
+                        <div class="platform-preferences">
+                            <h5>Channel Performance Analysis</h5>
+                            <div class="platform-chips">
+                                <div class="platform-chip high">
+                                    <i class="fab fa-instagram"></i>
+                                    <span>${context.best_channel || 'Instagram'}: ${context.channel_roi || '3.2x ROI'}</span>
+                                    <div class="engagement">Top Performer</div>
+                                </div>
+                                <div class="platform-chip medium">
+                                    <i class="fab fa-facebook"></i>
+                                    <span>Facebook: 2.1x ROI</span>
+                                    <div class="engagement">Strong</div>
+                                </div>
+                                <div class="platform-chip medium">
+                                    <i class="fab fa-linkedin"></i>
+                                    <span>LinkedIn: 1.8x ROI</span>
+                                    <div class="engagement">B2B Focus</div>
+                                </div>
+                                <div class="platform-chip low">
+                                    <i class="fab fa-twitter"></i>
+                                    <span>Twitter: 1.2x ROI</span>
+                                    <div class="engagement">Opportunity</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="performance-forecast">
+                            <h5>Performance Trend Analysis</h5>
+                            <div class="forecast-grid">
+                                <div class="forecast-item">
+                                    <div class="forecast-icon awareness"><i class="fas fa-arrow-up"></i></div>
+                                    <div class="forecast-details">
+                                        <div class="forecast-metric">Growth Trajectory</div>
+                                        <div class="forecast-value">${context.trend || 'Upward trend'} - 15% MoM</div>
+                                    </div>
+                                    <div class="forecast-bar">
+                                        <div class="forecast-progress" style="width: 85%; background: var(--accent-green);"></div>
+                                    </div>
+                                </div>
+                                <div class="forecast-item">
+                                    <div class="forecast-icon conversions"><i class="fas fa-target"></i></div>
+                                    <div class="forecast-details">
+                                        <div class="forecast-metric">Conversion Optimization</div>
+                                        <div class="forecast-value">${context.recommendation || 'Budget reallocation'} opportunity</div>
+                                    </div>
+                                    <div class="forecast-bar">
+                                        <div class="forecast-progress" style="width: 78%; background: var(--accent-primary);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-history"></i></div>
+                            <h4>Historical Intelligence</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-database"></i>
+                            <span>Historical pattern analysis reveals seasonal trends and optimization opportunities</span>
+                        </div>
+                        <div class="key-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value">15%</span>
+                                <span class="metric-desc">Q4 Seasonal Lift</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">89%</span>
+                                <span class="metric-desc">Pattern Accuracy</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">6Mo</span>
+                                <span class="metric-desc">Trend Window</span>
+                            </div>
+                        </div>
+                        <div class="historical-learnings">
+                            <h5>Key Historical Insights</h5>
+                            <ul>
+                                <li><strong>Seasonal Patterns:</strong> Q4 campaigns show 15% performance lift with urgency messaging</li>
+                                <li><strong>Audience Evolution:</strong> Mobile engagement increased 45% over past 6 months</li>
+                                <li><strong>Creative Lifecycle:</strong> Creative fatigue occurs after 3-4 weeks of continuous exposure</li>
+                                <li><strong>Channel Migration:</strong> Audience gradually shifting from Facebook to Instagram and TikTok</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategic-recommendations">
+                    <h3><i class="fas fa-lightbulb"></i> Data-Driven Recommendations</h3>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Channel Reallocation</h5>
+                            <p>Shift more budget to Instagram based on 3.2x ROI performance. Reduce Twitter spend and reallocate to high-performing channels.</p>
+                        </div>
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Timing Optimization</h5>
+                            <p>Focus ad delivery during Tuesday-Thursday 7-9 PM window for 42% better performance based on engagement data.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Creative Refresh Strategy</h5>
+                            <p>Implement 3-week creative rotation cycle to prevent fatigue. Video content showing 28% better performance than static.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Audience Segmentation</h5>
+                            <p>Create separate campaigns for Millennials and Gen Z with tailored messaging for each demographic's preferences.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insights-deep-dive">
+                    <h3><i class="fas fa-microscope"></i> Deep Dive Analysis</h3>
+                    <div class="output-section">
+                    <h3>Campaign Insights & Analytics</h3>
+
+                    <h4>Analytics Agent Analysis</h4>
+                    <p>Comprehensive data analysis revealing key performance trends and optimization opportunities across your campaigns.</p>
+
+                    <h4>Performance Insights</h4>
+                    <ul>
+                        <li><strong>Top Performing Segments:</strong> ${context.top_segment || 'Millennials 25-34'} showing ${context.performance || '34% higher engagement'}</li>
+                        <li><strong>Optimal Timing:</strong> ${context.best_time || 'Tuesday-Thursday 7-9 PM'} generates ${context.timing_lift || '42% better performance'}</li>
+                        <li><strong>Channel Efficiency:</strong> ${context.best_channel || 'Instagram'} delivering ${context.channel_roi || '3.2x ROI'}</li>
+                        <li><strong>Creative Performance:</strong> ${context.creative_insight || 'Video content'} outperforming static by ${context.creative_lift || '28%'}</li>
+                    </ul>
+
+                    <h4>Performance Agent Analysis</h4>
+                    <p>Historical performance patterns indicate ${context.trend || 'upward trajectory'} with ${context.recommendation || 'budget reallocation opportunities'}.</p>
+
+                    <h4>Historical Agent Analysis</h4>
+                    <ul>
+                        <li>Seasonal trends showing ${context.seasonal || '15% lift during Q4'}</li>
+                        <li>Audience behavior evolution patterns identified</li>
+                        <li>Competitive landscape shifts and opportunities</li>
+                        <li>Budget allocation efficiency improvements</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    generateBudgetAllocationOutput(context, userMessage) {
+        return `
+            <div class="task-specific-output">
+                <div class="output-section">
+                    <h3>Budget Allocation Optimization</h3>
+
+                    <h4>Performance Agent Analysis</h4>
+                    <p>Channel performance analysis reveals optimal budget distribution for maximum ROI across your marketing mix.</p>
+
+                    <h4>Recommended Budget Allocation</h4>
+                    <ul>
+                        <li><strong>Google Ads:</strong> ${context.google_budget || '35%'} - High-intent search traffic</li>
+                        <li><strong>Meta Platforms:</strong> ${context.meta_budget || '30%'} - Social engagement and retargeting</li>
+                        <li><strong>LinkedIn:</strong> ${context.linkedin_budget || '20%'} - B2B targeting and lead generation</li>
+                        <li><strong>Other Channels:</strong> ${context.other_budget || '15%'} - Testing and diversification</li>
+                    </ul>
+
+                    <h4>Analytics Agent Analysis</h4>
+                    <p>ROI modeling suggests ${context.roi_improvement || '23% performance increase'} with optimized allocation strategy.</p>
+
+                    <h4>Historical Agent Analysis</h4>
+                    <ul>
+                        <li>Historical performance data supports reallocation strategy</li>
+                        <li>Seasonal budget adjustment recommendations</li>
+                        <li>Competitive spending insights and opportunities</li>
+                        <li>Long-term budget scaling projections</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    generateCompetitorAnalysisOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-search" style="color: var(--accent-purple);"></i> Deep Market Research & Intelligence</h2>
+                        <p class="output-subtitle">Comprehensive competitive analysis and market insights to guide strategic decisions</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">47</div>
+                            <div class="stat-label">Competitors Analyzed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Market Segments</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">8.3</div>
+                            <div class="stat-label">Research Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">15</div>
+                            <div class="stat-label">Opportunities</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-search"></i></div>
+                            <h4>Deep Research Intelligence</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Market leaders are underinvesting in Gen Z engagement, creating a 40% opportunity gap in social commerce channels</span>
+                        </div>
+                        <div class="key-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value">73%</span>
+                                <span class="metric-desc">Market Share Gap</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">$2.8M</span>
+                                <span class="metric-desc">Revenue Opportunity</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">15</span>
+                                <span class="metric-desc">Competitor Weaknesses</span>
+                            </div>
+                        </div>
+                        <div class="competitive-landscape">
+                            <h5>Competitive Positioning Analysis</h5>
+                            <div class="competitive-breakdown">
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Premium Leaders</span>
+                                        <span class="segment-percentage">34%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 34%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Mid-Market Players</span>
+                                        <span class="segment-percentage">41%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 41%; background: linear-gradient(135deg, var(--accent-orange), #d97706);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Budget Options</span>
+                                        <span class="segment-percentage">25%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 25%; background: linear-gradient(135deg, var(--accent-green), #059669);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Performance Benchmarking</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-trophy"></i>
+                            <span>Top performers achieve 3.2x industry average ROAS through advanced personalization strategies</span>
+                        </div>
+                        <div class="performance-benchmarks">
+                            <h5>Industry Benchmarks vs. Top Performers</h5>
+                            <div class="forecast-grid">
+                                <div class="forecast-item">
+                                    <div class="forecast-icon awareness">
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                    <div class="forecast-details">
+                                        <div class="forecast-metric">Click-Through Rate</div>
+                                        <div class="forecast-value">Industry: 2.1% | Top: 4.8%</div>
+                                        <div class="forecast-bar">
+                                            <div class="forecast-progress" style="width: 85%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="forecast-item">
+                                    <div class="forecast-icon conversions">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                    <div class="forecast-details">
+                                        <div class="forecast-metric">Conversion Rate</div>
+                                        <div class="forecast-value">Industry: 3.2% | Top: 7.1%</div>
+                                        <div class="forecast-bar">
+                                            <div class="forecast-progress" style="width: 75%; background: linear-gradient(135deg, var(--accent-green), #059669);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="forecast-item">
+                                    <div class="forecast-icon roi">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="forecast-details">
+                                        <div class="forecast-metric">Return on Ad Spend</div>
+                                        <div class="forecast-value">Industry: 2.1x | Top: 4.8x</div>
+                                        <div class="forecast-bar">
+                                            <div class="forecast-progress" style="width: 90%; background: linear-gradient(135deg, var(--accent-orange), #d97706);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-history"></i></div>
+                            <h4>Historical Trend Analysis</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Seasonal patterns reveal 65% higher engagement during micro-moments vs. traditional holiday periods</span>
+                        </div>
+                        <div class="historical-analysis">
+                            <h5>Market Evolution & Trends</h5>
+                            <div class="trend-insights">
+                                <div class="trend-item">
+                                    <div class="trend-icon" style="background: var(--accent-green);">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </div>
+                                    <div class="trend-content">
+                                        <div class="trend-title">Rising: Social Commerce</div>
+                                        <div class="trend-description">340% growth in social shopping features adoption</div>
+                                    </div>
+                                </div>
+                                <div class="trend-item">
+                                    <div class="trend-icon" style="background: var(--accent-orange);">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="trend-content">
+                                        <div class="trend-title">Stable: Video Content</div>
+                                        <div class="trend-description">Consistent 60% engagement rate across platforms</div>
+                                    </div>
+                                </div>
+                                <div class="trend-item">
+                                    <div class="trend-icon" style="background: var(--accent-red);">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </div>
+                                    <div class="trend-content">
+                                        <div class="trend-title">Declining: Static Ads</div>
+                                        <div class="trend-description">25% decrease in effectiveness year-over-year</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategic-recommendations">
+                    <h3><i class="fas fa-lightbulb"></i> Strategic Market Opportunities</h3>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Social Commerce Investment</h5>
+                            <p>Competitors are slow to adopt social shopping features. Immediate investment could capture 40% of emerging market share before Q4.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <div class="rec-priority">Medium Priority</div>
+                            <h5>Pricing Strategy Gap</h5>
+                            <p>$50-75 price range is underserved by quality options. Premium-positioned product could dominate this segment.</p>
+                        </div>
+                        <div class="recommendation-card priority-high">
+                            <div class="rec-priority">High Priority</div>
+                            <h5>Gen Z Engagement Channel</h5>
+                            <p>TikTok and Instagram Reels show minimal competitor presence in educational content vertical.</p>
+                        </div>
+                        <div class="recommendation-card priority-low">
+                            <div class="rec-priority">Low Priority</div>
+                            <h5>Content Personalization</h5>
+                            <p>Advanced personalization could differentiate from competitors using basic demographic targeting.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="competitive-intelligence-section">
+                    <h3><i class="fas fa-shield-alt"></i> Competitive Intelligence Summary</h3>
+                    <div class="intelligence-grid">
+                        <div class="intelligence-card">
+                            <div class="intelligence-header">
+                                <h4>Market Leadership</h4>
+                                <div class="leadership-badge">Premium Tier</div>
+                            </div>
+                            <div class="intelligence-details">
+                                <p><strong>Brand A & Brand B</strong> control 34% market share through premium positioning and exclusive partnerships.</p>
+                                <div class="competitive-metrics">
+                                    <div class="metric"><strong>$180M</strong> Combined Revenue</div>
+                                    <div class="metric"><strong>2.1x</strong> Premium Pricing</div>
+                                    <div class="metric"><strong>87%</strong> Brand Recognition</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="intelligence-card">
+                            <div class="intelligence-header">
+                                <h4>Emerging Threats</h4>
+                                <div class="threat-badge">Monitor</div>
+                            </div>
+                            <div class="intelligence-details">
+                                <p><strong>3 New Entrants</strong> focusing on direct-to-consumer models with aggressive pricing strategies.</p>
+                                <div class="competitive-metrics">
+                                    <div class="metric"><strong>45%</strong> Price Undercut</div>
+                                    <div class="metric"><strong>$12M</strong> Funding Raised</div>
+                                    <div class="metric"><strong>2.4x</strong> Growth Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="knowledge-base-section">
+                    <h3><i class="fas fa-database" style="color: var(--accent-primary);"></i> Knowledge Sources Used</h3>
+                    <div class="knowledge-sources">
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon research"><i class="fas fa-search"></i></div>
+                                <div class="source-info">
+                                    <h4>Competitive Intelligence Database</h4>
+                                    <div class="source-status active">Active</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Real-time competitor monitoring, pricing analysis, and strategic positioning data across multiple channels.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>47</strong> competitors tracked</div>
+                                <div class="source-metric"><strong>Updated:</strong> 2 hours ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon performance"><i class="fas fa-chart-bar"></i></div>
+                                <div class="source-info">
+                                    <h4>Market Performance Data</h4>
+                                    <div class="source-status synced">Synced</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Industry benchmarks, market share analytics, and performance metrics from leading market research platforms.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>12</strong> market segments</div>
+                                <div class="source-metric"><strong>Updated:</strong> 4 hours ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon customer"><i class="fas fa-users"></i></div>
+                                <div class="source-info">
+                                    <h4>Consumer Behavior Insights</h4>
+                                    <div class="source-status active">Active</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Trend analysis, consumer preferences, and behavioral patterns from social listening and survey data.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>8</strong> trend reports</div>
+                                <div class="source-metric"><strong>Updated:</strong> 1 day ago</div>
+                            </div>
+                        </div>
+
+                        <div class="knowledge-source-card">
+                            <div class="source-header">
+                                <div class="source-icon product"><i class="fas fa-box"></i></div>
+                                <div class="source-info">
+                                    <h4>Product & Pricing Intelligence</h4>
+                                    <div class="source-status synced">Synced</div>
+                                </div>
+                            </div>
+                            <div class="source-details">
+                                Product feature comparisons, pricing strategies, and competitive landscape mapping for strategic positioning.
+                            </div>
+                            <div class="source-metrics">
+                                <div class="source-metric"><strong>156</strong> products analyzed</div>
+                                <div class="source-metric"><strong>Updated:</strong> 6 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    generateContentCalendarOutput(context, userMessage) {
+        return `
+            <div class="task-specific-output">
+                <div class="output-section">
+                    <h3>Strategic Content Calendar</h3>
+
+                    <h4>Creative Agent Analysis</h4>
+                    <p>Content strategy framework designed to maximize engagement and align with customer journey touchpoints.</p>
+
+                    <h4>Content Themes & Schedule</h4>
+                    <ul>
+                        <li><strong>Week 1:</strong> ${context.week1 || 'Brand awareness + Educational content'}</li>
+                        <li><strong>Week 2:</strong> ${context.week2 || 'Product features + Customer testimonials'}</li>
+                        <li><strong>Week 3:</strong> ${context.week3 || 'Social proof + Behind-the-scenes'}</li>
+                        <li><strong>Week 4:</strong> ${context.week4 || 'Promotional + Call-to-action content'}</li>
+                    </ul>
+
+                    <h4>Research Agent Analysis</h4>
+                    <p>Trending topics and optimal posting times identified for maximum reach and engagement across platforms.</p>
+
+                    <h4>Journey Agent Analysis</h4>
+                    <ul>
+                        <li>Content mapped to customer journey stages</li>
+                        <li>Cross-platform content adaptation strategy</li>
+                        <li>Engagement-driven posting schedule optimization</li>
+                        <li>Performance tracking and adjustment protocols</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    generateDefaultTaskOutput(task, context, userMessage) {
+        const taskName = task.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        const agents = this.currentTaskAgents || [];
+
+        return `
+            <div class="task-specific-output">
+                <div class="output-section">
+                    <h3>${taskName} Analysis</h3>
+                    <p>Our specialist agents have collaborated to deliver comprehensive insights for your ${task.replace(/-/g, ' ')} request.</p>
+
+                    ${agents.map(agent => `
+                        <h4>${agent} Insights</h4>
+                        <ul>
+                            <li>Analysis completed with focus on ${context.goal || 'optimization and performance'}</li>
+                            <li>Recommendations aligned with ${context.objectives || 'your business objectives'}</li>
+                            <li>Strategic insights generated for ${context.scope || 'immediate implementation'}</li>
+                        </ul>
+                    `).join('')}
+
+                    <h4>Next Steps</h4>
+                    <ul>
+                        <li>Review and validate the generated recommendations</li>
+                        <li>Implement priority optimizations</li>
+                        <li>Monitor performance and iterate based on results</li>
+                    </ul>
+                </div>
+            </div>
+        `;
     }
 
     generateAgentInsights(messageType, context) {
@@ -2514,6 +4481,204 @@ class MarketingSuperAgentV4 {
         }
 
         return typeInsights.default || 'This enhancement integrates seamlessly with our previous analysis, creating additional value and optimization opportunities.';
+    }
+
+    generateTaskSpecificResponse(task, message) {
+        const taskResponses = {
+            'campaign-brief': {
+                agent: 'Campaign Strategy Team',
+                content: `Perfect! I've activated our Research, Audience, and Performance agents to create a comprehensive campaign brief. They're analyzing market opportunities, target audience insights, and performance benchmarks to deliver a strategic foundation for your campaign.`
+            },
+            'optimize-campaign': {
+                agent: 'Performance Optimization Team',
+                content: `Excellent! Our Performance, Analytics, and Historical agents are now analyzing your campaign data. They're identifying optimization opportunities, performance gaps, and applying learnings from similar successful campaigns to boost your results.`
+            },
+            'campaign-insights': {
+                agent: 'Analytics Intelligence Team',
+                content: `Great! I've deployed our Analytics, Performance, and Historical agents to dive deep into your campaign data. They're generating comprehensive insights, identifying trends, and providing actionable recommendations based on your performance metrics.`
+            },
+            'setup-journey': {
+                agent: 'Journey Design Team',
+                content: `Fantastic! Our Journey, Audience, and Personalization agents are collaborating to design your automated customer journey. They're mapping optimal touchpoints, timing, and personalized experiences across email, SMS, and push notifications.`
+            },
+            'generate-creative': {
+                agent: 'Creative Production Team',
+                content: `Amazing! I've activated our Creative, Research, and Audience agents to generate compelling creative assets. They're developing multiple variants for A/B testing, ensuring each creative resonates with your target audience across all platforms.`
+            },
+            'audience-segments': {
+                agent: 'Audience Intelligence Team',
+                content: `Perfect! Our Audience, Analytics, and Research agents are building detailed audience segments. They're analyzing demographics, behaviors, preferences, and market data to create highly targeted segments for maximum campaign effectiveness.`
+            },
+            'budget-allocation': {
+                agent: 'Budget Optimization Team',
+                content: `Excellent! I've deployed our Performance, Analytics, and Historical agents to optimize your budget allocation. They're analyzing channel performance, ROI metrics, and historical data to recommend the most effective budget distribution across your marketing channels.`
+            },
+            'ab-test': {
+                agent: 'Testing & Optimization Team',
+                content: `Great! Our Creative, Performance, and Analytics agents are setting up your A/B testing framework. They're designing test variations, establishing statistical significance parameters, and creating measurement protocols to ensure reliable, actionable results.`
+            },
+            'competitor-analysis': {
+                agent: 'Market Intelligence Team',
+                content: `Perfect! I've activated our Research, Performance, and Historical agents to conduct comprehensive competitor analysis. They're analyzing competitor strategies, positioning, performance benchmarks, and market opportunities to give you a competitive edge.`
+            },
+            'content-calendar': {
+                agent: 'Content Strategy Team',
+                content: `Fantastic! Our Creative, Research, and Journey agents are collaborating to create your strategic content calendar. They're planning themes, scheduling optimal posting times, and ensuring content aligns with your customer journey and business objectives.`
+            }
+        };
+
+        return taskResponses[task] || {
+            agent: 'Task Specialist',
+            content: `I've activated the most relevant specialist agents for your ${task.replace(/-/g, ' ')} request. They're working together to deliver comprehensive, actionable results.`
+        };
+    }
+
+    addTaskSpecificSuggestions(task) {
+        const taskSuggestions = {
+            'campaign-brief': [
+                'Add specific KPIs and success metrics',
+                'Define budget parameters and constraints',
+                'Include competitor positioning analysis',
+                'Set campaign timeline and milestones'
+            ],
+            'optimize-campaign': [
+                'Review ad creative performance',
+                'Analyze audience segment effectiveness',
+                'Adjust budget allocation by channel',
+                'Test new bidding strategies'
+            ],
+            'campaign-insights': [
+                'Export performance report',
+                'Set up automated monitoring',
+                'Create custom dashboard',
+                'Schedule weekly insights review'
+            ],
+            'setup-journey': [
+                'Define entry and exit criteria',
+                'Set up conversion tracking',
+                'Create journey analytics dashboard',
+                'Test journey with sample audience'
+            ],
+            'generate-creative': [
+                'Create additional creative variations',
+                'Develop mobile-optimized versions',
+                'Generate copy variations',
+                'Design seasonal adaptations'
+            ],
+            'audience-segments': [
+                'Create lookalike audiences',
+                'Set up dynamic segmentation',
+                'Export segments to ad platforms',
+                'Create audience overlap analysis'
+            ],
+            'budget-allocation': [
+                'Set up budget alerts',
+                'Create scenario planning',
+                'Implement auto-bidding rules',
+                'Schedule budget reviews'
+            ],
+            'ab-test': [
+                'Set up additional test variations',
+                'Create test monitoring dashboard',
+                'Plan follow-up experiments',
+                'Document testing methodology'
+            ],
+            'competitor-analysis': [
+                'Set up competitor monitoring',
+                'Create competitive positioning map',
+                'Analyze competitor ad creative',
+                'Track competitor pricing changes'
+            ],
+            'content-calendar': [
+                'Add seasonal content themes',
+                'Set up content approval workflow',
+                'Create content performance tracking',
+                'Plan cross-platform adaptations'
+            ]
+        };
+
+        const suggestions = taskSuggestions[task] || [
+            'Refine the strategy further',
+            'Add more specific requirements',
+            'Create implementation timeline',
+            'Set up performance monitoring'
+        ];
+
+        const suggestionsHTML = `
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--content-bg); border: var(--border); border-radius: 8px; border-left: 4px solid var(--accent-primary);">
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; font-size: 13px;">💡 Next Steps & Suggestions</div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    ${suggestions.map(suggestion =>
+                        `<button class="suggestion-btn" onclick="app.handleSuggestion('${suggestion}')" style="background: var(--card-bg); border: var(--border); border-radius: 20px; padding: 4px 12px; font-size: 11px; cursor: pointer; transition: all var(--transition-fast); color: var(--text-secondary);">
+                            ${suggestion}
+                        </button>`
+                    ).join('')}
+                </div>
+            </div>
+        `;
+
+        this.addMessage(suggestionsHTML, 'agent', 'SuperAgent');
+    }
+
+    updateAgentStatusWithThought(agentName, thought, thoughtIndex) {
+        // Agent status is already updated in the showAgentThoughtProcess method
+        // This method is called to replace the chat spam with status updates
+        // The actual status update happens in lines 988-992 of showAgentThoughtProcess
+    }
+
+    getShortStatusMessage(thought, thoughtIndex) {
+        // Create concise status messages for agent progress display
+        const shortMessages = [
+            'Analyzing data patterns...',
+            'Processing requirements...',
+            'Generating recommendations...',
+            'Finalizing insights...',
+            'Validating results...'
+        ];
+
+        // Use a consistent short message based on thought index
+        return shortMessages[thoughtIndex % shortMessages.length] || 'Processing...';
+    }
+
+
+    clearTaskContext() {
+        // Reset task-specific context to allow normal processing for subsequent messages
+        this.currentTask = null;
+        this.currentTaskAgents = null;
+    }
+
+    updateProgressHeaderOnCompletion(timestamp, totalAgents) {
+        const progressIcon = document.getElementById(`progress-icon-${timestamp}`);
+        const progressText = document.getElementById(`progress-text-${timestamp}`);
+
+        if (progressIcon && progressText) {
+            progressIcon.className = 'fas fa-check-circle';
+            progressIcon.style.color = 'var(--accent-green)';
+            progressText.textContent = `${totalAgents} specialist agents completed`;
+        }
+    }
+
+    checkAndUpdateProgressHeader() {
+        // Find all progress displays and check if their agents are complete
+        const progressDisplays = document.querySelectorAll('.agent-progress-display');
+
+        progressDisplays.forEach(display => {
+            const progressHeader = display.querySelector('.progress-header');
+            const allAgentItems = display.querySelectorAll('.agent-progress-item');
+            const completedItems = display.querySelectorAll('.agent-progress-item.completed');
+
+            // If all agents in this display are completed, update the header
+            if (allAgentItems.length > 0 && completedItems.length === allAgentItems.length) {
+                const progressIcon = progressHeader.querySelector('i');
+                const progressText = progressHeader.querySelector('span');
+
+                if (progressIcon && progressText && !progressIcon.classList.contains('fa-check-circle')) {
+                    progressIcon.className = 'fas fa-check-circle';
+                    progressIcon.style.color = 'var(--accent-green)';
+                    progressText.textContent = `${allAgentItems.length} specialist agents completed`;
+                }
+            }
+        });
     }
 
     generateBriefResponse(message) {
@@ -3876,6 +6041,123 @@ class MarketingSuperAgentV4 {
             this.addMessage('✅ Journey changes saved successfully! The updated configuration is now active.', 'agent');
             this.closeEditModal();
         }, 1500);
+    }
+
+    addOutputActionButtons() {
+        const outputHeader = document.querySelector('.output-header');
+        if (!outputHeader) return;
+
+        // Remove existing action buttons if present
+        const existingActions = outputHeader.querySelector('.output-header-actions');
+        if (existingActions) {
+            existingActions.remove();
+        }
+
+        // Create action buttons container
+        const actionsContainer = document.createElement('div');
+        actionsContainer.className = 'output-header-actions';
+        actionsContainer.style.cssText = 'display: flex; gap: var(--space-sm); align-items: center;';
+
+        // Create Export button
+        const exportBtn = document.createElement('button');
+        exportBtn.className = 'workspace-btn';
+        exportBtn.innerHTML = `
+            <i class="fas fa-download"></i>
+            <span>Export</span>
+        `;
+        exportBtn.addEventListener('click', () => this.exportOutput());
+
+        // Create Share button
+        const shareBtn = document.createElement('button');
+        shareBtn.className = 'workspace-btn primary';
+        shareBtn.innerHTML = `
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+        `;
+        shareBtn.addEventListener('click', () => this.shareOutput());
+
+        actionsContainer.appendChild(shareBtn);
+        actionsContainer.appendChild(exportBtn);
+
+        // Add to header
+        const outputTitleSection = outputHeader.querySelector('.output-title-section');
+        if (outputTitleSection) {
+            outputHeader.insertBefore(actionsContainer, outputTitleSection.nextSibling);
+        } else {
+            outputHeader.appendChild(actionsContainer);
+        }
+    }
+
+    async shareOutput() {
+        const outputTitle = document.getElementById('output-title')?.textContent || 'Marketing SuperAgent Output';
+        const outputContent = document.getElementById('output-content');
+
+        if (!outputContent) {
+            this.addMessage("❌ No content available to share.", 'agent');
+            return;
+        }
+
+        // Create shareable text
+        const shareText = `${outputTitle}\n\nGenerated by Marketing SuperAgent\n\nView the full analysis and recommendations...`;
+        const shareUrl = window.location.href;
+
+        // Try Web Share API first
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: outputTitle,
+                    text: shareText,
+                    url: shareUrl
+                });
+                this.addMessage("✅ Content shared successfully!", 'agent');
+                return;
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.warn('Web Share API failed:', error);
+                }
+                // Fall through to clipboard sharing
+            }
+        }
+
+        // Fallback to clipboard
+        this.fallbackShare(shareText, shareUrl);
+    }
+
+    async fallbackShare(shareText, shareUrl) {
+        const fullShareText = `${shareText}\n\n${shareUrl}`;
+
+        try {
+            await navigator.clipboard.writeText(fullShareText);
+            this.addMessage("✅ Share link copied to clipboard!", 'agent');
+        } catch (error) {
+            console.warn('Clipboard API failed:', error);
+
+            // Ultimate fallback - show text to copy manually
+            const shareModal = document.createElement('div');
+            shareModal.style.cssText = `
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5); z-index: 1000;
+                display: flex; align-items: center; justify-content: center;
+            `;
+
+            shareModal.innerHTML = `
+                <div style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%;">
+                    <h3 style="margin: 0 0 1rem 0;">Share Content</h3>
+                    <p style="margin: 0 0 1rem 0; color: #666;">Copy this text to share:</p>
+                    <textarea readonly style="width: 100%; height: 150px; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 0.875rem;">${fullShareText}</textarea>
+                    <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
+                        <button onclick="this.closest('.share-modal').remove()" style="padding: 0.5rem 1rem; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer;">Close</button>
+                    </div>
+                </div>
+            `;
+            shareModal.className = 'share-modal';
+
+            document.body.appendChild(shareModal);
+
+            // Select the text for easy copying
+            const textarea = shareModal.querySelector('textarea');
+            textarea.select();
+        }
     }
 }
 
