@@ -8092,6 +8092,17 @@ class MarketingSuperAgentV4 {
         });
     }
 
+    handlePersonalizationActions() {
+        // Add event listeners for Web Personalization Agent buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#enable-personalization-trial')) {
+                this.enablePersonalizationTrial();
+            } else if (e.target.closest('#learn-more-personalization')) {
+                this.learnMorePersonalization();
+            }
+        });
+    }
+
     editJourney() {
         // Create edit journey interface
         const editInterface = `
@@ -8417,6 +8428,46 @@ class MarketingSuperAgentV4 {
             const textarea = shareModal.querySelector('textarea');
             textarea.select();
         }
+    }
+
+    enablePersonalizationTrial() {
+        this.addMessage('Enabling Web Personalization trial for 7 days...', 'agent', 'Web Personalization Agent');
+
+        setTimeout(() => {
+            this.addMessage('✅ Web Personalization trial activated! Your website will now show personalized experiences to returning visitors from your reactivation journey. Trial includes:\n\n• Dynamic content based on email engagement\n• Personalized product recommendations\n• Exit-intent offers\n• Journey-synced messaging\n\nYou can monitor performance in the Analytics dashboard.', 'agent', 'Web Personalization Agent');
+        }, 2000);
+    }
+
+    learnMorePersonalization() {
+        const infoMessage = `
+            <div class="personalization-info-card">
+                <h4>🌐 Web Personalization Agent</h4>
+                <p><strong>What it does:</strong> Creates personalized website experiences that adapt to where visitors are in your marketing journeys.</p>
+
+                <h5>Key Features:</h5>
+                <ul>
+                    <li><strong>Journey Integration:</strong> Syncs with email campaigns to show relevant website content</li>
+                    <li><strong>Dynamic Content:</strong> Changes headlines, offers, and products based on visitor behavior</li>
+                    <li><strong>Smart Targeting:</strong> Different experiences for new vs. returning visitors</li>
+                    <li><strong>Exit-Intent:</strong> Captures departing visitors with targeted offers</li>
+                    <li><strong>A/B Testing:</strong> Automatically tests different personalization strategies</li>
+                </ul>
+
+                <h5>Perfect for:</h5>
+                <ul>
+                    <li>E-commerce sites wanting to increase conversions</li>
+                    <li>SaaS companies optimizing trial signups</li>
+                    <li>Service businesses improving lead quality</li>
+                    <li>Any business running email marketing campaigns</li>
+                </ul>
+
+                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--gray-100); border-radius: var(--radius-md);">
+                    <strong>💡 Pro Tip:</strong> Works best when combined with Audience and Journey agents for complete customer experience optimization.
+                </div>
+            </div>
+        `;
+
+        this.addMessage(infoMessage, 'agent', 'Web Personalization Agent');
     }
 
     handleCreativePrompt(prompt) {
@@ -9128,6 +9179,82 @@ class MarketingSuperAgentV4 {
         `;
 
         this.displayOutput(output, 'Reactivation Journey', 'Engage AI Assistant');
+
+        // Add Web Personalization Agent recommendation after specialist agents complete
+        setTimeout(() => {
+            const webPersonalizationMessage = `
+                <div class="agent-recommendation-card">
+                    <div class="recommendation-header">
+                        <div class="agent-icon personalization">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="recommendation-info">
+                            <h4>Web Personalization Agent</h4>
+                            <p>Enhance your reactivation journey with targeted website experiences</p>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-content">
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>I can create personalized landing pages that adapt based on where subscribers are in your reactivation journey</span>
+                        </div>
+
+                        <div class="personalization-features">
+                            <h5>What I can do:</h5>
+                            <ul>
+                                <li><strong>Dynamic content:</strong> Show different offers based on customer segment</li>
+                                <li><strong>Behavioral triggers:</strong> Personalized pop-ups for returning visitors</li>
+                                <li><strong>Journey-synced messaging:</strong> Website content that matches email touchpoints</li>
+                                <li><strong>Exit-intent captures:</strong> Last-chance offers for departing visitors</li>
+                            </ul>
+                        </div>
+
+                        <div class="preview-section">
+                            <h5>Preview Experience:</h5>
+                            <div class="website-preview" id="website-preview">
+                                <div class="preview-browser">
+                                    <div class="browser-bar">
+                                        <div class="browser-dots">
+                                            <span></span><span></span><span></span>
+                                        </div>
+                                        <div class="browser-url">yourstore.com</div>
+                                    </div>
+                                    <div class="preview-content">
+                                        <div class="hero-section">
+                                            <h3>Welcome Back! We've Missed You 💙</h3>
+                                            <p>Here's that 25% off we promised in your email</p>
+                                            <div class="cta-button">Claim Your Discount</div>
+                                        </div>
+                                        <div class="personalized-products">
+                                            <h4>Picked Just For You</h4>
+                                            <div class="product-grid">
+                                                <div class="product-card">New Arrivals</div>
+                                                <div class="product-card">Your Favorites</div>
+                                                <div class="product-card">Trending Now</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-actions">
+                            <button class="journey-btn primary" id="enable-personalization-trial">
+                                <i class="fas fa-magic"></i>
+                                Enable Trial for 7 Days
+                            </button>
+                            <button class="journey-btn secondary" id="learn-more-personalization">
+                                <i class="fas fa-info-circle"></i>
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            this.addMessage(webPersonalizationMessage, 'agent', 'Web Personalization Agent');
+        }, 3000); // Show after 3 seconds to let specialist agents complete
     }
 
     generateVIPEmailCampaign() {
@@ -9451,6 +9578,7 @@ let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new MarketingSuperAgentV4();
     app.handleJourneyActions();
+    app.handlePersonalizationActions();
     app.initializeKnowledgeBaseSearch();
     console.log('Marketing SuperAgent v4 loaded successfully');
 });
