@@ -10,6 +10,7 @@ class MarketingSuperAgentV4 {
         this.init();
         this.loadHistoryFromStorage();
         this.initRouting();
+        this.setupUniversalNextStepsListeners();
     }
 
     init() {
@@ -163,6 +164,31 @@ class MarketingSuperAgentV4 {
                 if (prompt) {
                     this.handleExamplePrompt(prompt);
                 }
+            }
+        });
+
+        // Creative and Engage quick entries - using global event delegation
+        document.addEventListener('click', (e) => {
+            // Handle Creative AI quick entries
+            if (e.target.closest('.creative-prompt-option')) {
+                const button = e.target.closest('.creative-prompt-option');
+                const prompt = button.getAttribute('data-prompt');
+                console.log('🎨 Creative prompt clicked via global delegation:', prompt);
+                if (prompt) {
+                    this.handleCreativePrompt(prompt);
+                }
+                return;
+            }
+
+            // Handle Engage AI quick entries
+            if (e.target.closest('.engage-prompt-option')) {
+                const button = e.target.closest('.engage-prompt-option');
+                const prompt = button.getAttribute('data-prompt');
+                console.log('🎯 Engage prompt clicked via global delegation:', prompt);
+                if (prompt) {
+                    this.handleEngagePrompt(prompt);
+                }
+                return;
             }
         });
 
@@ -488,9 +514,21 @@ class MarketingSuperAgentV4 {
         // Store and set the current suite title
         this.currentSuiteTitle = areaTitles[area] || 'Creative AI Suite';
 
+        // Special handling for Engage AI Suite
+        if (area === 'engage') {
+            this.showEngageInterface();
+            return;
+        }
+
         // Special handling for Paid Media AI Suite
         if (area === 'paid-media') {
             this.showPaidMediaInterface();
+            return;
+        }
+
+        // Special handling for Creative AI Suite
+        if (area === 'creative') {
+            this.showCreativeInterface();
             return;
         }
 
@@ -594,6 +632,154 @@ class MarketingSuperAgentV4 {
         document.head.appendChild(style);
     }
 
+    showCreativeInterface() {
+        // Transition to working interface
+        this.showWorkingInterface();
+
+        // Set the output title
+        const outputTitle = document.getElementById('output-title');
+        if (outputTitle) {
+            outputTitle.textContent = this.currentSuiteTitle;
+        }
+
+        // Show Creative AI welcome message
+        this.addMessage("Welcome to Creative AI — your partner for generating and testing high-performing assets. What would you like to create today?", 'agent', 'Creative AI Assistant');
+
+        // Show suggested prompts after a delay
+        setTimeout(() => {
+            const creativeSuggestionsHTML = `
+                <div class="creative-quick-entries">
+                    <h4>Quick entries</h4>
+                    <div class="creative-entries-grid">
+                        <button class="creative-prompt-option" data-prompt="Generate 3 Instagram ad variations for my Fall Collection launch">
+                            <div class="creative-prompt-icon instagram">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="creative-prompt-text">Generate 3 Instagram ad variations for my Fall Collection launch</div>
+                        </button>
+
+                        <button class="creative-prompt-option" data-prompt="Find best-performing hero images from my DAM for Black Friday campaign">
+                            <div class="creative-prompt-icon dam">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <div class="creative-prompt-text">Find best-performing hero images from my DAM for Black Friday campaign</div>
+                        </button>
+
+                        <button class="creative-prompt-option" data-prompt="Draft 2 email subject lines to improve open rates for cart abandoners">
+                            <div class="creative-prompt-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="creative-prompt-text">Draft 2 email subject lines to improve open rates for cart abandoners</div>
+                        </button>
+
+                        <button class="creative-prompt-option" data-prompt="Test alternative copy for my landing page headline">
+                            <div class="creative-prompt-icon copy">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="creative-prompt-text">Test alternative copy for my landing page headline</div>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            this.addMessage(creativeSuggestionsHTML, 'agent', 'Creative AI Assistant');
+
+            // Event listeners are now handled via global delegation in setupEventListeners()
+            console.log('Creative AI quick entries displayed - using global event delegation');
+
+            // Add knowledge base toggle option after suggestions
+            setTimeout(() => {
+                const knowledgeToggleHTML = `
+                    <div style="margin-top: 1rem; padding: 1rem; background: var(--gray-50); border: 1px solid var(--border-light); border-radius: 8px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-book" style="color: var(--accent-primary);"></i>
+                                <span style="font-weight: 600; color: var(--text-primary);">Knowledge Base Context</span>
+                            </div>
+                            <label class="toggle-switch" style="position: relative; display: inline-block; width: 50px; height: 28px;">
+                                <input type="checkbox" id="creative-kb-toggle" checked style="opacity: 0; width: 0; height: 0;">
+                                <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #3b82f6; transition: 0.3s; border-radius: 28px;"></span>
+                                <span class="toggle-dot" style="position: absolute; content: ''; height: 22px; width: 22px; right: 3px; top: 3px; background-color: white; transition: 0.3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                            </label>
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.4;">
+                            <span id="creative-kb-status">
+                                ✅ Using your brand guidelines and creative briefs for personalized suggestions
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                this.addMessage(knowledgeToggleHTML, 'agent', 'Creative AI Assistant');
+
+                // Setup toggle event listener
+                const toggleElement = document.getElementById('creative-kb-toggle');
+                if (toggleElement) {
+                    toggleElement.addEventListener('change', (e) => {
+                        this.handleCreativeKBToggle(e.target.checked);
+                    });
+                }
+            }, 500);
+        }, 800);
+    }
+
+    showEngageInterface() {
+        // Transition to working interface
+        this.showWorkingInterface();
+
+        // Set the output title
+        const outputTitle = document.getElementById('output-title');
+        if (outputTitle) {
+            outputTitle.textContent = this.currentSuiteTitle;
+        }
+
+        // Show Engage AI welcome message
+        this.addMessage("Welcome to Engage AI - your hub for building audiences, orchestrating journeys, and optimizing engagement across channels. What would you like to do today?", 'agent', 'Engage AI Assistant');
+
+        // Show suggested prompts after a delay
+        setTimeout(() => {
+            const engageSuggestionsHTML = `
+                <div class="engage-quick-entries">
+                    <h4>Quick entries</h4>
+                    <div class="engage-entries-grid">
+                        <button class="engage-prompt-option" data-prompt="Build an audience of cart abandoners from the last 14 days">
+                            <div class="engage-prompt-icon audience">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="engage-prompt-text">Build an audience of cart abandoners from the last 14 days</div>
+                        </button>
+
+                        <button class="engage-prompt-option" data-prompt="Design a reactivation journey for inactive subscribers">
+                            <div class="engage-prompt-icon journey">
+                                <i class="fas fa-sitemap"></i>
+                            </div>
+                            <div class="engage-prompt-text">Design a reactivation journey for inactive subscribers</div>
+                        </button>
+
+                        <button class="engage-prompt-option" data-prompt="Launch an email campaign for my VIP customers">
+                            <div class="engage-prompt-icon campaign">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="engage-prompt-text">Launch an email campaign for my VIP customers</div>
+                        </button>
+
+                        <button class="engage-prompt-option" data-prompt="Check open and click rates for my last three email sends">
+                            <div class="engage-prompt-icon analytics">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="engage-prompt-text">Check open and click rates for my last three email sends</div>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            this.addMessage(engageSuggestionsHTML, 'agent', 'Engage AI Assistant');
+
+            // Event listeners are now handled via global delegation in setupEventListeners()
+            console.log('Engage AI quick entries displayed - using global event delegation');
+        }, 800);
+    }
+
     handlePaidMediaOption(option) {
         const optionNames = {
             'creation': 'Campaign Creation',
@@ -656,6 +842,13 @@ class MarketingSuperAgentV4 {
 
     handleTaskClick(task) {
         console.log('Task clicked:', task);
+
+        // Special handling for campaign brief - show examples interface
+        if (task === 'campaign-brief') {
+            this.showCampaignBriefExamples();
+            return;
+        }
+
         const taskPrompts = {
             'campaign-brief': 'Create a comprehensive campaign brief with objectives, target audience, and strategy',
             'optimize-campaign': 'Analyze my current campaign performance and provide optimization recommendations',
@@ -733,17 +926,40 @@ class MarketingSuperAgentV4 {
     }
 
     showWorkingInterface() {
+        console.log('🔄 showWorkingInterface called'); // Debug log
+
         const homeScreen = document.getElementById('home-screen');
         const workingInterface = document.getElementById('working-interface');
         const appHeader = document.querySelector('.app-header');
         const mainContent = document.querySelector('.main-content');
 
-        if (homeScreen) homeScreen.style.display = 'none';
-        if (workingInterface) workingInterface.style.display = 'grid';
-        if (appHeader) appHeader.style.display = 'none';
-        if (mainContent) mainContent.classList.add('working-mode');
+        console.log('🔍 Elements found:', {
+            homeScreen: !!homeScreen,
+            workingInterface: !!workingInterface,
+            appHeader: !!appHeader,
+            mainContent: !!mainContent
+        }); // Debug log
+
+        if (homeScreen) {
+            homeScreen.style.display = 'none';
+            console.log('✅ Home screen hidden'); // Debug log
+        }
+        if (workingInterface) {
+            workingInterface.style.display = 'grid';
+            console.log('✅ Working interface shown'); // Debug log
+        }
+        if (appHeader) {
+            appHeader.style.display = 'none';
+            console.log('✅ App header hidden'); // Debug log
+        }
+        if (mainContent) {
+            mainContent.classList.add('working-mode');
+            console.log('✅ Working mode class added'); // Debug log
+        }
 
         this.currentView = 'working';
+        console.log('🎯 Current view set to working'); // Debug log
+
         // Initialize thought processes for new task
         this.currentThoughtProcesses = [];
         this.initializeOutputPanel();
@@ -766,9 +982,825 @@ class MarketingSuperAgentV4 {
         }
     }
 
+    showCampaignBriefExamples() {
+        // Show working interface first
+        this.showWorkingInterface();
+
+        // Set AI suite title
+        this.currentSuiteTitle = 'Campaign Brief Assistant';
+        const outputTitle = document.getElementById('output-title');
+        if (outputTitle) {
+            outputTitle.textContent = this.currentSuiteTitle;
+        }
+
+        // Add initial message
+        this.addMessage("I'll help you create a comprehensive campaign brief. Choose from these example scenarios or describe your own campaign:", 'agent', 'Campaign Brief Assistant');
+
+        // Show examples interface in chat messages
+        const campaignExamplesHTML = `
+                <div class="creative-quick-entries">
+                    <h4>Campaign Brief Examples</h4>
+                    <div class="creative-entries-grid">
+                        <button class="creative-prompt-option" data-campaign-type="product-launch-tech">
+                            <div class="creative-prompt-icon email">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <span class="creative-prompt-text">Tech Product Launch - Launch a new SaaS platform targeting B2B customers with $100K budget</span>
+                        </button>
+                        <button class="creative-prompt-option" data-campaign-type="product-launch-consumer">
+                            <div class="creative-prompt-icon dam">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <span class="creative-prompt-text">Consumer Product Launch - Launch eco-friendly skincare line targeting millennials and Gen Z</span>
+                        </button>
+                        <button class="creative-prompt-option" data-campaign-type="holiday-sale">
+                            <div class="creative-prompt-icon instagram">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <span class="creative-prompt-text">Holiday Sale Campaign - Black Friday/Cyber Monday campaign for e-commerce retailer</span>
+                        </button>
+                        <button class="creative-prompt-option" data-campaign-type="back-to-school">
+                            <div class="creative-prompt-icon copy">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <span class="creative-prompt-text">Back-to-School Campaign - Target students and parents with education technology solutions</span>
+                        </button>
+                        <button class="creative-prompt-option" data-campaign-type="user-acquisition">
+                            <div class="creative-prompt-icon email">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="creative-prompt-text">User Acquisition - Scale mobile app downloads and registrations for fintech startup</span>
+                        </button>
+                        <button class="creative-prompt-option" data-campaign-type="retention-campaign">
+                            <div class="creative-prompt-icon dam">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <span class="creative-prompt-text">Customer Retention - Re-engage inactive subscribers with personalized win-back campaign</span>
+                        </button>
+                        <button class="creative-prompt-option" data-campaign-type="brand-awareness">
+                            <div class="creative-prompt-icon instagram">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <span class="creative-prompt-text">Brand Awareness - Build brand recognition for sustainable fashion startup targeting Gen Z</span>
+                        </button>
+                        <button class="creative-prompt-option" data-campaign-type="brand-repositioning">
+                            <div class="creative-prompt-icon copy">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <span class="creative-prompt-text">Brand Repositioning - Modernize established brand perception for younger demographics</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        // Add examples as a chat message
+        this.addMessage(campaignExamplesHTML, 'agent', 'Campaign Brief Assistant');
+
+        // Add event listeners for example cards
+        this.setupCampaignExampleListeners();
+    }
+
+    setupCampaignExampleListeners() {
+        // Remove existing listeners first to prevent duplicates
+        if (this.campaignExampleHandler) {
+            document.removeEventListener('click', this.campaignExampleHandler);
+        }
+        if (this.campaignCustomHandler) {
+            document.removeEventListener('click', this.campaignCustomHandler);
+        }
+        if (this.campaignKeyHandler) {
+            document.removeEventListener('keypress', this.campaignKeyHandler);
+        }
+
+        // Create new handlers and store references
+        this.campaignExampleHandler = (e) => {
+            const card = e.target.closest('.creative-prompt-option');
+            if (card) {
+                const campaignType = card.getAttribute('data-campaign-type');
+                this.generateCampaignBrief(campaignType);
+            }
+        };
+
+        this.campaignCustomHandler = (e) => {
+            if (e.target.closest('#create-custom-brief')) {
+                const input = document.getElementById('custom-brief-input');
+                if (input && input.value.trim()) {
+                    this.generateCustomCampaignBrief(input.value.trim());
+                    input.value = '';
+                }
+            }
+        };
+
+        this.campaignKeyHandler = (e) => {
+            if (e.target.id === 'custom-brief-input' && e.key === 'Enter') {
+                const input = e.target;
+                if (input.value.trim()) {
+                    this.generateCustomCampaignBrief(input.value.trim());
+                    input.value = '';
+                }
+            }
+        };
+
+        // Add the new listeners
+        document.addEventListener('click', this.campaignExampleHandler);
+        document.addEventListener('click', this.campaignCustomHandler);
+        document.addEventListener('keypress', this.campaignKeyHandler);
+    }
+
+    generateCampaignBrief(campaignType) {
+        // Add user selection message
+        const campaignMessages = {
+            'product-launch-tech': 'Create a comprehensive campaign brief for launching a new SaaS platform targeting B2B customers',
+            'product-launch-consumer': 'Create a comprehensive campaign brief for launching an eco-friendly skincare line targeting millennials and Gen Z',
+            'holiday-sale': 'Create a comprehensive campaign brief for Black Friday/Cyber Monday campaign for e-commerce retailer',
+            'back-to-school': 'Create a comprehensive campaign brief for back-to-school campaign targeting students and parents with education technology',
+            'user-acquisition': 'Create a comprehensive campaign brief for scaling mobile app downloads and registrations for fintech startup',
+            'retention-campaign': 'Create a comprehensive campaign brief for re-engaging inactive subscribers with personalized win-back campaign',
+            'brand-awareness': 'Create a comprehensive campaign brief for building brand recognition for sustainable fashion startup targeting Gen Z',
+            'brand-repositioning': 'Create a comprehensive campaign brief for modernizing established brand perception for younger demographics'
+        };
+
+        const userMessage = campaignMessages[campaignType] || 'Create a comprehensive campaign brief';
+        this.addMessage(userMessage, 'user');
+
+        // Show relevant agents for this campaign type
+        const campaignAgents = {
+            'product-launch-tech': ['Research Agent', 'Audience Agent', 'Performance Agent'],
+            'product-launch-consumer': ['Research Agent', 'Creative Agent', 'Audience Agent'],
+            'holiday-sale': ['Performance Agent', 'Historical Agent', 'Creative Agent'],
+            'back-to-school': ['Audience Agent', 'Journey Agent', 'Creative Agent'],
+            'user-acquisition': ['Audience Agent', 'Performance Agent', 'Analytics Agent'],
+            'retention-campaign': ['Journey Agent', 'Personalization Agent', 'Analytics Agent'],
+            'brand-awareness': ['Research Agent', 'Creative Agent', 'Audience Agent'],
+            'brand-repositioning': ['Research Agent', 'Historical Agent', 'Creative Agent']
+        };
+
+        const agents = campaignAgents[campaignType] || ['Research Agent', 'Audience Agent', 'Performance Agent'];
+
+        // Show processing indicator
+        this.showProcessingIndicator();
+
+        // Show agent progress
+        setTimeout(() => {
+            this.showCampaignBriefAgentProgress(agents, campaignType);
+        }, 1000);
+
+        // Generate comprehensive brief
+        setTimeout(() => {
+            this.displayComprehensiveCampaignBrief(campaignType);
+        }, 4000);
+    }
+
+    generateCustomCampaignBrief(description) {
+        this.addMessage(`Create a comprehensive campaign brief: ${description}`, 'user');
+
+        // Determine relevant agents based on description keywords
+        let agents = ['Research Agent', 'Audience Agent', 'Performance Agent'];
+
+        if (description.toLowerCase().includes('creative') || description.toLowerCase().includes('design') || description.toLowerCase().includes('content')) {
+            agents.push('Creative Agent');
+        }
+        if (description.toLowerCase().includes('journey') || description.toLowerCase().includes('automation') || description.toLowerCase().includes('flow')) {
+            agents.push('Journey Agent');
+        }
+        if (description.toLowerCase().includes('analytics') || description.toLowerCase().includes('measurement') || description.toLowerCase().includes('tracking')) {
+            agents.push('Analytics Agent');
+        }
+        if (description.toLowerCase().includes('personalization') || description.toLowerCase().includes('targeting') || description.toLowerCase().includes('segmentation')) {
+            agents.push('Personalization Agent');
+        }
+
+        // Remove duplicates and limit to 4 agents
+        agents = [...new Set(agents)].slice(0, 4);
+
+        // Show processing indicator
+        this.showProcessingIndicator();
+
+        // Show agent progress
+        setTimeout(() => {
+            this.showCampaignBriefAgentProgress(agents, 'custom', description);
+        }, 1000);
+
+        // Generate comprehensive brief
+        setTimeout(() => {
+            this.displayComprehensiveCampaignBrief('custom', description);
+        }, 4000);
+    }
+
+    showCampaignBriefAgentProgress(agents, campaignType, description = '') {
+        const agentConfigs = {
+            'Research Agent': { color: '#9256d9', icon: 'fas fa-search' },
+            'Audience Agent': { color: '#2d9d78', icon: 'fas fa-users' },
+            'Performance Agent': { color: '#1957db', icon: 'fas fa-chart-line' },
+            'Creative Agent': { color: '#e34850', icon: 'fas fa-palette' },
+            'Journey Agent': { color: '#e68619', icon: 'fas fa-sitemap' },
+            'Analytics Agent': { color: '#1957db', icon: 'fas fa-chart-bar' },
+            'Historical Agent': { color: '#6366f1', icon: 'fas fa-history' },
+            'Personalization Agent': { color: '#9256d9', icon: 'fas fa-user-cog' }
+        };
+
+        const agentDetails = {
+            'Research Agent': {
+                name: 'Research Agent',
+                tasks: [
+                    'Analyzing market landscape and opportunities',
+                    'Researching competitive positioning',
+                    'Identifying industry trends and insights',
+                    'Compiling strategic recommendations'
+                ]
+            },
+            'Audience Agent': {
+                name: 'Audience Agent',
+                tasks: [
+                    'Defining target audience segments',
+                    'Analyzing demographic and psychographic data',
+                    'Creating detailed buyer personas',
+                    'Mapping audience journey touchpoints'
+                ]
+            },
+            'Performance Agent': {
+                name: 'Performance Agent',
+                tasks: [
+                    'Setting performance benchmarks and KPIs',
+                    'Analyzing budget allocation strategies',
+                    'Forecasting campaign performance',
+                    'Defining success metrics and tracking'
+                ]
+            },
+            'Creative Agent': {
+                name: 'Creative Agent',
+                tasks: [
+                    'Developing creative strategy and concepts',
+                    'Designing campaign messaging framework',
+                    'Planning visual identity and assets',
+                    'Creating content themes and guidelines'
+                ]
+            },
+            'Journey Agent': {
+                name: 'Journey Agent',
+                tasks: [
+                    'Mapping customer journey stages',
+                    'Designing touchpoint experiences',
+                    'Creating automation workflows',
+                    'Optimizing conversion funnels'
+                ]
+            },
+            'Analytics Agent': {
+                name: 'Analytics Agent',
+                tasks: [
+                    'Setting up measurement framework',
+                    'Defining attribution models',
+                    'Creating performance dashboards',
+                    'Establishing reporting cadence'
+                ]
+            },
+            'Historical Agent': {
+                name: 'Historical Agent',
+                tasks: [
+                    'Analyzing past campaign performance',
+                    'Identifying successful strategies',
+                    'Learning from previous challenges',
+                    'Applying historical insights'
+                ]
+            },
+            'Personalization Agent': {
+                name: 'Personalization Agent',
+                tasks: [
+                    'Creating personalization strategies',
+                    'Defining dynamic content rules',
+                    'Setting up behavioral triggers',
+                    'Optimizing individual experiences'
+                ]
+            }
+        };
+
+        let progressContent = `
+            <div class="agent-progress-display">
+                <div class="progress-header">
+                    <i class="fas fa-cogs"></i>
+                    Campaign Brief Generation in Progress
+                </div>
+                <div class="agent-progress-list">
+        `;
+
+        agents.forEach((agentName, index) => {
+            const config = agentConfigs[agentName];
+            const details = agentDetails[agentName];
+
+            if (config && details) {
+                const currentTask = details.tasks[Math.floor(Math.random() * details.tasks.length)];
+
+                progressContent += `
+                    <div class="agent-progress-item working" style="animation-delay: ${index * 0.5}s">
+                        <div class="agent-progress-icon" style="background: linear-gradient(135deg, ${config.color}, ${config.color}dd)">
+                            <i class="${config.icon}"></i>
+                        </div>
+                        <div class="agent-progress-content">
+                            <div class="agent-progress-name">${agentName}</div>
+                            <div class="agent-progress-task">${currentTask}</div>
+                        </div>
+                        <div class="agent-status-indicator working">
+                            <i class="fas fa-sync-alt fa-spin"></i>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        progressContent += `
+                </div>
+            </div>
+        `;
+
+        this.addMessage(progressContent, 'agent', 'Campaign Brief Assistant');
+    }
+
+    displayComprehensiveCampaignBrief(campaignType, customDescription = '') {
+        const outputContent = document.getElementById('output-content');
+        if (!outputContent) return;
+
+        // Campaign brief data for different types
+        const campaignBriefs = {
+            'product-launch-tech': {
+                title: 'SaaS Platform Launch Campaign Brief',
+                objective: 'Drive awareness and trial adoption for new B2B SaaS platform among technology decision-makers',
+                budget: '$100,000',
+                duration: '12 weeks',
+                targetAudience: 'B2B Technology Decision-Makers',
+                primaryGoal: 'Generate 500 qualified leads and 50 trial signups',
+                kpis: ['Lead Generation: 500 qualified leads', 'Trial Conversions: 50 signups', 'Brand Awareness: 25% lift', 'Cost per Lead: <$200'],
+                channels: ['LinkedIn Ads', 'Google Ads', 'Content Marketing', 'Webinars'],
+                messaging: 'Transform your workflow with intelligent automation'
+            },
+            'product-launch-consumer': {
+                title: 'Eco-Friendly Skincare Launch Campaign Brief',
+                objective: 'Launch sustainable skincare line targeting environmentally conscious millennials and Gen Z consumers',
+                budget: '$75,000',
+                duration: '8 weeks',
+                targetAudience: 'Eco-conscious Millennials & Gen Z',
+                primaryGoal: 'Achieve 1,000 product sales and 15% market awareness',
+                kpis: ['Product Sales: 1,000 units', 'Brand Awareness: 15% lift', 'Social Engagement: 10K interactions', 'Customer Acquisition Cost: <$75'],
+                channels: ['Instagram Ads', 'TikTok', 'Influencer Partnerships', 'Email Marketing'],
+                messaging: 'Clean beauty that cares for you and the planet'
+            },
+            'holiday-sale': {
+                title: 'Black Friday/Cyber Monday Campaign Brief',
+                objective: 'Maximize revenue during peak shopping season with strategic promotions and channel optimization',
+                budget: '$150,000',
+                duration: '6 weeks',
+                targetAudience: 'E-commerce Shoppers & Existing Customers',
+                primaryGoal: 'Achieve $1.5M in revenue with 4:1 ROAS',
+                kpis: ['Revenue: $1.5M target', 'ROAS: 4:1 minimum', 'Conversion Rate: 8% lift', 'Customer Retention: 25% increase'],
+                channels: ['Google Shopping', 'Facebook/Instagram Ads', 'Email Marketing', 'Retargeting'],
+                messaging: 'Biggest savings of the year - limited time only'
+            },
+            'back-to-school': {
+                title: 'Back-to-School EdTech Campaign Brief',
+                objective: 'Capture education market during back-to-school season targeting students, parents, and educators',
+                budget: '$80,000',
+                duration: '10 weeks',
+                targetAudience: 'Students, Parents & Educators',
+                primaryGoal: 'Drive 2,000 app downloads and 500 premium subscriptions',
+                kpis: ['App Downloads: 2,000', 'Premium Subscriptions: 500', 'Brand Awareness: 20% lift', 'Cost per Acquisition: <$160'],
+                channels: ['Social Media', 'Search Ads', 'Educational Partnerships', 'Content Marketing'],
+                messaging: 'Empower learning success this school year'
+            },
+            'user-acquisition': {
+                title: 'Fintech App User Acquisition Campaign Brief',
+                objective: 'Scale mobile app downloads and user registrations for fintech platform targeting young professionals',
+                budget: '$120,000',
+                duration: '16 weeks',
+                targetAudience: 'Young Professionals (25-35)',
+                primaryGoal: 'Acquire 10,000 new users with 30% activation rate',
+                kpis: ['New Users: 10,000', 'Activation Rate: 30%', 'Cost per Install: <$12', 'Lifetime Value: >$300'],
+                channels: ['App Store Optimization', 'Social Media Ads', 'Referral Program', 'Financial Media'],
+                messaging: 'Take control of your financial future'
+            },
+            'retention-campaign': {
+                title: 'Win-Back Retention Campaign Brief',
+                objective: 'Re-engage inactive subscribers with personalized experiences to drive reactivation and retention',
+                budget: '$50,000',
+                duration: '12 weeks',
+                targetAudience: 'Inactive Subscribers (90+ days)',
+                primaryGoal: 'Reactivate 20% of inactive subscribers',
+                kpis: ['Reactivation Rate: 20%', 'Email Open Rate: 35%', 'Click-through Rate: 8%', 'Revenue Recovery: $200K'],
+                channels: ['Email Marketing', 'SMS', 'Push Notifications', 'Personalized Offers'],
+                messaging: 'We miss you - come back to exclusive benefits'
+            },
+            'brand-awareness': {
+                title: 'Sustainable Fashion Brand Awareness Campaign Brief',
+                objective: 'Build brand recognition and consideration for sustainable fashion startup among Gen Z consumers',
+                budget: '$90,000',
+                duration: '14 weeks',
+                targetAudience: 'Eco-conscious Gen Z (18-26)',
+                primaryGoal: 'Achieve 25% brand awareness and 500K social impressions',
+                kpis: ['Brand Awareness: 25%', 'Social Impressions: 500K', 'Website Traffic: 50K visits', 'Social Followers: +10K'],
+                channels: ['TikTok', 'Instagram', 'Influencer Partnerships', 'Sustainable Fashion Media'],
+                messaging: 'Fashion that doesnt cost the earth'
+            },
+            'brand-repositioning': {
+                title: 'Brand Modernization Campaign Brief',
+                objective: 'Reposition established brand to appeal to younger demographics while maintaining core customer base',
+                budget: '$200,000',
+                duration: '20 weeks',
+                targetAudience: 'Millennials & Gen Z + Existing Customers',
+                primaryGoal: 'Shift brand perception and increase younger demo consideration by 30%',
+                kpis: ['Brand Perception Shift: 30%', 'Younger Demo Consideration: 30%', 'Overall Brand Health: Maintain', 'Social Sentiment: +15%'],
+                channels: ['Multi-platform Digital', 'Influencer Partnerships', 'Content Marketing', 'PR & Events'],
+                messaging: 'Timeless quality meets modern innovation'
+            }
+        };
+
+        let briefData;
+        if (campaignType === 'custom') {
+            briefData = {
+                title: 'Custom Campaign Brief',
+                objective: customDescription,
+                budget: 'To be determined',
+                duration: '8-12 weeks',
+                targetAudience: 'Target audience analysis pending',
+                primaryGoal: 'Campaign goals to be defined based on objectives',
+                kpis: ['Lead Generation: TBD', 'Conversion Rate: TBD', 'Brand Awareness: TBD', 'ROI: TBD'],
+                channels: ['Multi-channel approach recommended', 'Channel mix to be optimized', 'Based on audience insights'],
+                messaging: 'Messaging strategy to be developed'
+            };
+        } else {
+            briefData = campaignBriefs[campaignType] || campaignBriefs['product-launch-tech'];
+        }
+
+        const comprehensiveBrief = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-document-alt"></i>${briefData.title}</h2>
+                        <p class="output-subtitle">Comprehensive campaign strategy with specialist agent analysis</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">${briefData.budget}</span>
+                            <span class="stat-label">Budget</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">${briefData.duration}</span>
+                            <span class="stat-label">Duration</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="campaign-brief-grid">
+                    <div class="brief-section campaign-overview">
+                        <div class="section-header">
+                            <h3><i class="fas fa-bullseye"></i>Campaign Overview</h3>
+                        </div>
+                        <div class="overview-content">
+                            <div class="overview-item">
+                                <h4>Primary Objective</h4>
+                                <p>${briefData.objective}</p>
+                            </div>
+                            <div class="overview-item">
+                                <h4>Target Audience</h4>
+                                <p>${briefData.targetAudience}</p>
+                            </div>
+                            <div class="overview-item">
+                                <h4>Primary Goal</h4>
+                                <p>${briefData.primaryGoal}</p>
+                            </div>
+                            <div class="overview-item">
+                                <h4>Key Messaging</h4>
+                                <p>${briefData.messaging}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brief-section kpi-metrics">
+                        <div class="section-header">
+                            <h3><i class="fas fa-chart-line"></i>Key Performance Indicators</h3>
+                        </div>
+                        <div class="kpi-grid">
+                            ${briefData.kpis.map(kpi => `
+                                <div class="kpi-card">
+                                    <div class="kpi-icon">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                    <div class="kpi-details">
+                                        <span class="kpi-metric">${kpi}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="brief-section channel-strategy">
+                        <div class="section-header">
+                            <h3><i class="fas fa-broadcast-tower"></i>Channel Strategy</h3>
+                        </div>
+                        <div class="channel-grid">
+                            ${briefData.channels.map((channel, index) => `
+                                <div class="channel-card priority-${index < 2 ? 'high' : 'medium'}">
+                                    <div class="channel-icon">
+                                        <i class="fas fa-${channel.toLowerCase().includes('google') ? 'search' :
+                                                  channel.toLowerCase().includes('social') || channel.toLowerCase().includes('instagram') || channel.toLowerCase().includes('facebook') ? 'share-alt' :
+                                                  channel.toLowerCase().includes('email') ? 'envelope' :
+                                                  channel.toLowerCase().includes('tiktok') ? 'video' : 'bullhorn'}"></i>
+                                    </div>
+                                    <span class="channel-name">${channel}</span>
+                                    <span class="channel-priority">${index < 2 ? 'Primary' : 'Secondary'}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="brief-section specialist-analysis">
+                        <div class="section-header">
+                            <h3><i class="fas fa-users-cog"></i>Specialist Agent Analysis</h3>
+                        </div>
+                        <div class="analysis-insights">
+                            <div class="insight-card research">
+                                <div class="insight-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h4>Market Research Insights</h4>
+                                    <ul>
+                                        <li>Competitive landscape analysis shows 23% market opportunity</li>
+                                        <li>Trend analysis indicates 45% growth in target segment</li>
+                                        <li>Consumer sentiment data supports positioning strategy</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="insight-card audience">
+                                <div class="insight-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h4>Audience Intelligence</h4>
+                                    <ul>
+                                        <li>Primary segment: ${briefData.targetAudience}</li>
+                                        <li>Behavioral patterns optimized for ${briefData.channels[0]}</li>
+                                        <li>Messaging resonance score: 8.2/10</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="insight-card performance">
+                                <div class="insight-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h4>Performance Forecasting</h4>
+                                    <ul>
+                                        <li>Projected ROAS: 4.2:1 based on historical data</li>
+                                        <li>Expected conversion rate: 3.8% (+15% vs industry)</li>
+                                        <li>Budget efficiency score: 94/100</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brief-section implementation-timeline">
+                        <div class="section-header">
+                            <h3><i class="fas fa-calendar-alt"></i>Implementation Timeline</h3>
+                        </div>
+                        <div class="timeline-phases">
+                            <div class="phase-card setup">
+                                <div class="phase-number">1</div>
+                                <div class="phase-content">
+                                    <h4>Setup & Preparation</h4>
+                                    <span class="phase-duration">Weeks 1-2</span>
+                                    <p>Campaign setup, creative development, audience configuration</p>
+                                </div>
+                            </div>
+
+                            <div class="phase-card launch">
+                                <div class="phase-number">2</div>
+                                <div class="phase-content">
+                                    <h4>Launch & Scale</h4>
+                                    <span class="phase-duration">Weeks 3-6</span>
+                                    <p>Campaign launch, performance monitoring, initial optimizations</p>
+                                </div>
+                            </div>
+
+                            <div class="phase-card optimize">
+                                <div class="phase-number">3</div>
+                                <div class="phase-content">
+                                    <h4>Optimize & Expand</h4>
+                                    <span class="phase-duration">Weeks 7-${briefData.duration.split(' ')[0]}</span>
+                                    <p>Data-driven optimizations, budget reallocation, scale winning elements</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        outputContent.innerHTML = comprehensiveBrief;
+
+        // Add final message
+        this.addMessage("✅ Comprehensive campaign brief generated! The specialist agents have analyzed market opportunities, audience insights, and performance forecasts to create your strategic foundation. Ready to move to execution?", 'agent', 'Campaign Brief Assistant');
+
+        // Setup next steps listeners - not needed since we moved suggestions to chat
+        // this.setupBriefNextStepsListeners();
+    }
+
+    setupBriefNextStepsListeners() {
+        // Remove existing listener first to prevent duplicates
+        if (this.briefNextStepsHandler) {
+            document.removeEventListener('click', this.briefNextStepsHandler);
+        }
+
+        // Create new handler and store reference
+        this.briefNextStepsHandler = (e) => {
+            const btn = e.target.closest('.next-step-btn');
+            if (btn) {
+                const action = btn.getAttribute('data-action');
+                this.handleBriefNextStep(action);
+            }
+        };
+
+        // Add the new listener
+        document.addEventListener('click', this.briefNextStepsHandler);
+    }
+
+    handleBriefNextStep(action) {
+        const actionMessages = {
+            'generate-creative': 'Generate creative assets and variations for this campaign',
+            'build-audiences': 'Build detailed target audience segments for this campaign',
+            'design-journey': 'Design customer journey flows and touchpoints for this campaign',
+            'setup-tracking': 'Setup comprehensive performance tracking and analytics for this campaign'
+        };
+
+        const message = actionMessages[action] || 'Continue with campaign development';
+        this.addMessage(message, 'user');
+
+        // Route to appropriate specialist based on action
+        const actionRouting = {
+            'generate-creative': () => this.handleCreativeRequest(),
+            'build-audiences': () => this.handleEngageRequest(),
+            'design-journey': () => this.handleEngageRequest(),
+            'setup-tracking': () => this.routeToAgents('Setup performance tracking and analytics')
+        };
+
+        setTimeout(() => {
+            if (actionRouting[action]) {
+                actionRouting[action]();
+            } else {
+                this.routeToAgents(message);
+            }
+        }, 1000);
+    }
+
+    generateSuggestedNextSteps(outputType, context = {}) {
+        const nextStepsConfigs = {
+            'campaign-brief': [
+                'Generate creative assets for this campaign',
+                'Build target audiences for segments',
+                'Design customer journey flows',
+                'Setup performance tracking'
+            ],
+            'audience-analysis': [
+                'Create detailed personas',
+                'Map customer journey for segments',
+                'Generate targeted creative assets',
+                'Setup targeted campaigns'
+            ],
+            'creative-concepts': [
+                'Create more creative variations',
+                'Setup A/B tests for concepts',
+                'Build campaigns with assets',
+                'Generate additional assets'
+            ],
+            'journey-flow': [
+                'Add more customer touchpoints',
+                'Generate journey content',
+                'Setup marketing automation',
+                'Test journey effectiveness'
+            ],
+            'content-calendar': [
+                'Create content assets',
+                'Schedule publishing workflow',
+                'Setup approval processes',
+                'Track content performance'
+            ],
+            'performance-analysis': [
+                'Optimize campaign performance',
+                'Create campaign improvements',
+                'Scale winning elements',
+                'Test new variations'
+            ],
+            'research-insights': [
+                'Create strategy brief',
+                'Design target audiences',
+                'Develop campaign messaging',
+                'Plan channel strategy'
+            ],
+            'default': [
+                'Create campaign brief',
+                'Generate creative assets',
+                'Analyze target audience',
+                'Setup customer journey'
+            ]
+        };
+
+        const suggestions = nextStepsConfigs[outputType] || nextStepsConfigs['default'];
+
+        return `
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--gray-50); border-radius: 8px;">
+                <h4 style="margin: 0 0 0.5rem 0; font-size: 0.875rem; color: var(--gray-700);">Suggested next steps:</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    ${suggestions.map(suggestion => `
+                        <button class="suggestion-btn" onclick="app.handleSuggestion('${suggestion}')"
+                            style="background: white; border: 1px solid var(--gray-200); border-radius: 20px;
+                                   padding: 0.25rem 0.75rem; font-size: 0.75rem; cursor: pointer;
+                                   transition: all 150ms ease;">
+                            ${suggestion}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    setupUniversalNextStepsListeners() {
+        // Remove existing listener first to prevent duplicates
+        if (this.universalNextStepsHandler) {
+            document.removeEventListener('click', this.universalNextStepsHandler);
+        }
+
+        // Create new handler and store reference
+        this.universalNextStepsHandler = (e) => {
+            const btn = e.target.closest('.next-step-action-btn');
+            if (btn) {
+                const action = btn.getAttribute('data-action');
+                this.handleUniversalNextStep(action);
+            }
+        };
+
+        // Add the new listener
+        document.addEventListener('click', this.universalNextStepsHandler);
+    }
+
+    handleUniversalNextStep(action) {
+        const actionMap = {
+            'generate-creative': 'Generate creative assets and variations',
+            'build-audiences': 'Build detailed target audience segments',
+            'design-journey': 'Design customer journey flows and touchpoints',
+            'setup-tracking': 'Setup comprehensive performance tracking',
+            'create-personas': 'Create detailed customer personas',
+            'create-variations': 'Create more creative variations',
+            'setup-ab-test': 'Setup A/B testing framework',
+            'build-campaigns': 'Build comprehensive marketing campaigns',
+            'create-assets': 'Generate additional creative assets',
+            'create-touchpoints': 'Add more customer touchpoints',
+            'generate-content': 'Generate content for customer journey',
+            'setup-automation': 'Setup marketing automation workflows',
+            'test-journey': 'Test customer journey effectiveness',
+            'create-content': 'Create content assets for calendar',
+            'schedule-posts': 'Schedule content publishing',
+            'setup-approval': 'Setup content approval workflows',
+            'track-performance': 'Track content performance metrics',
+            'optimize-campaigns': 'Optimize campaign performance',
+            'create-improvements': 'Create campaign improvements',
+            'expand-winning': 'Scale winning campaign elements',
+            'test-variations': 'Test new campaign variations',
+            'create-strategy': 'Create comprehensive strategy brief',
+            'design-audience': 'Design target audience segments',
+            'develop-messaging': 'Develop campaign messaging',
+            'plan-channels': 'Plan multi-channel strategy',
+            'create-campaign': 'Create new campaign brief',
+            'analyze-audience': 'Analyze target audience insights',
+            'setup-journey': 'Setup customer journey automation'
+        };
+
+        const message = actionMap[action] || 'Continue with marketing development';
+        this.addMessage(message, 'user');
+
+        // Route to appropriate specialist based on action
+        setTimeout(() => {
+            if (action.includes('creative') || action.includes('assets') || action.includes('content')) {
+                this.handleCreativeRequest();
+            } else if (action.includes('audience') || action.includes('journey') || action.includes('personas')) {
+                this.handleEngageRequest();
+            } else if (action.includes('campaign') || action === 'create-strategy') {
+                this.showCampaignBriefExamples();
+            } else {
+                this.routeToAgents(message);
+            }
+        }, 1000);
+    }
+
     addMessage(content, sender = 'agent', agentName = 'SuperAgent') {
+        console.log(`📧 addMessage called: sender=${sender}, agentName=${agentName}, content preview=${content.substring(0, 50)}...`); // Debug log
+
         const chatMessages = document.getElementById('chat-messages');
-        if (!chatMessages) return;
+        if (!chatMessages) {
+            console.log('❌ chat-messages element not found in addMessage'); // Debug log
+            return;
+        }
+
+        console.log('✅ chat-messages element found, creating message...'); // Debug log
 
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
@@ -793,8 +1825,10 @@ class MarketingSuperAgentV4 {
             `;
         }
 
+        console.log('🔗 Appending message to chat...'); // Debug log
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        console.log('✅ Message appended successfully'); // Debug log
 
         this.messageHistory.push({
             content,
@@ -802,6 +1836,151 @@ class MarketingSuperAgentV4 {
             agentName,
             timestamp: new Date()
         });
+    }
+
+    displayOutput(content, title = 'AI Output', agentName = 'SuperAgent') {
+        console.log(`🖥️ displayOutput called: title=${title}, agentName=${agentName}`); // Debug log
+
+        // First, remove any typing indicators
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+            const typingIndicators = chatMessages.querySelectorAll('.agent-typing');
+            typingIndicators.forEach(indicator => {
+                console.log('🗑️ Removing typing indicator...'); // Debug log
+                indicator.remove();
+            });
+        }
+
+        // Update the output panel title and metadata
+        const outputTitle = document.getElementById('output-title');
+        if (outputTitle) {
+            outputTitle.textContent = title;
+            console.log('📝 Updated output title:', title); // Debug log
+        }
+
+        const lastUpdated = document.getElementById('last-updated');
+        if (lastUpdated) {
+            lastUpdated.textContent = 'Just now';
+            console.log('⏰ Updated timestamp'); // Debug log
+        }
+
+        const agentsUsed = document.getElementById('agents-used');
+        if (agentsUsed) {
+            agentsUsed.textContent = agentName;
+            console.log('🤖 Updated agent name:', agentName); // Debug log
+        }
+
+        // Update the output content
+        const outputContent = document.getElementById('output-content');
+        if (outputContent) {
+            outputContent.innerHTML = content;
+
+            // Add universal suggested next steps to chat
+            setTimeout(() => {
+                try {
+                    console.log('🔍 Debug: Starting next steps timeout'); // Debug log
+                    const outputType = this.getOutputTypeFromTitle(title);
+                    console.log('🔍 Debug: title=', title, 'outputType=', outputType); // Debug log
+                const nextStepsConfigs = {
+                    'campaign-brief': [
+                        'Generate creative assets for this campaign',
+                        'Build target audiences for segments',
+                        'Design customer journey flows',
+                        'Setup performance tracking'
+                    ],
+                    'creative': [
+                        'Generate additional creative variations',
+                        'Setup A/B testing framework',
+                        'Launch creative optimization campaign',
+                        'Analyze creative performance metrics'
+                    ],
+                    'journey': [
+                        'Activate this customer journey',
+                        'Create creative assets for touchpoints',
+                        'Setup advanced segmentation',
+                        'Launch performance monitoring'
+                    ],
+                    'audience': [
+                        'Create targeted campaigns for each segment',
+                        'Generate personalized creative assets',
+                        'Design multi-channel customer journeys',
+                        'Setup advanced tracking and attribution'
+                    ],
+                    'performance': [
+                        'Optimize budget allocation',
+                        'Create new audience segments',
+                        'Generate improved creative variants',
+                        'Setup automated bidding strategies'
+                    ],
+                    'budget': [
+                        'Setup budget alerts',
+                        'Create scenario planning',
+                        'Implement auto-bidding rules',
+                        'Schedule budget reviews'
+                    ],
+                    'ab-test': [
+                        'Setup additional test variations',
+                        'Create test monitoring dashboard',
+                        'Plan follow-up experiments',
+                        'Document testing methodology'
+                    ],
+                    'research': [
+                        'Set up competitor monitoring',
+                        'Create competitive positioning map',
+                        'Analyze competitor ad creative',
+                        'Track competitor pricing changes'
+                    ],
+                    'optimization': [
+                        'Review ad creative performance',
+                        'Analyze audience segment effectiveness',
+                        'Adjust budget allocation by channel',
+                        'Test new bidding strategies'
+                    ],
+                    'email': [
+                        'Design welcome email series',
+                        'Setup automated email workflows',
+                        'Create email performance tracking',
+                        'Plan email content calendar'
+                    ],
+                    'general': [
+                        'Continue with creative asset generation',
+                        'Setup advanced audience targeting',
+                        'Design customer journey optimization',
+                        'Launch comprehensive performance tracking'
+                    ]
+                };
+                const suggestions = nextStepsConfigs[outputType] || nextStepsConfigs['general'];
+                console.log('🔍 Debug: Adding suggestions:', suggestions); // Debug log
+                this.addFollowUpSuggestions(suggestions);
+                } catch (error) {
+                    console.error('❌ Error in next steps timeout:', error);
+                }
+            }, 1000);
+
+            console.log('✅ Output content updated successfully'); // Debug log
+        } else {
+            console.log('❌ output-content element not found'); // Debug log
+        }
+
+        // Add completion message to chat
+        this.addMessage(`✅ ${title} generated successfully! Check the output panel for detailed results.`, 'agent', agentName);
+    }
+
+    getOutputTypeFromTitle(title) {
+        const titleLower = title.toLowerCase();
+
+        if (titleLower.includes('campaign brief') || titleLower.includes('brief')) return 'campaign-brief';
+        if (titleLower.includes('creative') || titleLower.includes('ad variations') || titleLower.includes('instagram')) return 'creative';
+        if (titleLower.includes('journey') || titleLower.includes('flow')) return 'journey';
+        if (titleLower.includes('audience') || titleLower.includes('segment')) return 'audience';
+        if (titleLower.includes('performance') || titleLower.includes('analytics') || titleLower.includes('report')) return 'performance';
+        if (titleLower.includes('budget') || titleLower.includes('allocation')) return 'budget';
+        if (titleLower.includes('a/b test') || titleLower.includes('test') || titleLower.includes('headline')) return 'ab-test';
+        if (titleLower.includes('competitor') || titleLower.includes('research')) return 'research';
+        if (titleLower.includes('optimization') || titleLower.includes('optimize')) return 'optimization';
+        if (titleLower.includes('email') || titleLower.includes('engagement')) return 'email';
+
+        return 'general';
     }
 
     showProcessingIndicator() {
@@ -890,9 +2069,9 @@ class MarketingSuperAgentV4 {
             brief: ['Deep Research', 'Performance', 'Audience'],
             creative: ['Creative', 'Research Agent', 'Audience'],
             journey: ['Journey', 'Audience', 'Performance'],
-            performance: ['Performance', 'Analytics', 'Research Agent'],
-            audience: ['Audience', 'Research Agent', 'Analytics'],
-            'paid-media': ['Paid Media', 'Performance', 'Analytics'],
+            performance: ['Performance', 'Analytics Agent', 'Research Agent'],
+            audience: ['Audience', 'Research Agent', 'Analytics Agent'],
+            'paid-media': ['Paid Media', 'Performance', 'Analytics Agent'],
             research: ['Research Agent', 'Performance', 'Historical'],
             content: ['Creative', 'Research Agent', 'Journey'],
             general: ['Deep Research', 'Performance']
@@ -908,8 +2087,8 @@ class MarketingSuperAgentV4 {
             'Research Agent': { icon: 'fas fa-search', color: '#8b5cf6', task: 'Analyzing market trends and competitor data' },
             'Creative': { icon: 'fas fa-palette', color: '#ec4899', task: 'Generating creative concepts and assets' },
             'Creative Agent': { icon: 'fas fa-palette', color: '#ec4899', task: 'Generating creative concepts and assets' },
-            'Journey': { icon: 'fas fa-route', color: '#f59e0b', task: 'Mapping customer touchpoints and flows' },
-            'Journey Agent': { icon: 'fas fa-route', color: '#f59e0b', task: 'Mapping customer touchpoints and flows' },
+            'Journey': { icon: 'fas fa-sitemap', color: '#f59e0b', task: 'Mapping customer touchpoints and flows' },
+            'Journey Agent': { icon: 'fas fa-sitemap', color: '#f59e0b', task: 'Mapping customer touchpoints and flows' },
             'Performance': { icon: 'fas fa-chart-bar', color: '#3b82f6', task: 'Reviewing campaign performance data' },
             'Performance Agent': { icon: 'fas fa-chart-bar', color: '#3b82f6', task: 'Reviewing campaign performance data' },
             'Audience': { icon: 'fas fa-users', color: '#10b981', task: 'Identifying target segments' },
@@ -917,9 +2096,9 @@ class MarketingSuperAgentV4 {
             'Paid Media': { icon: 'fas fa-dollar-sign', color: '#14b8a6', task: 'Optimizing budget allocation' },
             'Historical': { icon: 'fas fa-history', color: '#6366f1', task: 'Analyzing past campaign learnings' },
             'Historical Agent': { icon: 'fas fa-history', color: '#6366f1', task: 'Analyzing past campaign learnings' },
-            'AI Decisioning': { icon: 'fas fa-brain', color: '#ef4444', task: 'Processing strategic recommendations' },
-            'Analytics Agent': { icon: 'fas fa-chart-pie', color: '#2563eb', task: 'Analyzing data and metrics' },
-            'Personalization Agent': { icon: 'fas fa-user-cog', color: '#9256d9', task: 'Optimizing personalized experiences' }
+            'AI Decisioning': { icon: 'fas fa-microchip', color: '#ef4444', task: 'Processing strategic recommendations' },
+            'Analytics Agent': { icon: 'fas fa-chart-line', color: '#2563eb', task: 'Analyzing data and metrics' },
+            'Personalization Agent': { icon: 'fas fa-user-edit', color: '#9256d9', task: 'Optimizing personalized experiences' }
         };
 
         // Generate a unique timestamp for this progress session
@@ -934,6 +2113,10 @@ class MarketingSuperAgentV4 {
                 <div class="agent-progress-list">
                     ${activeAgents.map((agentName, index) => {
                         const agent = agentDetails[agentName];
+                        if (!agent) {
+                            console.error(`Agent details not found for: ${agentName}`);
+                            return ''; // Skip this agent if details not found
+                        }
                         const itemId = `agent-${agentName.replace(/\s+/g, '-').toLowerCase()}-${timestamp}`;
                         return `
                             <div class="agent-progress-item" id="${itemId}">
@@ -1132,7 +2315,7 @@ class MarketingSuperAgentV4 {
                     if (taskDiv) {
                         // Create shorter status messages for better display
                         const shortStatus = this.getShortStatusMessage(thought, thoughtIndex);
-                        taskDiv.innerHTML = `<i class="fas fa-brain" style="margin-right: 6px; color: var(--accent-purple);"></i>${shortStatus}`;
+                        taskDiv.innerHTML = `<i class="fas fa-microchip" style="margin-right: 6px; color: var(--accent-purple);"></i>${shortStatus}`;
                     }
                 }
 
@@ -1330,7 +2513,7 @@ class MarketingSuperAgentV4 {
             <div class="thought-process-container" style="margin: var(--space-sm) 0; border: var(--border); border-radius: var(--radius-md); background: var(--gray-50);">
                 <div class="thought-process-header" onclick="app.toggleThoughtProcess('${thoughtProcessId}')" style="padding: var(--space-sm) var(--space-md); cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-bottom: var(--border);">
                     <div style="display: flex; align-items: center; gap: var(--space-xs);">
-                        <i class="fas fa-brain" style="color: var(--accent-purple);"></i>
+                        <i class="fas fa-microchip" style="color: var(--accent-purple);"></i>
                         <span style="font-weight: 600; color: var(--text-primary); font-size: var(--label);">${agentName} Agent - Thought Process</span>
                     </div>
                     <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast); transform: rotate(180deg);"></i>
@@ -1674,7 +2857,7 @@ class MarketingSuperAgentV4 {
             `;
             header.innerHTML = `
                 <div style="display: flex; align-items: center; gap: var(--space-xs);">
-                    <i class="fas fa-brain" style="color: var(--accent-purple);"></i>
+                    <i class="fas fa-microchip" style="color: var(--accent-purple);"></i>
                     <span>Agent Thought Processes</span>
                 </div>
                 <button id="toggle-all-thought-processes" onclick="app.toggleAllThoughtProcesses()" style="
@@ -1719,7 +2902,7 @@ class MarketingSuperAgentV4 {
                 processElement.innerHTML = `
                     <div class="thought-process-header" onclick="app.toggleOutputThoughtProcess('${thoughtProcessId}')" style="padding: var(--space-sm) var(--space-md); cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-bottom: var(--border);">
                         <div style="display: flex; align-items: center; gap: var(--space-xs);">
-                            <i class="fas fa-brain" style="color: var(--accent-purple); font-size: 14px;"></i>
+                            <i class="fas fa-microchip" style="color: var(--accent-purple); font-size: 14px;"></i>
                             <span style="font-weight: 600; color: var(--text-primary); font-size: var(--font-base);">${process.agentName} Agent</span>
                         </div>
                         <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast); transform: rotate(180deg);"></i>
@@ -1920,6 +3103,84 @@ class MarketingSuperAgentV4 {
         // Add export button to the output content
         outputContent.innerHTML = content;
 
+        // Add universal suggested next steps to chat
+        setTimeout(() => {
+            try {
+            const nextStepsConfigs = {
+                'campaign-brief': [
+                    'Generate creative assets for this campaign',
+                    'Build target audiences for segments',
+                    'Design customer journey flows',
+                    'Setup performance tracking'
+                ],
+                'creative': [
+                    'Generate additional creative variations',
+                    'Setup A/B testing framework',
+                    'Launch creative optimization campaign',
+                    'Analyze creative performance metrics'
+                ],
+                'journey': [
+                    'Activate this customer journey',
+                    'Create creative assets for touchpoints',
+                    'Setup advanced segmentation',
+                    'Launch performance monitoring'
+                ],
+                'audience': [
+                    'Create targeted campaigns for each segment',
+                    'Generate personalized creative assets',
+                    'Design multi-channel customer journeys',
+                    'Setup advanced tracking and attribution'
+                ],
+                'performance': [
+                    'Optimize budget allocation',
+                    'Create new audience segments',
+                    'Generate improved creative variants',
+                    'Setup automated bidding strategies'
+                ],
+                'budget': [
+                    'Setup budget alerts',
+                    'Create scenario planning',
+                    'Implement auto-bidding rules',
+                    'Schedule budget reviews'
+                ],
+                'ab-test': [
+                    'Setup additional test variations',
+                    'Create test monitoring dashboard',
+                    'Plan follow-up experiments',
+                    'Document testing methodology'
+                ],
+                'research': [
+                    'Set up competitor monitoring',
+                    'Create competitive positioning map',
+                    'Analyze competitor ad creative',
+                    'Track competitor pricing changes'
+                ],
+                'optimization': [
+                    'Review ad creative performance',
+                    'Analyze audience segment effectiveness',
+                    'Adjust budget allocation by channel',
+                    'Test new bidding strategies'
+                ],
+                'email': [
+                    'Design welcome email series',
+                    'Setup automated email workflows',
+                    'Create email performance tracking',
+                    'Plan email content calendar'
+                ],
+                'general': [
+                    'Continue with creative asset generation',
+                    'Setup advanced audience targeting',
+                    'Design customer journey optimization',
+                    'Launch comprehensive performance tracking'
+                ]
+            };
+            const suggestions = nextStepsConfigs[messageType] || nextStepsConfigs['general'];
+            this.addFollowUpSuggestions(suggestions);
+            } catch (error) {
+                console.error('❌ Error in next steps timeout:', error);
+            }
+        }, 2000);
+
         // Add Export and Share buttons to output header
         this.addOutputActionButtons();
 
@@ -1967,7 +3228,6 @@ class MarketingSuperAgentV4 {
                 ${this.generateExecutiveSummary(messageType, context)}
                 ${this.generateDetailedInsights(insights, messageType)}
                 ${this.generateRecommendations(messageType, context)}
-                ${this.generateNextSteps(messageType, context)}
             </div>
         `;
     }
@@ -1981,33 +3241,76 @@ class MarketingSuperAgentV4 {
             budget: '',
             timeline: '',
             industry: '',
-            keywords: []
+            keywords: [],
+            campaign_type: '',
+            product: '',
+            urgency: '',
+            tone: '',
+            specific_request: message // Keep the original message for detailed analysis
         };
 
         // Extract platforms
-        const platforms = ['google', 'meta', 'facebook', 'instagram', 'tiktok', 'linkedin', 'youtube', 'twitter', 'snapchat'];
+        const platforms = ['google', 'meta', 'facebook', 'instagram', 'tiktok', 'linkedin', 'youtube', 'twitter', 'snapchat', 'pinterest', 'reddit'];
         platforms.forEach(platform => {
             if (lowerMessage.includes(platform)) {
                 context.platform.push(platform.charAt(0).toUpperCase() + platform.slice(1));
             }
         });
 
-        // Extract objectives
+        // Extract objectives with more nuance
         if (lowerMessage.includes('awareness') || lowerMessage.includes('brand')) context.objective = 'Brand Awareness';
-        else if (lowerMessage.includes('conversion') || lowerMessage.includes('sales')) context.objective = 'Conversions';
-        else if (lowerMessage.includes('traffic') || lowerMessage.includes('visits')) context.objective = 'Traffic';
-        else if (lowerMessage.includes('leads') || lowerMessage.includes('lead generation')) context.objective = 'Lead Generation';
-        else if (lowerMessage.includes('engagement')) context.objective = 'Engagement';
+        else if (lowerMessage.includes('conversion') || lowerMessage.includes('sales') || lowerMessage.includes('purchase')) context.objective = 'Conversions';
+        else if (lowerMessage.includes('traffic') || lowerMessage.includes('visits') || lowerMessage.includes('website')) context.objective = 'Traffic';
+        else if (lowerMessage.includes('leads') || lowerMessage.includes('lead generation') || lowerMessage.includes('signup')) context.objective = 'Lead Generation';
+        else if (lowerMessage.includes('engagement') || lowerMessage.includes('interact')) context.objective = 'Engagement';
+        else if (lowerMessage.includes('download') || lowerMessage.includes('app install')) context.objective = 'App Downloads';
 
-        // Extract audience
+        // Extract audience with more detail
         if (lowerMessage.includes('millennials')) context.audience = 'Millennials (25-40)';
         else if (lowerMessage.includes('gen z')) context.audience = 'Gen Z (18-28)';
         else if (lowerMessage.includes('gen x')) context.audience = 'Gen X (35-50)';
         else if (lowerMessage.includes('b2b') || lowerMessage.includes('business')) context.audience = 'B2B Decision Makers';
+        else if (lowerMessage.includes('parents')) context.audience = 'Parents';
+        else if (lowerMessage.includes('students')) context.audience = 'Students';
+        else if (lowerMessage.includes('professionals')) context.audience = 'Working Professionals';
+
+        // Extract campaign types
+        if (lowerMessage.includes('black friday') || lowerMessage.includes('holiday') || lowerMessage.includes('christmas')) {
+            context.campaign_type = 'Holiday/Seasonal';
+            context.urgency = 'high';
+        } else if (lowerMessage.includes('product launch') || lowerMessage.includes('new product')) {
+            context.campaign_type = 'Product Launch';
+        } else if (lowerMessage.includes('sale') || lowerMessage.includes('promotion') || lowerMessage.includes('discount')) {
+            context.campaign_type = 'Promotional';
+        } else if (lowerMessage.includes('retention') || lowerMessage.includes('loyalty')) {
+            context.campaign_type = 'Retention';
+        }
+
+        // Extract timeline/urgency
+        if (lowerMessage.includes('urgent') || lowerMessage.includes('asap') || lowerMessage.includes('quickly')) context.urgency = 'high';
+        else if (lowerMessage.includes('next week') || lowerMessage.includes('soon')) context.urgency = 'medium';
 
         // Extract budget indicators
         if (lowerMessage.match(/\$[\d,]+k/)) context.budget = lowerMessage.match(/\$[\d,]+k/)[0];
-        else if (lowerMessage.includes('budget')) context.budget = 'Budget optimization';
+        else if (lowerMessage.match(/\$[\d,]+/)) context.budget = lowerMessage.match(/\$[\d,]+/)[0];
+        else if (lowerMessage.includes('small budget') || lowerMessage.includes('limited budget')) context.budget = 'Limited Budget';
+        else if (lowerMessage.includes('large budget') || lowerMessage.includes('big budget')) context.budget = 'Large Budget';
+
+        // Extract product/service mentions
+        const productKeywords = ['app', 'software', 'course', 'book', 'service', 'product', 'subscription', 'saas'];
+        productKeywords.forEach(keyword => {
+            if (lowerMessage.includes(keyword)) {
+                context.product = keyword;
+            }
+        });
+
+        // Extract industry context
+        const industries = ['tech', 'healthcare', 'education', 'finance', 'retail', 'travel', 'fitness', 'food', 'fashion'];
+        industries.forEach(industry => {
+            if (lowerMessage.includes(industry)) {
+                context.industry = industry;
+            }
+        });
 
         return context;
     }
@@ -2032,266 +3335,144 @@ class MarketingSuperAgentV4 {
     }
 
     generateCampaignBriefOutput(context, userMessage) {
+        // Generate dynamic content based on the actual user request
+        const campaignTitle = this.generateCampaignTitle(context, userMessage);
+        const objectives = this.generateObjectives(context);
+        const targetAudience = this.generateTargetAudience(context);
+        const platforms = this.generatePlatformStrategy(context);
+        const budget = this.generateBudgetStrategy(context);
+        const timeline = this.generateTimeline(context);
+        const kpis = this.generateKPIs(context);
+
         return `
             <div class="enhanced-output">
                 <div class="output-header-section">
                     <div class="output-title-area">
-                        <h2><i class="fas fa-rocket" style="color: var(--accent-primary);"></i> Campaign Brief & Strategy</h2>
-                        <p class="output-subtitle">Comprehensive campaign strategy developed by our specialist agents</p>
+                        <h2><i class="fas fa-rocket" style="color: var(--accent-primary);"></i> ${campaignTitle}</h2>
+                        <p class="output-subtitle">Campaign brief generated from: "${userMessage}"</p>
                     </div>
                     <div class="output-stats">
-                        <div class="stat-card">
-                            <div class="stat-number">3.2x</div>
-                            <div class="stat-label">Projected ROI</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">25%</div>
-                            <div class="stat-label">Awareness Lift</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">1,000+</div>
-                            <div class="stat-label">Qualified Leads</div>
-                        </div>
+                        ${kpis.map(kpi => `
+                            <div class="stat-card">
+                                <div class="stat-number">${kpi.value}</div>
+                                <div class="stat-label">${kpi.label}</div>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
 
-                <div class="agent-analysis-grid">
-                    <div class="agent-analysis-card research">
-                        <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-search"></i></div>
-                            <h4>Research Agent Analysis</h4>
+                <div class="campaign-brief-grid">
+                    <div class="brief-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-target"></i> Campaign Overview</h3>
                         </div>
-                        <div class="analysis-content">
-                            <div class="insight-highlight">
-                                <i class="fas fa-lightbulb"></i>
-                                <span>Market Opportunity Identified</span>
+                        <div class="overview-content">
+                            <div class="overview-item">
+                                <h4>Objective</h4>
+                                <p>${objectives.primary}</p>
                             </div>
-                            <p>Comprehensive market analysis reveals strong potential with ${context.audience || 'target demographic'} showing ${context.engagement || '34% higher engagement'} during ${context.timeframe || 'Q4 2024'}.</p>
-                            <div class="key-metrics">
-                                <div class="metric-item">
-                                    <span class="metric-value">+18%</span>
-                                    <span class="metric-desc">Market growth YoY</span>
-                                </div>
-                                <div class="metric-item">
-                                    <span class="metric-value">67%</span>
-                                    <span class="metric-desc">Competitive advantage</span>
+                            <div class="overview-item">
+                                <h4>Campaign Type</h4>
+                                <p>${context.campaign_type || 'Brand Activation'}</p>
+                            </div>
+                            <div class="overview-item">
+                                <h4>Timeline</h4>
+                                <p>${timeline}</p>
+                            </div>
+                            <div class="overview-item">
+                                <h4>Budget</h4>
+                                <p>${budget}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brief-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-users"></i> Target Audience</h3>
+                        </div>
+                        <div class="analysis-insights">
+                            <div class="insight-card audience">
+                                <div class="insight-icon"><i class="fas fa-bullseye"></i></div>
+                                <div class="insight-content">
+                                    <h4>Primary Audience</h4>
+                                    <ul>
+                                        <li><strong>Demographics:</strong> ${targetAudience.demographics}</li>
+                                        <li><strong>Behaviors:</strong> ${targetAudience.behaviors}</li>
+                                        <li><strong>Interests:</strong> ${targetAudience.interests}</li>
+                                        <li><strong>Pain Points:</strong> ${targetAudience.painPoints}</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="agent-analysis-card audience">
-                        <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-users"></i></div>
-                            <h4>Audience Agent Insights</h4>
+                    <div class="brief-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-bullhorn"></i> Channel Strategy</h3>
                         </div>
-                        <div class="analysis-content">
-                            <div class="audience-breakdown">
-                                <h5>Primary Audience Segments</h5>
-                                <div class="segment-bars">
-                                    <div class="segment-bar">
-                                        <div class="segment-info">
-                                            <span class="segment-name">${context.demographic || 'Millennials (25-34)'}</span>
-                                            <span class="segment-percentage">42%</span>
-                                        </div>
-                                        <div class="segment-progress">
-                                            <div class="segment-fill" style="width: 42%; background: var(--accent-green);"></div>
-                                        </div>
+                        <div class="channel-grid">
+                            ${platforms.map(platform => `
+                                <div class="channel-card ${platform.priority}">
+                                    <div class="channel-icon">
+                                        <i class="${platform.icon}"></i>
                                     </div>
-                                    <div class="segment-bar">
-                                        <div class="segment-info">
-                                            <span class="segment-name">Gen Z (18-28)</span>
-                                            <span class="segment-percentage">35%</span>
-                                        </div>
-                                        <div class="segment-progress">
-                                            <div class="segment-fill" style="width: 35%; background: var(--accent-primary);"></div>
-                                        </div>
-                                    </div>
-                                    <div class="segment-bar">
-                                        <div class="segment-info">
-                                            <span class="segment-name">Gen X (35-50)</span>
-                                            <span class="segment-percentage">23%</span>
-                                        </div>
-                                        <div class="segment-progress">
-                                            <div class="segment-fill" style="width: 23%; background: var(--accent-orange);"></div>
-                                        </div>
-                                    </div>
+                                    <div class="channel-name">${platform.name}</div>
+                                    <div class="channel-priority">${platform.priority} Priority</div>
                                 </div>
-                            </div>
-                            <div class="platform-preferences">
-                                <h5>Platform Engagement</h5>
-                                <div class="platform-chips">
-                                    <span class="platform-chip high">Instagram <span class="engagement">89%</span></span>
-                                    <span class="platform-chip high">TikTok <span class="engagement">76%</span></span>
-                                    <span class="platform-chip medium">YouTube <span class="engagement">64%</span></span>
-                                    <span class="platform-chip medium">Facebook <span class="engagement">52%</span></span>
-                                </div>
-                            </div>
+                            `).join('')}
                         </div>
                     </div>
 
-                    <div class="agent-analysis-card performance">
-                        <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
-                            <h4>Performance Agent Projections</h4>
+                    <div class="brief-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-chart-line"></i> Key Performance Indicators</h3>
                         </div>
-                        <div class="analysis-content">
-                            <div class="performance-forecast">
-                                <h5>Campaign Performance Forecast</h5>
-                                <div class="forecast-grid">
-                                    <div class="forecast-item">
-                                        <div class="forecast-icon awareness"><i class="fas fa-eye"></i></div>
-                                        <div class="forecast-details">
-                                            <span class="forecast-metric">Brand Awareness</span>
-                                            <span class="forecast-value">+25% lift</span>
-                                            <div class="forecast-bar">
-                                                <div class="forecast-progress" style="width: 75%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));"></div>
-                                            </div>
-                                        </div>
+                        <div class="kpi-grid">
+                            ${this.generateDetailedKPIs(context).map(kpi => `
+                                <div class="kpi-card">
+                                    <div class="kpi-icon">
+                                        <i class="${kpi.icon}"></i>
                                     </div>
-                                    <div class="forecast-item">
-                                        <div class="forecast-icon conversions"><i class="fas fa-shopping-cart"></i></div>
-                                        <div class="forecast-details">
-                                            <span class="forecast-metric">Conversion Rate</span>
-                                            <span class="forecast-value">${context.goal || '15% improvement'}</span>
-                                            <div class="forecast-bar">
-                                                <div class="forecast-progress" style="width: 60%; background: linear-gradient(90deg, var(--accent-green), #059669);"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="forecast-item">
-                                        <div class="forecast-icon roi"><i class="fas fa-dollar-sign"></i></div>
-                                        <div class="forecast-details">
-                                            <span class="forecast-metric">ROI Potential</span>
-                                            <span class="forecast-value">${context.roi || '3.2x return'}</span>
-                                            <div class="forecast-bar">
-                                                <div class="forecast-progress" style="width: 85%; background: linear-gradient(90deg, var(--accent-orange), #d97706);"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div class="kpi-metric">${kpi.metric}</div>
                                 </div>
-                            </div>
+                            `).join('')}
                         </div>
                     </div>
-                </div>
 
-                <div class="strategic-recommendations">
-                    <h3><i class="fas fa-compass" style="color: var(--accent-purple);"></i> Strategic Recommendations</h3>
-                    <div class="recommendations-grid">
-                        <div class="recommendation-card priority-high">
-                            <div class="rec-priority">High Priority</div>
-                            <h5>Multi-Platform Creative Strategy</h5>
-                            <p>Develop platform-specific creative assets with ${context.creative_focus || 'video-first approach'} for maximum engagement across Instagram and TikTok.</p>
+                    <div class="brief-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-calendar-alt"></i> Execution Timeline</h3>
                         </div>
-                        <div class="recommendation-card priority-medium">
-                            <div class="rec-priority">Medium Priority</div>
-                            <h5>Audience Segmentation</h5>
-                            <p>Implement advanced audience segmentation to deliver personalized messaging based on platform behavior and engagement patterns.</p>
-                        </div>
-                        <div class="recommendation-card priority-low">
-                            <div class="rec-priority">Low Priority</div>
-                            <h5>Budget Optimization</h5>
-                            <p>Allocate ${context.budget_split || '60% to high-performing platforms'} with 20% reserved for testing and optimization.</p>
+                        <div class="timeline-phases">
+                            ${this.generateExecutionPhases(context).map((phase, index) => `
+                                <div class="phase-card">
+                                    <div class="phase-number">${index + 1}</div>
+                                    <div class="phase-content">
+                                        <h4>${phase.name}</h4>
+                                        <div class="phase-duration">${phase.duration}</div>
+                                        <p>${phase.description}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
-                </div>
 
-                <div class="timeline-section">
-                    <h3><i class="fas fa-calendar-alt" style="color: var(--accent-green);"></i> Implementation Timeline</h3>
-                    <div class="timeline-track">
-                        <div class="timeline-item active">
-                            <div class="timeline-marker"></div>
-                            <div class="timeline-content">
-                                <h5>Week 1-2: Campaign Setup</h5>
-                                <p>Creative development, audience configuration, and platform setup</p>
-                            </div>
+                    <div class="brief-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-lightbulb"></i> Strategic Recommendations</h3>
                         </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker"></div>
-                            <div class="timeline-content">
-                                <h5>Week 3-4: Launch & Optimization</h5>
-                                <p>Campaign launch with daily monitoring and initial optimizations</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker"></div>
-                            <div class="timeline-content">
-                                <h5>Week 5-8: Scale & Iterate</h5>
-                                <p>Performance analysis, budget scaling, and creative iteration</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="knowledge-base-section">
-                    <h3><i class="fas fa-database" style="color: var(--accent-primary);"></i> Knowledge Sources Used</h3>
-                    <div class="knowledge-sources">
-                        <div class="knowledge-source-card">
-                            <div class="source-header">
-                                <div class="source-icon brand"><i class="fas fa-palette"></i></div>
-                                <div class="source-info">
-                                    <h4>Brand Voice Guidelines</h4>
-                                    <div class="source-status active">Active</div>
+                        <div class="analysis-insights">
+                            ${this.generateStrategicRecommendations(context).map(rec => `
+                                <div class="insight-card ${rec.type}">
+                                    <div class="insight-icon"><i class="${rec.icon}"></i></div>
+                                    <div class="insight-content">
+                                        <h4>${rec.title}</h4>
+                                        <ul>
+                                            ${rec.points.map(point => `<li>${point}</li>`).join('')}
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="source-details">
-                                Brand tone, messaging framework, and visual identity standards for consistent creative output.
-                            </div>
-                            <div class="source-metrics">
-                                <div class="source-metric"><strong>12</strong> documents</div>
-                                <div class="source-metric"><strong>Updated:</strong> 2 days ago</div>
-                            </div>
-                        </div>
-
-                        <div class="knowledge-source-card">
-                            <div class="source-header">
-                                <div class="source-icon customer"><i class="fas fa-users"></i></div>
-                                <div class="source-info">
-                                    <h4>Customer Research Data</h4>
-                                    <div class="source-status synced">Synced</div>
-                                </div>
-                            </div>
-                            <div class="source-details">
-                                Audience insights, behavioral patterns, and preference data to optimize creative resonance.
-                            </div>
-                            <div class="source-metrics">
-                                <div class="source-metric"><strong>8</strong> segments</div>
-                                <div class="source-metric"><strong>Updated:</strong> 1 week ago</div>
-                            </div>
-                        </div>
-
-                        <div class="knowledge-source-card">
-                            <div class="source-header">
-                                <div class="source-icon performance"><i class="fas fa-chart-bar"></i></div>
-                                <div class="source-info">
-                                    <h4>Performance Benchmarks</h4>
-                                    <div class="source-status active">Active</div>
-                                </div>
-                            </div>
-                            <div class="source-details">
-                                Historical campaign performance data and industry benchmarks for creative optimization.
-                            </div>
-                            <div class="source-metrics">
-                                <div class="source-metric"><strong>24</strong> campaigns</div>
-                                <div class="source-metric"><strong>Updated:</strong> 3 days ago</div>
-                            </div>
-                        </div>
-
-                        <div class="knowledge-source-card">
-                            <div class="source-header">
-                                <div class="source-icon compliance"><i class="fas fa-shield-alt"></i></div>
-                                <div class="source-info">
-                                    <h4>Compliance Guidelines</h4>
-                                    <div class="source-status active">Active</div>
-                                </div>
-                            </div>
-                            <div class="source-details">
-                                Legal requirements, platform policies, and industry regulations for compliant creative content.
-                            </div>
-                            <div class="source-metrics">
-                                <div class="source-metric"><strong>6</strong> policies</div>
-                                <div class="source-metric"><strong>Updated:</strong> 1 week ago</div>
-                            </div>
+                            `).join('')}
                         </div>
                     </div>
                 </div>
@@ -2299,263 +3480,218 @@ class MarketingSuperAgentV4 {
         `;
     }
 
-    generateOptimizationOutput(context, userMessage) {
-        return `
-            <div class="enhanced-output">
-                <div class="output-header-section">
-                    <div class="output-title-area">
-                        <h2><i class="fas fa-chart-line" style="color: var(--accent-primary);"></i> Campaign Optimization Report</h2>
-                        <p class="output-subtitle">AI-driven performance analysis and strategic recommendations</p>
-                    </div>
-                    <div class="output-stats">
-                        <div class="stat-card">
-                            <div class="stat-number">+32%</div>
-                            <div class="stat-label">Potential Uplift</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">$12.5K</div>
-                            <div class="stat-label">Est. Monthly Savings</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">85%</div>
-                            <div class="stat-label">Confidence Score</div>
-                        </div>
-                    </div>
-                </div>
+    generateCampaignTitle(context, userMessage) {
+        if (context.campaign_type === 'Holiday/Seasonal') {
+            return `${context.campaign_type} Campaign Strategy`;
+        } else if (context.campaign_type === 'Product Launch') {
+            return `${context.product ? context.product.charAt(0).toUpperCase() + context.product.slice(1) : 'Product'} Launch Campaign`;
+        } else if (context.objective) {
+            return `${context.objective} Campaign Brief`;
+        } else {
+            return 'Campaign Brief & Strategy';
+        }
+    }
 
-                <div class="agent-analysis-grid">
-                    <div class="agent-analysis-card performance">
-                        <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
-                            <h4>Performance Analysis</h4>
-                        </div>
-                        <div class="insight-highlight">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>Performance gaps identified across 3 key areas requiring immediate attention</span>
-                        </div>
-                        <div class="key-metrics">
-                            <div class="metric-item">
-                                <span class="metric-value" style="color: var(--accent-orange);">${context.ctr || '2.4%'}</span>
-                                <span class="metric-desc">Current CTR</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-value" style="color: var(--accent-red);">$${context.cpa || '4.20'}</span>
-                                <span class="metric-desc">Cost per Acquisition</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-value" style="color: var(--accent-orange);">${context.cvr || '1.8%'}</span>
-                                <span class="metric-desc">Conversion Rate</span>
-                            </div>
-                        </div>
-                    </div>
+    generateObjectives(context) {
+        const objectiveMap = {
+            'Brand Awareness': 'Build brand recognition and visibility among target audiences',
+            'Conversions': 'Drive sales and conversion actions through targeted messaging',
+            'Traffic': 'Increase qualified website traffic and user engagement',
+            'Lead Generation': 'Capture high-quality leads and grow the sales pipeline',
+            'Engagement': 'Foster community engagement and brand loyalty',
+            'App Downloads': 'Drive mobile app installations and first-time user activation'
+        };
 
-                    <div class="agent-analysis-card audience">
-                        <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-chart-pie"></i></div>
-                            <h4>Analytics Agent Insights</h4>
-                        </div>
-                        <div class="insight-highlight">
-                            <i class="fas fa-clock"></i>
-                            <span>Peak engagement windows identified with 60% higher conversion rates</span>
-                        </div>
-                        <div class="platform-preferences">
-                            <h5>Audience Behavior Analysis</h5>
-                            <div class="platform-chips">
-                                <div class="platform-chip high">
-                                    <i class="fas fa-mobile-alt"></i>
-                                    <span>Mobile: ${context.mobile_traffic || '73%'}</span>
-                                    <div class="engagement">High Conversion</div>
-                                </div>
-                                <div class="platform-chip medium">
-                                    <i class="fas fa-clock"></i>
-                                    <span>Peak: ${context.optimal_times || '6-8 PM weekdays'}</span>
-                                    <div class="engagement">Best Times</div>
-                                </div>
-                                <div class="platform-chip high">
-                                    <i class="fas fa-calendar-week"></i>
-                                    <span>Days: ${context.peak_days || 'Tue-Thu'}</span>
-                                    <div class="engagement">Peak Days</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        return {
+            primary: objectiveMap[context.objective] || 'Drive brand growth and customer acquisition through strategic marketing initiatives'
+        };
+    }
 
-                    <div class="agent-analysis-card research">
-                        <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-history"></i></div>
-                            <h4>Historical Agent Insights</h4>
-                        </div>
-                        <div class="insight-highlight">
-                            <i class="fas fa-trending-up"></i>
-                            <span>Similar campaigns achieved ${context.historical_lift || '40% performance lift'} with strategic optimizations</span>
-                        </div>
-                        <div class="key-metrics">
-                            <div class="metric-item">
-                                <span class="metric-value">40%</span>
-                                <span class="metric-desc">Historical Lift</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-value">85%</span>
-                                <span class="metric-desc">Success Rate</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-value">3.2x</span>
-                                <span class="metric-desc">ROI Improvement</span>
-                            </div>
-                        </div>
-                        <div class="historical-learnings">
-                            <h5>Key Learnings from Similar Campaigns</h5>
-                            <ul>
-                                <li><strong>Creative Refresh Impact:</strong> ${context.top_creative || 'Video carousel format'} outperformed static by 65%</li>
-                                <li><strong>Budget Reallocation:</strong> Shifting to ${context.recommended_channels || 'high-performing channels'} improved ROAS</li>
-                                <li><strong>Testing Opportunities:</strong> ${context.test_element || 'Headline variations'} showed significant impact on CTR</li>
-                                <li><strong>Seasonal Patterns:</strong> Q4 campaigns benefit from 30% budget increase in winning segments</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    generateTargetAudience(context) {
+        const audienceProfiles = {
+            'Millennials (25-40)': {
+                demographics: 'Ages 25-40, college-educated, household income $50-100K',
+                behaviors: 'Research-driven, value-conscious, digitally native',
+                interests: 'Technology, sustainability, work-life balance, experiences',
+                painPoints: 'Time constraints, budget management, information overload'
+            },
+            'Gen Z (18-28)': {
+                demographics: 'Ages 18-28, mobile-first, diverse backgrounds',
+                behaviors: 'Authenticity-seeking, social-conscious, quick decision-makers',
+                interests: 'Social media, creativity, social causes, entrepreneurship',
+                painPoints: 'Financial stress, social pressure, career uncertainty'
+            },
+            'B2B Decision Makers': {
+                demographics: 'Professional roles, 30-55 years old, industry leadership',
+                behaviors: 'Data-driven, ROI-focused, long sales cycles',
+                interests: 'Industry trends, efficiency tools, networking, growth',
+                painPoints: 'Budget constraints, technology adoption, competitive pressure'
+            },
+            'Parents': {
+                demographics: 'Parents with children, ages 25-45, household-focused',
+                behaviors: 'Safety-conscious, family-first, time-pressed',
+                interests: 'Child development, family activities, education, health',
+                painPoints: 'Time management, budget allocation, safety concerns'
+            }
+        };
 
-                <div class="strategic-recommendations">
-                    <h3><i class="fas fa-rocket"></i> Strategic Recommendations</h3>
-                    <div class="recommendations-grid">
-                        <div class="recommendation-card priority-high">
-                            <div class="rec-priority">High Priority</div>
-                            <h5>Budget Reallocation</h5>
-                            <p>Shift 30% of Facebook budget to Google Ads and LinkedIn. These channels showing 45% better ROAS for your target audience.</p>
-                        </div>
-                        <div class="recommendation-card priority-high">
-                            <div class="rec-priority">High Priority</div>
-                            <h5>Creative Optimization</h5>
-                            <p>Launch video creative tests against current static ads. Historical data shows 65% higher engagement for video formats.</p>
-                        </div>
-                        <div class="recommendation-card priority-medium">
-                            <div class="rec-priority">Medium Priority</div>
-                            <h5>Audience Refinement</h5>
-                            <p>Narrow targeting to high-intent segments identified by AI analysis. Projected 35% CTR improvement.</p>
-                        </div>
-                        <div class="recommendation-card priority-medium">
-                            <div class="rec-priority">Medium Priority</div>
-                            <h5>Bid Strategy Update</h5>
-                            <p>Switch to Target CPA bidding at $25. AI optimization will reduce acquisition costs by estimated 25%.</p>
-                        </div>
-                    </div>
-                </div>
+        return audienceProfiles[context.audience] || {
+            demographics: 'Primary target demographic based on campaign requirements',
+            behaviors: 'Engaged consumers seeking relevant solutions',
+            interests: 'Category-specific interests and lifestyle preferences',
+            painPoints: 'Common challenges and unmet needs in the market'
+        };
+    }
 
-                <div class="timeline-section">
-                    <h3><i class="fas fa-calendar-check"></i> Implementation Timeline</h3>
-                    <div class="timeline-track">
-                        <div class="timeline-item active">
-                            <div class="timeline-marker"></div>
-                            <div class="timeline-content">
-                                <h5>Week 1: Foundation & Testing</h5>
-                                <p>Implement audience refinements and launch creative A/B tests to establish baseline performance improvements.</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker"></div>
-                            <div class="timeline-content">
-                                <h5>Week 2: Budget Optimization</h5>
-                                <p>Adjust budget allocation based on initial test results and implement Target CPA bidding strategy.</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker"></div>
-                            <div class="timeline-content">
-                                <h5>Week 3: Scale Winning Elements</h5>
-                                <p>Scale successful variations, optimize underperforming segments, and implement advanced targeting.</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker"></div>
-                            <div class="timeline-content">
-                                <h5>Week 4: Performance Review</h5>
-                                <p>Comprehensive analysis of optimization results and planning for next iteration cycle.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    generatePlatformStrategy(context) {
+        const platformMap = {
+            'Instagram': { icon: 'fab fa-instagram', priority: 'priority-high' },
+            'Facebook': { icon: 'fab fa-facebook', priority: 'priority-medium' },
+            'Tiktok': { icon: 'fab fa-tiktok', priority: 'priority-high' },
+            'LinkedIn': { icon: 'fab fa-linkedin', priority: 'priority-medium' },
+            'Google': { icon: 'fab fa-google', priority: 'priority-high' },
+            'Youtube': { icon: 'fab fa-youtube', priority: 'priority-medium' }
+        };
 
-                <div class="output-section">
-                    <h3>Campaign Optimization Recommendations</h3>
+        if (context.platform.length > 0) {
+            return context.platform.map(platform => ({
+                name: platform,
+                icon: platformMap[platform]?.icon || 'fas fa-globe',
+                priority: platformMap[platform]?.priority || 'priority-medium'
+            }));
+        }
 
-                    <h4>Performance Agent Analysis</h4>
-                    <ul>
-                        <li>Current CTR: ${context.ctr || '2.4%'} - Opportunity to improve by 35%</li>
-                        <li>Cost per acquisition trending ${context.cpa_trend || '15% lower'} than industry average</li>
-                        <li>Top performing ad creative: ${context.top_creative || 'Video carousel format'}</li>
-                    </ul>
+        // Default platform recommendations based on audience
+        if (context.audience === 'Gen Z (18-28)') {
+            return [
+                { name: 'TikTok', icon: 'fab fa-tiktok', priority: 'priority-high' },
+                { name: 'Instagram', icon: 'fab fa-instagram', priority: 'priority-high' },
+                { name: 'YouTube', icon: 'fab fa-youtube', priority: 'priority-medium' }
+            ];
+        } else if (context.audience === 'B2B Decision Makers') {
+            return [
+                { name: 'LinkedIn', icon: 'fab fa-linkedin', priority: 'priority-high' },
+                { name: 'Google', icon: 'fab fa-google', priority: 'priority-high' },
+                { name: 'Facebook', icon: 'fab fa-facebook', priority: 'priority-medium' }
+            ];
+        }
 
-                    <h4>Analytics Agent Insights</h4>
-                    <ul>
-                        <li>Optimal posting times: ${context.optimal_times || '6-8 PM weekdays'}</li>
-                        <li>Audience engagement peaks during ${context.peak_days || 'Tuesday-Thursday'}</li>
-                        <li>Mobile traffic accounts for ${context.mobile_traffic || '73%'} of conversions</li>
-                    </ul>
+        return [
+            { name: 'Facebook', icon: 'fab fa-facebook', priority: 'priority-high' },
+            { name: 'Instagram', icon: 'fab fa-instagram', priority: 'priority-high' },
+            { name: 'Google', icon: 'fab fa-google', priority: 'priority-medium' }
+        ];
+    }
 
-                    <h4>Historical Agent Recommendations</h4>
-                    <ul>
-                        <li>Similar campaigns saw ${context.historical_lift || '40% performance lift'} with creative refresh</li>
-                        <li>Budget reallocation to ${context.recommended_channels || 'high-performing channels'} recommended</li>
-                    </ul>
-                </div>
+    generateBudgetStrategy(context) {
+        if (context.budget && context.budget !== 'Budget optimization') {
+            return `${context.budget} total campaign budget`;
+        } else if (context.budget === 'Limited Budget') {
+            return 'Optimized for cost-effective reach and engagement';
+        } else if (context.budget === 'Large Budget') {
+            return 'Comprehensive multi-channel approach with premium placements';
+        }
+        return 'Budget allocation optimized across high-performing channels';
+    }
 
-                <div class="knowledge-base-section">
-                    <h3><i class="fas fa-database" style="color: var(--accent-primary);"></i> Knowledge Sources Used</h3>
-                    <div class="knowledge-sources">
-                        <div class="knowledge-source-card">
-                            <div class="source-header">
-                                <div class="source-icon performance"><i class="fas fa-chart-bar"></i></div>
-                                <div class="source-info">
-                                    <h4>Campaign Performance Data</h4>
-                                    <div class="source-status active">Active</div>
-                                </div>
-                            </div>
-                            <div class="source-details">
-                                Historical campaign metrics, conversion tracking, and performance benchmarks for optimization insights.
-                            </div>
-                            <div class="source-metrics">
-                                <div class="source-metric"><strong>156</strong> campaigns</div>
-                                <div class="source-metric"><strong>Updated:</strong> 1 hour ago</div>
-                            </div>
-                        </div>
+    generateTimeline(context) {
+        if (context.urgency === 'high') {
+            return 'Fast-track execution within 1-2 weeks';
+        } else if (context.campaign_type === 'Holiday/Seasonal') {
+            return '4-6 weeks for seasonal campaign optimization';
+        } else if (context.campaign_type === 'Product Launch') {
+            return '8-12 weeks for comprehensive launch strategy';
+        }
+        return '4-8 weeks for full campaign development and execution';
+    }
 
-                        <div class="knowledge-source-card">
-                            <div class="source-header">
-                                <div class="source-icon customer"><i class="fas fa-users"></i></div>
-                                <div class="source-info">
-                                    <h4>Audience Analytics</h4>
-                                    <div class="source-status synced">Synced</div>
-                                </div>
-                            </div>
-                            <div class="source-details">
-                                User behavior data, demographic insights, and engagement patterns for targeted optimization.
-                            </div>
-                            <div class="source-metrics">
-                                <div class="source-metric"><strong>24</strong> segments</div>
-                                <div class="source-metric"><strong>Updated:</strong> 30 mins ago</div>
-                            </div>
-                        </div>
+    generateKPIs(context) {
+        const kpiTemplates = {
+            'Brand Awareness': [
+                { value: '2.5M', label: 'Impressions' },
+                { value: '15%', label: 'Brand Lift' },
+                { value: '45%', label: 'Reach' }
+            ],
+            'Conversions': [
+                { value: '4.2x', label: 'ROAS' },
+                { value: '18%', label: 'Conversion Rate' },
+                { value: '750+', label: 'Conversions' }
+            ],
+            'Lead Generation': [
+                { value: '500+', label: 'Qualified Leads' },
+                { value: '$45', label: 'Cost per Lead' },
+                { value: '12%', label: 'Lead Quality' }
+            ]
+        };
 
-                        <div class="knowledge-source-card">
-                            <div class="source-header">
-                                <div class="source-icon research"><i class="fas fa-search"></i></div>
-                                <div class="source-info">
-                                    <h4>Industry Benchmarks</h4>
-                                    <div class="source-status active">Active</div>
-                                </div>
-                            </div>
-                            <div class="source-details">
-                                Market research, competitor analysis, and industry performance standards for strategic comparisons.
-                            </div>
-                            <div class="source-metrics">
-                                <div class="source-metric"><strong>48</strong> reports</div>
-                                <div class="source-metric"><strong>Updated:</strong> 2 days ago</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+        return kpiTemplates[context.objective] || [
+            { value: '3.2x', label: 'Projected ROI' },
+            { value: '25%', label: 'Engagement Lift' },
+            { value: '1,000+', label: 'Actions' }
+        ];
+    }
+
+    generateDetailedKPIs(context) {
+        return [
+            { metric: 'Click-through Rate: 2.4%', icon: 'fas fa-mouse-pointer' },
+            { metric: 'Cost per Click: $1.25', icon: 'fas fa-dollar-sign' },
+            { metric: 'Conversion Rate: 8.5%', icon: 'fas fa-chart-line' },
+            { metric: 'Return on Ad Spend: 4.2x', icon: 'fas fa-chart-pie' }
+        ];
+    }
+
+    generateExecutionPhases(context) {
+        if (context.urgency === 'high') {
+            return [
+                { name: 'Strategy & Setup', duration: 'Week 1', description: 'Campaign strategy, audience setup, and creative brief development' },
+                { name: 'Launch & Optimize', duration: 'Week 2', description: 'Campaign launch with real-time optimization and performance monitoring' }
+            ];
+        }
+
+        return [
+            { name: 'Planning & Research', duration: 'Weeks 1-2', description: 'Market research, competitor analysis, and strategic planning' },
+            { name: 'Creative Development', duration: 'Weeks 3-4', description: 'Asset creation, messaging development, and creative testing' },
+            { name: 'Campaign Launch', duration: 'Week 5', description: 'Multi-channel campaign activation and initial performance monitoring' },
+            { name: 'Optimization & Scale', duration: 'Weeks 6-8', description: 'Performance optimization, budget reallocation, and scaling successful elements' }
+        ];
+    }
+
+    generateStrategicRecommendations(context) {
+        const recommendations = [
+            {
+                type: 'research',
+                icon: 'fas fa-search',
+                title: 'Market Research Insights',
+                points: [
+                    `Target ${context.audience || 'primary audience'} shows highest engagement during evening hours`,
+                    `${context.campaign_type || 'Campaign'} messaging should emphasize value proposition and urgency`,
+                    'Competitor analysis reveals opportunity for differentiated positioning'
+                ]
+            },
+            {
+                type: 'performance',
+                icon: 'fas fa-chart-bar',
+                title: 'Performance Optimization',
+                points: [
+                    'Implement progressive audience expansion based on initial performance',
+                    'A/B test creative messaging and call-to-action variations',
+                    'Monitor and optimize for cost-efficiency across all channels'
+                ]
+            }
+        ];
+
+        if (context.platform.length > 0) {
+            recommendations.push({
+                type: 'audience',
+                icon: 'fas fa-users',
+                title: 'Platform-Specific Strategy',
+                points: context.platform.map(platform =>
+                    `Optimize ${platform} content for platform-native engagement and conversion`
+                )
+            });
+        }
+
+        return recommendations;
     }
 
     generateCreativeOutput(context, userMessage) {
@@ -3006,7 +4142,7 @@ class MarketingSuperAgentV4 {
 
                     <div class="agent-analysis-card analytics">
                         <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-chart-pie"></i></div>
+                            <div class="agent-icon"><i class="fas fa-chart-line"></i></div>
                             <h4>Analytics Agent Monitoring</h4>
                         </div>
                         <div class="analysis-content">
@@ -3107,7 +4243,7 @@ class MarketingSuperAgentV4 {
             <div class="enhanced-output">
                 <div class="output-header-section">
                     <div class="output-title-area">
-                        <h2><i class="fas fa-chart-pie" style="color: var(--accent-purple);"></i> Campaign Insights & Analytics</h2>
+                        <h2><i class="fas fa-chart-line" style="color: var(--accent-purple);"></i> Campaign Insights & Analytics</h2>
                         <p class="output-subtitle">Comprehensive data analysis and performance intelligence</p>
                     </div>
                     <div class="output-stats">
@@ -3129,7 +4265,7 @@ class MarketingSuperAgentV4 {
                 <div class="agent-analysis-grid">
                     <div class="agent-analysis-card audience">
                         <div class="agent-card-header">
-                            <div class="agent-icon"><i class="fas fa-chart-pie"></i></div>
+                            <div class="agent-icon"><i class="fas fa-chart-line"></i></div>
                             <h4>Analytics Intelligence</h4>
                         </div>
                         <div class="insight-highlight">
@@ -3689,31 +4825,402 @@ class MarketingSuperAgentV4 {
 
     generateContentCalendarOutput(context, userMessage) {
         return `
-            <div class="task-specific-output">
-                <div class="output-section">
-                    <h3>Strategic Content Calendar</h3>
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-calendar-alt" style="color: var(--accent-primary);"></i> Strategic Content Calendar</h2>
+                        <p class="output-subtitle">AI-optimized content strategy with scheduling and performance insights</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">28</span>
+                            <span class="stat-label">Content Pieces</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Platforms</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">78%</span>
+                            <span class="stat-label">Engagement Rate</span>
+                        </div>
+                    </div>
+                </div>
 
-                    <h4>Creative Agent Analysis</h4>
-                    <p>Content strategy framework designed to maximize engagement and align with customer journey touchpoints.</p>
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card creative">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-palette"></i></div>
+                            <h4>Content Strategy</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Multi-format content mix optimized for each platform's native experience</span>
+                        </div>
 
-                    <h4>Content Themes & Schedule</h4>
-                    <ul>
-                        <li><strong>Week 1:</strong> ${context.week1 || 'Brand awareness + Educational content'}</li>
-                        <li><strong>Week 2:</strong> ${context.week2 || 'Product features + Customer testimonials'}</li>
-                        <li><strong>Week 3:</strong> ${context.week3 || 'Social proof + Behind-the-scenes'}</li>
-                        <li><strong>Week 4:</strong> ${context.week4 || 'Promotional + Call-to-action content'}</li>
-                    </ul>
+                        <div class="content-strategy-overview">
+                            <h5>Content Pillars</h5>
+                            <div class="content-pillars">
+                                <div class="pillar-card education">
+                                    <div class="pillar-icon"><i class="fas fa-graduation-cap"></i></div>
+                                    <div class="pillar-info">
+                                        <h6>Educational</h6>
+                                        <span>40% - How-tos, Tips, Insights</span>
+                                    </div>
+                                </div>
+                                <div class="pillar-card entertainment">
+                                    <div class="pillar-icon"><i class="fas fa-laugh"></i></div>
+                                    <div class="pillar-info">
+                                        <h6>Entertainment</h6>
+                                        <span>30% - Stories, Behind-scenes</span>
+                                    </div>
+                                </div>
+                                <div class="pillar-card promotional">
+                                    <div class="pillar-icon"><i class="fas fa-bullhorn"></i></div>
+                                    <div class="pillar-info">
+                                        <h6>Promotional</h6>
+                                        <span>20% - Products, Offers</span>
+                                    </div>
+                                </div>
+                                <div class="pillar-card community">
+                                    <div class="pillar-icon"><i class="fas fa-users"></i></div>
+                                    <div class="pillar-info">
+                                        <h6>Community</h6>
+                                        <span>10% - User-generated, Q&A</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <h4>Research Agent Analysis</h4>
-                    <p>Trending topics and optimal posting times identified for maximum reach and engagement across platforms.</p>
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-search"></i></div>
+                            <h4>Optimal Timing</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-clock"></i>
+                            <span>Peak engagement windows identified across all target platforms</span>
+                        </div>
 
-                    <h4>Journey Agent Analysis</h4>
-                    <ul>
-                        <li>Content mapped to customer journey stages</li>
-                        <li>Cross-platform content adaptation strategy</li>
-                        <li>Engagement-driven posting schedule optimization</li>
-                        <li>Performance tracking and adjustment protocols</li>
-                    </ul>
+                        <div class="timing-analysis">
+                            <h5>Best Posting Times</h5>
+                            <div class="platform-timing">
+                                <div class="timing-row">
+                                    <div class="platform-icon"><i class="fab fa-instagram"></i></div>
+                                    <div class="timing-info">
+                                        <span class="platform-name">Instagram</span>
+                                        <span class="best-time">11 AM - 1 PM, 7 PM - 9 PM</span>
+                                    </div>
+                                </div>
+                                <div class="timing-row">
+                                    <div class="platform-icon"><i class="fab fa-linkedin"></i></div>
+                                    <div class="timing-info">
+                                        <span class="platform-name">LinkedIn</span>
+                                        <span class="best-time">8 AM - 10 AM, 12 PM - 2 PM</span>
+                                    </div>
+                                </div>
+                                <div class="timing-row">
+                                    <div class="platform-icon"><i class="fab fa-twitter"></i></div>
+                                    <div class="timing-info">
+                                        <span class="platform-name">Twitter</span>
+                                        <span class="best-time">9 AM - 10 AM, 7 PM - 9 PM</span>
+                                    </div>
+                                </div>
+                                <div class="timing-row">
+                                    <div class="platform-icon"><i class="fab fa-facebook"></i></div>
+                                    <div class="timing-info">
+                                        <span class="platform-name">Facebook</span>
+                                        <span class="best-time">1 PM - 3 PM, 7 PM - 9 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Calendar View -->
+                <div class="content-calendar-section">
+                    <div class="calendar-header">
+                        <h3><i class="fas fa-calendar-week"></i> December 2024 Content Calendar</h3>
+                        <div class="calendar-actions">
+                            <button class="calendar-btn" id="export-calendar-btn">
+                                <i class="fas fa-download"></i>
+                                Export Calendar
+                            </button>
+                            <button class="calendar-btn primary" id="create-content-btn">
+                                <i class="fas fa-plus"></i>
+                                Create Content
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="calendar-grid">
+                        <div class="calendar-day header">Mon</div>
+                        <div class="calendar-day header">Tue</div>
+                        <div class="calendar-day header">Wed</div>
+                        <div class="calendar-day header">Thu</div>
+                        <div class="calendar-day header">Fri</div>
+                        <div class="calendar-day header">Sat</div>
+                        <div class="calendar-day header">Sun</div>
+
+                        <!-- Week 1 -->
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day">
+                            <span class="day-number">1</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Holiday Shopping Guide</span>
+                            </div>
+                        </div>
+
+                        <!-- Week 2 -->
+                        <div class="calendar-day">
+                            <span class="day-number">2</span>
+                            <div class="content-item entertainment">
+                                <i class="fab fa-instagram"></i>
+                                <span>Behind the Scenes</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">3</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Tips & Tricks</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">4</span>
+                            <div class="content-item promotional">
+                                <i class="fas fa-percent"></i>
+                                <span>Flash Sale Announcement</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">5</span>
+                            <div class="content-item community">
+                                <i class="fas fa-users"></i>
+                                <span>Customer Spotlight</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">6</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-video"></i>
+                                <span>Product Demo</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">7</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-camera"></i>
+                                <span>Weekend Vibes</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">8</span>
+                            <div class="content-item promotional">
+                                <i class="fas fa-gift"></i>
+                                <span>Gift Guide</span>
+                            </div>
+                        </div>
+
+                        <!-- Week 3 -->
+                        <div class="calendar-day">
+                            <span class="day-number">9</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-book"></i>
+                                <span>Industry Insights</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">10</span>
+                            <div class="content-item community">
+                                <i class="fas fa-star"></i>
+                                <span>Customer Reviews</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">11</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-music"></i>
+                                <span>Trending Challenge</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">12</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-question-circle"></i>
+                                <span>FAQ Friday</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">13</span>
+                            <div class="content-item promotional">
+                                <i class="fas fa-tags"></i>
+                                <span>Weekend Sale</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">14</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-heart"></i>
+                                <span>Team Appreciation</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">15</span>
+                            <div class="content-item community">
+                                <i class="fas fa-comments"></i>
+                                <span>Community Q&A</span>
+                            </div>
+                        </div>
+
+                        <!-- Week 4 -->
+                        <div class="calendar-day">
+                            <span class="day-number">16</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Year in Review</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">17</span>
+                            <div class="content-item promotional">
+                                <i class="fas fa-snowflake"></i>
+                                <span>Holiday Special</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">18</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Interactive Poll</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">19</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-trophy"></i>
+                                <span>Success Stories</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">20</span>
+                            <div class="content-item community">
+                                <i class="fas fa-handshake"></i>
+                                <span>Partner Feature</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">21</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-calendar-star"></i>
+                                <span>Weekend Fun</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">22</span>
+                            <div class="content-item promotional">
+                                <i class="fas fa-fire"></i>
+                                <span>Last Chance Sale</span>
+                            </div>
+                        </div>
+
+                        <!-- Final week -->
+                        <div class="calendar-day">
+                            <span class="day-number">23</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-rocket"></i>
+                                <span>Looking Ahead 2025</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">24</span>
+                            <div class="content-item community">
+                                <i class="fas fa-gift-heart"></i>
+                                <span>Holiday Wishes</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">25</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-tree"></i>
+                                <span>Christmas Special</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">26</span>
+                            <div class="content-item community">
+                                <i class="fas fa-thanks"></i>
+                                <span>Thank You Post</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">27</span>
+                            <div class="content-item educational">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Year-end Tips</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">28</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-party-horn"></i>
+                                <span>Weekend Celebration</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">29</span>
+                            <div class="content-item promotional">
+                                <i class="fas fa-fireworks"></i>
+                                <span>New Year Preview</span>
+                            </div>
+                        </div>
+
+                        <!-- Extra days -->
+                        <div class="calendar-day">
+                            <span class="day-number">30</span>
+                            <div class="content-item community">
+                                <i class="fas fa-heart"></i>
+                                <span>Community Love</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <span class="day-number">31</span>
+                            <div class="content-item entertainment">
+                                <i class="fas fa-clock"></i>
+                                <span>Countdown 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Insights -->
+                <div class="strategic-recommendations">
+                    <h3><i class="fas fa-chart-line"></i> Performance Insights & Recommendations</h3>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card priority-high">
+                            <span class="rec-priority">High Impact</span>
+                            <h5>Video Content Strategy</h5>
+                            <p>Increase video content to 60% of posts. Video content generates 3x more engagement than static posts on your platforms.</p>
+                        </div>
+                        <div class="recommendation-card priority-medium">
+                            <span class="rec-priority">Medium Impact</span>
+                            <h5>User-Generated Content</h5>
+                            <p>Launch UGC campaigns to boost community content from 10% to 25%. Customer content builds trust and authenticity.</p>
+                        </div>
+                        <div class="recommendation-card priority-low">
+                            <span class="rec-priority">Optimization</span>
+                            <h5>Cross-Platform Adaptation</h5>
+                            <p>Adapt content formats for each platform's native experience while maintaining consistent messaging and brand voice.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -3737,13 +5244,6 @@ class MarketingSuperAgentV4 {
                             <li>Strategic insights generated for ${context.scope || 'immediate implementation'}</li>
                         </ul>
                     `).join('')}
-
-                    <h4>Next Steps</h4>
-                    <ul>
-                        <li>Review and validate the generated recommendations</li>
-                        <li>Implement priority optimizations</li>
-                        <li>Monitor performance and iterate based on results</li>
-                    </ul>
                 </div>
             </div>
         `;
@@ -4396,49 +5896,132 @@ class MarketingSuperAgentV4 {
     }
 
     generateFollowUpResponse(message) {
-        // Show thinking process for follow-up
-        this.addMessage('🧠 **Analyzing your follow-up request...**', 'agent');
+        // Analyze the message to determine task type and required agents
+        const messageType = this.analyzeMessage(message);
+        const context = this.extractContextFromMessage(message);
 
-        const thinkingProcess = [
-            'Processing your request parameters...',
-            'Evaluating context from previous conversation...',
-            'Identifying optimal specialist agents for this task...',
-            'Synthesizing recommendations with existing analysis...',
-            'Preparing targeted insights and next steps...'
-        ];
+        // Show initial processing message
+        this.addMessage('🧠 **Analyzing your request...**', 'agent');
+
+        // Get the appropriate AI suite title
+        const suiteTitle = this.getAISuiteFromMessageType(messageType);
+        this.currentSuiteTitle = suiteTitle;
+
+        // Determine which agents to activate based on message type
+        const agentConfigs = {
+            brief: ['Deep Research', 'Performance', 'Audience'],
+            creative: ['Creative', 'Research Agent', 'Audience'],
+            journey: ['Journey', 'Audience', 'Performance'],
+            performance: ['Performance', 'Analytics Agent', 'Research Agent'],
+            audience: ['Audience', 'Research Agent', 'Analytics Agent'],
+            'paid-media': ['Paid Media', 'Performance', 'Analytics Agent'],
+            general: ['Deep Research', 'Performance', 'Creative']
+        };
+
+        const activeAgents = agentConfigs[messageType] || agentConfigs.general;
+
+        // Show agent activation message
+        setTimeout(() => {
+            this.addMessage(`🚀 **Activating ${activeAgents.length} specialist agents:** ${activeAgents.join(', ')}`, 'agent');
+        }, 800);
+
+        // Show agent progress with visual indicators
+        setTimeout(() => {
+            this.showAgentProgress(messageType, message);
+        }, 1200);
+
+        // Show thinking process specific to the task
+        const thinkingProcess = this.getTaskSpecificThinking(messageType, context);
 
         thinkingProcess.forEach((thought, index) => {
             setTimeout(() => {
                 this.addMessage(`🔍 ${thought}`, 'agent');
-            }, (index + 1) * 600);
+            }, 1800 + (index * 800));
         });
 
-        const responses = [
-            "I'll help you with that. Let me analyze the requirements and provide recommendations.",
-            "Great idea! I'm processing your request and will have detailed results shortly.",
-            "I understand what you're looking for. Let me gather the relevant data and insights.",
-            "Perfect! I'm working on that now and will show you the results in the output panel.",
-            "I can definitely help with that. Let me activate the relevant specialist agents."
-        ];
-
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-
+        // Generate final response message
+        const finalResponseDelay = 1800 + (thinkingProcess.length * 800) + 500;
         setTimeout(() => {
-            this.addMessage(randomResponse, 'agent');
-        }, thinkingProcess.length * 600 + 500);
+            const responseMessage = this.getTaskSpecificResponse(messageType, context);
+            this.addMessage(responseMessage, 'agent');
+        }, finalResponseDelay);
 
-        // Add contextual reasoning insight to output area
+        // Add thought process to output area
         setTimeout(() => {
-            const messageType = this.analyzeMessage(message);
             const contextualInsight = this.getFollowUpInsight(message, messageType);
             this.addThoughtProcessToOutput('Strategy Coordinator', contextualInsight, message);
-        }, thinkingProcess.length * 600 + 1200);
+        }, finalResponseDelay + 800);
 
-        // Simulate updating output panel
+        // Generate comprehensive polished output
         setTimeout(() => {
-            const messageType = this.analyzeMessage(message);
             this.updateOutputPanel(messageType, message);
-        }, thinkingProcess.length * 600 + 2000);
+        }, finalResponseDelay + 1500);
+    }
+
+    getTaskSpecificThinking(messageType, context) {
+        const thinkingTemplates = {
+            brief: [
+                'Analyzing market landscape and competitive positioning...',
+                'Researching target audience behaviors and preferences...',
+                'Evaluating campaign objectives and success metrics...',
+                'Synthesizing strategic recommendations and budget allocation...'
+            ],
+            creative: [
+                'Analyzing brand guidelines and creative requirements...',
+                'Researching visual trends and platform specifications...',
+                'Generating creative concepts and messaging strategies...',
+                'Preparing asset recommendations and A/B testing plans...'
+            ],
+            journey: [
+                'Mapping customer touchpoints and interaction patterns...',
+                'Analyzing conversion paths and drop-off points...',
+                'Designing automated workflow triggers and sequences...',
+                'Optimizing journey timing and personalization rules...'
+            ],
+            performance: [
+                'Collecting and analyzing campaign performance data...',
+                'Identifying optimization opportunities and bottlenecks...',
+                'Calculating ROI and attribution across channels...',
+                'Generating actionable improvement recommendations...'
+            ],
+            audience: [
+                'Analyzing demographic and psychographic data...',
+                'Identifying high-value customer segments...',
+                'Researching behavioral patterns and preferences...',
+                'Creating targeting strategies and lookalike audiences...'
+            ],
+            'paid-media': [
+                'Analyzing budget allocation and channel performance...',
+                'Researching platform-specific optimization opportunities...',
+                'Calculating bid strategies and audience targeting...',
+                'Preparing media mix recommendations and scaling plans...'
+            ]
+        };
+
+        return thinkingTemplates[messageType] || [
+            'Processing your request and identifying key requirements...',
+            'Activating relevant specialist agents for analysis...',
+            'Gathering data and insights from multiple sources...',
+            'Preparing comprehensive recommendations and next steps...'
+        ];
+    }
+
+    getTaskSpecificResponse(messageType, context) {
+        const responses = {
+            brief: `✅ **Campaign brief completed!** I've analyzed your requirements and created a comprehensive strategy covering market analysis, audience targeting, and budget allocation. The output panel shows detailed insights from our Research, Performance, and Audience agents.`,
+
+            creative: `🎨 **Creative strategy ready!** Our Creative, Research, and Audience agents have developed concepts, messaging, and asset recommendations. Check the output panel for visual mockups and A/B testing strategies.`,
+
+            journey: `🗺️ **Customer journey mapped!** The Journey, Audience, and Performance agents have created a comprehensive flow with touchpoints, automation triggers, and optimization recommendations available in the output panel.`,
+
+            performance: `📊 **Performance analysis complete!** Our Performance, Analytics, and Research agents have identified optimization opportunities, ROI improvements, and actionable insights now available in the output panel.`,
+
+            audience: `👥 **Audience insights generated!** The Audience, Research, and Analytics agents have created detailed segmentation, targeting strategies, and behavioral analysis available in the output panel.`,
+
+            'paid-media': `💰 **Media plan optimized!** Our Paid Media, Performance, and Analytics agents have developed budget allocation, channel strategies, and scaling recommendations now in the output panel.`
+        };
+
+        return responses[messageType] || `✅ **Analysis complete!** Our specialist agents have processed your request and generated comprehensive insights and recommendations available in the output panel.`;
     }
 
     getFollowUpInsight(message, messageType) {
@@ -4604,20 +6187,7 @@ class MarketingSuperAgentV4 {
             'Set up performance monitoring'
         ];
 
-        const suggestionsHTML = `
-            <div style="margin-top: 1rem; padding: 1rem; background: var(--content-bg); border: var(--border); border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; font-size: 13px;">💡 Next Steps & Suggestions</div>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    ${suggestions.map(suggestion =>
-                        `<button class="suggestion-btn" onclick="app.handleSuggestion('${suggestion}')" style="background: var(--card-bg); border: var(--border); border-radius: 20px; padding: 4px 12px; font-size: 11px; cursor: pointer; transition: all var(--transition-fast); color: var(--text-secondary);">
-                            ${suggestion}
-                        </button>`
-                    ).join('')}
-                </div>
-            </div>
-        `;
-
-        this.addMessage(suggestionsHTML, 'agent', 'SuperAgent');
+        this.addFollowUpSuggestions(suggestions);
     }
 
     updateAgentStatusWithThought(agentName, thought, thoughtIndex) {
@@ -4808,6 +6378,9 @@ class MarketingSuperAgentV4 {
             // Force a reflow to ensure the change takes effect
             kbPage.offsetHeight;
 
+            // Re-initialize knowledge base interactions to ensure toggles work
+            this.setupKnowledgeBaseInteractions();
+
             // Check if sidebar is visible within the knowledge base page
             const kbSidebar = kbPage.querySelector('.sidebar-nav');
             if (kbSidebar) {
@@ -4941,46 +6514,61 @@ class MarketingSuperAgentV4 {
     }
 
     setupKnowledgeBaseInteractions() {
-        // Toggle pinned context items
-        document.addEventListener('click', (e) => {
+        // Remove existing listeners to prevent duplicates
+        if (this.kbClickHandler) {
+            document.removeEventListener('click', this.kbClickHandler);
+        }
+
+        // Create new click handler
+        this.kbClickHandler = (e) => {
+            // Toggle pinned context items
             if (e.target.closest('.pinned-toggle')) {
+                console.log('🔧 KB Toggle: Pinned toggle clicked');
                 const toggle = e.target.closest('.pinned-toggle');
                 const pinnedItem = toggle.closest('.pinned-item');
                 const icon = toggle.querySelector('i');
 
                 if (toggle.classList.contains('active')) {
                     // Deactivate
+                    console.log('🔧 KB Toggle: Deactivating pinned item');
                     toggle.classList.remove('active');
                     pinnedItem.classList.remove('active');
                     icon.className = 'fas fa-toggle-off';
                     pinnedItem.querySelector('.pinned-status').textContent = 'Inactive';
                 } else {
                     // Activate
+                    console.log('🔧 KB Toggle: Activating pinned item');
                     toggle.classList.add('active');
                     pinnedItem.classList.add('active');
                     icon.className = 'fas fa-toggle-on';
                     pinnedItem.querySelector('.pinned-status').textContent = 'Active';
                 }
+                return;
             }
-        });
 
-        // Toggle context packs
-        document.addEventListener('click', (e) => {
+            // Toggle context packs
             if (e.target.closest('.pack-toggle')) {
+                console.log('🔧 KB Toggle: Pack toggle clicked');
                 const toggle = e.target.closest('.pack-toggle');
                 const icon = toggle.querySelector('i');
 
                 if (toggle.classList.contains('active')) {
                     // Deactivate
+                    console.log('🔧 KB Toggle: Deactivating pack');
                     toggle.classList.remove('active');
                     icon.className = 'fas fa-toggle-off';
                 } else {
                     // Activate
+                    console.log('🔧 KB Toggle: Activating pack');
                     toggle.classList.add('active');
                     icon.className = 'fas fa-toggle-on';
                 }
+                return;
             }
-        });
+        };
+
+        // Add the click handler
+        document.addEventListener('click', this.kbClickHandler);
 
         // Knowledge Base search
         const kbSearch = document.getElementById('kb-search');
@@ -5118,9 +6706,80 @@ class MarketingSuperAgentV4 {
     }
 
     exportOutput() {
-        this.addMessage("📥 Preparing PDF export with all outputs, data, and recommendations. Download will start shortly.", 'agent');
+        // Show export options modal
+        this.showExportOptionsModal();
+    }
 
-        // Get the current output content
+    showExportOptionsModal() {
+        const modal = document.createElement('div');
+        modal.className = 'export-modal-overlay';
+        modal.innerHTML = `
+            <div class="export-modal">
+                <div class="export-modal-header">
+                    <h3><i class="fas fa-download"></i> Export Options</h3>
+                    <button class="close-export-modal" id="close-export-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="export-modal-content">
+                    <div class="export-options">
+                        <div class="export-option" data-type="pdf">
+                            <div class="export-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                            <div class="export-info">
+                                <h4>PDF Report</h4>
+                                <p>Comprehensive report with all analysis and recommendations</p>
+                            </div>
+                        </div>
+                        <div class="export-option" data-type="powerpoint">
+                            <div class="export-icon powerpoint"><i class="fas fa-file-powerpoint"></i></div>
+                            <div class="export-info">
+                                <h4>PowerPoint Slides</h4>
+                                <p>Ready-to-present slide deck with key insights and visuals</p>
+                            </div>
+                        </div>
+                        <div class="export-option" data-type="google-slides">
+                            <div class="export-icon google-slides"><i class="fab fa-google"></i></div>
+                            <div class="export-info">
+                                <h4>Google Slides</h4>
+                                <p>Shareable Google Slides presentation format</p>
+                            </div>
+                        </div>
+                        <div class="export-option" data-type="markdown">
+                            <div class="export-icon markdown"><i class="fab fa-markdown"></i></div>
+                            <div class="export-info">
+                                <h4>Markdown</h4>
+                                <p>Clean markdown format for documentation and sharing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Add event listeners
+        modal.querySelector('#close-export-modal').addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+            }
+        });
+
+        // Handle export option selection
+        modal.querySelectorAll('.export-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const exportType = option.dataset.type;
+                document.body.removeChild(modal);
+                this.handleExport(exportType);
+            });
+        });
+    }
+
+    handleExport(exportType) {
         const outputContent = document.getElementById('output-content');
         const outputTitle = document.getElementById('output-title');
 
@@ -5129,10 +6788,24 @@ class MarketingSuperAgentV4 {
             return;
         }
 
-        // Create PDF using browser's print functionality
-        setTimeout(() => {
-            this.generatePDF();
-        }, 1000);
+        switch (exportType) {
+            case 'pdf':
+                this.addMessage("📄 Preparing PDF export with all outputs, data, and recommendations. Download will start shortly.", 'agent');
+                setTimeout(() => this.generatePDF(), 1000);
+                break;
+            case 'powerpoint':
+                this.addMessage("🎯 Generating PowerPoint slide deck with key insights and visuals. Download will start shortly.", 'agent');
+                setTimeout(() => this.generatePowerPointSlides(), 1000);
+                break;
+            case 'google-slides':
+                this.addMessage("📊 Creating Google Slides presentation format. Download will start shortly.", 'agent');
+                setTimeout(() => this.generateGoogleSlides(), 1000);
+                break;
+            case 'markdown':
+                this.addMessage("📝 Preparing Markdown export for documentation. Download will start shortly.", 'agent');
+                setTimeout(() => this.generateMarkdown(), 1000);
+                break;
+        }
     }
 
     generatePDF() {
@@ -5382,6 +7055,553 @@ class MarketingSuperAgentV4 {
             </body>
             </html>
         `;
+    }
+
+    generatePowerPointSlides() {
+        try {
+            const outputTitle = document.getElementById('output-title')?.textContent || 'Marketing SuperAgent Analysis';
+            const outputContent = document.getElementById('output-content');
+
+            if (!outputContent) {
+                this.addMessage("❌ No content available to export.", 'agent');
+                return;
+            }
+
+            // Extract structured data for slides
+            const slideData = this.extractSlideContent(outputContent, outputTitle);
+
+            // Generate PowerPoint-compatible HTML
+            const pptContent = this.generatePowerPointHTML(slideData);
+
+            // Create and download the file
+            this.downloadFile(pptContent, `${outputTitle.replace(/[^a-z0-9]/gi, '_')}_slides.html`, 'text/html');
+
+            this.addMessage("✅ PowerPoint slides exported successfully! The HTML file can be imported into PowerPoint or presented directly in a browser.", 'agent');
+
+        } catch (error) {
+            console.error('PowerPoint export error:', error);
+            this.addMessage("❌ Error generating PowerPoint slides. Please try again.", 'agent');
+        }
+    }
+
+    generateGoogleSlides() {
+        try {
+            const outputTitle = document.getElementById('output-title')?.textContent || 'Marketing SuperAgent Analysis';
+            const outputContent = document.getElementById('output-content');
+
+            if (!outputContent) {
+                this.addMessage("❌ No content available to export.", 'agent');
+                return;
+            }
+
+            // Extract structured data for slides
+            const slideData = this.extractSlideContent(outputContent, outputTitle);
+
+            // Generate Google Slides-compatible format
+            const googleSlidesContent = this.generateGoogleSlidesFormat(slideData);
+
+            // Create and download the file
+            this.downloadFile(googleSlidesContent, `${outputTitle.replace(/[^a-z0-9]/gi, '_')}_google_slides.html`, 'text/html');
+
+            this.addMessage("✅ Google Slides format exported successfully! Upload the HTML file to Google Drive and convert to Google Slides.", 'agent');
+
+        } catch (error) {
+            console.error('Google Slides export error:', error);
+            this.addMessage("❌ Error generating Google Slides format. Please try again.", 'agent');
+        }
+    }
+
+    generateMarkdown() {
+        try {
+            const outputTitle = document.getElementById('output-title')?.textContent || 'Marketing SuperAgent Analysis';
+            const outputContent = document.getElementById('output-content');
+
+            if (!outputContent) {
+                this.addMessage("❌ No content available to export.", 'agent');
+                return;
+            }
+
+            // Convert HTML content to Markdown
+            const markdownContent = this.convertToMarkdown(outputContent, outputTitle);
+
+            // Create and download the file
+            this.downloadFile(markdownContent, `${outputTitle.replace(/[^a-z0-9]/gi, '_')}_report.md`, 'text/markdown');
+
+            this.addMessage("✅ Markdown export completed successfully! Perfect for documentation and sharing.", 'agent');
+
+        } catch (error) {
+            console.error('Markdown export error:', error);
+            this.addMessage("❌ Error generating Markdown file. Please try again.", 'agent');
+        }
+    }
+
+    extractSlideContent(contentElement, title) {
+        const slides = [];
+
+        // Title slide
+        slides.push({
+            type: 'title',
+            title: title,
+            subtitle: 'AI-Powered Marketing Analysis',
+            timestamp: new Date().toLocaleDateString()
+        });
+
+        // Extract all major sections for slides
+        const sections = contentElement.querySelectorAll('.agent-analysis-card, .creative-concepts-section, .competitive-intelligence-section, .strategic-recommendations, .timeline-section, .knowledge-base-section, .enhanced-output > *');
+
+        sections.forEach((section, index) => {
+            const sectionTitle = section.querySelector('h3, h4, h2')?.textContent || section.querySelector('.agent-card-header h4')?.textContent || `Section ${index + 1}`;
+
+            // Extract insights from multiple sources
+            const insights = section.querySelectorAll('.insight-highlight, .insight-highlight span, .forecast-item, .trend-item');
+
+            // Extract metrics from multiple sources
+            const metrics = section.querySelectorAll('.metric-item, .key-metrics .metric-item, .stat-card, .metric, .forecast-details');
+
+            // Extract concepts and recommendations
+            const concepts = section.querySelectorAll('.concept-card, .recommendation-card, .intelligence-card, .knowledge-source-card, .hypothesis-card');
+
+            // Extract bullet points and lists
+            const bulletPoints = section.querySelectorAll('ul li, .segment-bar, .platform-chip');
+
+            // Extract general paragraphs as content
+            const paragraphs = section.querySelectorAll('p');
+            const contentParagraphs = Array.from(paragraphs)
+                .map(p => p.textContent.trim())
+                .filter(text => text.length > 20 && !text.includes('Updated:') && !text.includes('Generated'));
+
+            // Create content slide with enhanced extraction
+            const slideContent = {
+                type: 'content',
+                title: sectionTitle,
+                insights: Array.from(insights).map(insight => {
+                    const text = insight.querySelector('span')?.textContent || insight.textContent;
+                    return text.trim();
+                }).filter(text => text.length > 10),
+                metrics: Array.from(metrics).map(metric => {
+                    const value = metric.querySelector('.metric-value, .stat-number, .forecast-metric')?.textContent ||
+                                 metric.querySelector('strong')?.textContent || '';
+                    const desc = metric.querySelector('.metric-desc, .metric-label, .stat-label, .forecast-value')?.textContent ||
+                                metric.textContent.replace(value, '').trim();
+                    return { value: value.trim(), description: desc.trim() };
+                }).filter(metric => metric.value || metric.description),
+                concepts: Array.from(concepts).map(concept => {
+                    const title = concept.querySelector('h4, h5, .source-info h4')?.textContent || '';
+                    const description = concept.querySelector('p, .source-details')?.textContent || '';
+                    return { title: title.trim(), description: description.trim() };
+                }).filter(concept => concept.title || concept.description),
+                bulletPoints: Array.from(bulletPoints).map(item => {
+                    const text = item.textContent.trim();
+                    return text;
+                }).filter(text => text.length > 10 && text.length < 150),
+                content: contentParagraphs.slice(0, 3) // Limit to first 3 relevant paragraphs
+            };
+
+            // Include slide if it has any meaningful content
+            if (slideContent.insights.length > 0 || slideContent.metrics.length > 0 ||
+                slideContent.concepts.length > 0 || slideContent.bulletPoints.length > 0 ||
+                slideContent.content.length > 0) {
+                slides.push(slideContent);
+            }
+        });
+
+        // If no sections were found, extract from the entire content
+        if (slides.length === 1) { // Only title slide
+            const fallbackInsights = contentElement.querySelectorAll('h3, h4, h5, strong');
+            const fallbackContent = Array.from(fallbackInsights)
+                .map(el => el.textContent.trim())
+                .filter(text => text.length > 10)
+                .slice(0, 10);
+
+            if (fallbackContent.length > 0) {
+                slides.push({
+                    type: 'content',
+                    title: 'Analysis Overview',
+                    insights: [],
+                    metrics: [],
+                    concepts: [],
+                    bulletPoints: fallbackContent,
+                    content: []
+                });
+            }
+        }
+
+        // Summary slide with top insights
+        const allInsights = contentElement.querySelectorAll('.insight-highlight, .recommendation-card h5, .concept-header h4');
+        slides.push({
+            type: 'summary',
+            title: 'Key Takeaways',
+            insights: Array.from(allInsights).slice(0, 6).map(insight => insight.textContent.trim()).filter(text => text.length > 10)
+        });
+
+        return slides;
+    }
+
+    generatePowerPointHTML(slideData) {
+        const timestamp = new Date().toLocaleDateString();
+
+        let slidesHTML = '';
+
+        slideData.forEach((slide, index) => {
+            if (slide.type === 'title') {
+                slidesHTML += `
+                    <div class="slide title-slide">
+                        <div class="slide-content">
+                            <h1>${slide.title}</h1>
+                            <h2>${slide.subtitle}</h2>
+                            <p class="timestamp">${slide.timestamp}</p>
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === 'content') {
+                slidesHTML += `
+                    <div class="slide content-slide">
+                        <div class="slide-content">
+                            <h1>${slide.title}</h1>
+                            ${slide.insights.length > 0 ? `
+                                <div class="insights-section">
+                                    <h3>Key Insights</h3>
+                                    <ul>
+                                        ${slide.insights.map(insight => `<li>${insight}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            ${slide.content && slide.content.length > 0 ? `
+                                <div class="content-section">
+                                    ${slide.content.map(paragraph => `<p>${paragraph}</p>`).join('')}
+                                </div>
+                            ` : ''}
+                            ${slide.bulletPoints && slide.bulletPoints.length > 0 ? `
+                                <div class="bullets-section">
+                                    <ul>
+                                        ${slide.bulletPoints.map(bullet => `<li>${bullet}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            ${slide.metrics.length > 0 ? `
+                                <div class="metrics-section">
+                                    <h3>Key Metrics</h3>
+                                    <div class="metrics-grid">
+                                        ${slide.metrics.map(metric => `
+                                            <div class="metric">
+                                                <div class="metric-value">${metric.value}</div>
+                                                <div class="metric-label">${metric.description}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            ${slide.concepts.length > 0 ? `
+                                <div class="concepts-section">
+                                    <h3>Recommendations</h3>
+                                    <ul>
+                                        ${slide.concepts.map(concept => `
+                                            <li><strong>${concept.title}</strong>${concept.description ? `<br>${concept.description}` : ''}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === 'summary') {
+                slidesHTML += `
+                    <div class="slide summary-slide">
+                        <div class="slide-content">
+                            <h1>${slide.title}</h1>
+                            <ul class="summary-list">
+                                ${slide.insights.map(insight => `<li>${insight}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        return `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Marketing SuperAgent - Presentation</title>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+                    body {
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                        background: #f5f5f5;
+                        overflow-x: auto;
+                        white-space: nowrap;
+                        padding: 20px;
+                    }
+
+                    .slide {
+                        display: inline-block;
+                        width: 1024px;
+                        height: 768px;
+                        background: white;
+                        margin-right: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                        vertical-align: top;
+                        position: relative;
+                        overflow: hidden;
+                    }
+
+                    .slide-content {
+                        padding: 60px;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .title-slide {
+                        background: linear-gradient(135deg, #1957db, #4475e6);
+                        color: white;
+                    }
+
+                    .title-slide .slide-content {
+                        justify-content: center;
+                        text-align: center;
+                    }
+
+                    .title-slide h1 {
+                        font-size: 48px;
+                        font-weight: 600;
+                        margin-bottom: 20px;
+                        line-height: 1.2;
+                    }
+
+                    .title-slide h2 {
+                        font-size: 24px;
+                        opacity: 0.9;
+                        margin-bottom: 40px;
+                    }
+
+                    .content-slide h1 {
+                        font-size: 36px;
+                        color: #1957db;
+                        margin-bottom: 40px;
+                        border-bottom: 3px solid #1957db;
+                        padding-bottom: 10px;
+                    }
+
+                    .content-slide h3 {
+                        font-size: 24px;
+                        color: #2c2c2c;
+                        margin: 30px 0 15px 0;
+                    }
+
+                    .content-slide ul {
+                        list-style: none;
+                        margin: 0 0 30px 0;
+                    }
+
+                    .content-slide li {
+                        padding: 8px 0;
+                        padding-left: 25px;
+                        position: relative;
+                        font-size: 18px;
+                        line-height: 1.5;
+                    }
+
+                    .content-slide li::before {
+                        content: "▶";
+                        position: absolute;
+                        left: 0;
+                        color: #1957db;
+                        font-size: 12px;
+                        top: 12px;
+                    }
+
+                    .content-section {
+                        margin: 20px 0;
+                    }
+
+                    .content-section p {
+                        font-size: 16px;
+                        line-height: 1.6;
+                        margin-bottom: 15px;
+                        color: #2c2c2c;
+                    }
+
+                    .bullets-section {
+                        margin: 20px 0;
+                    }
+
+                    .bullets-section ul {
+                        list-style: none;
+                        margin: 0;
+                    }
+
+                    .bullets-section li {
+                        padding: 6px 0;
+                        padding-left: 25px;
+                        position: relative;
+                        font-size: 16px;
+                        line-height: 1.5;
+                    }
+
+                    .bullets-section li::before {
+                        content: "•";
+                        position: absolute;
+                        left: 0;
+                        color: #1957db;
+                        font-size: 16px;
+                        font-weight: bold;
+                        top: 6px;
+                    }
+
+                    .metrics-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                        gap: 20px;
+                        margin: 20px 0;
+                    }
+
+                    .metric {
+                        text-align: center;
+                        padding: 20px;
+                        background: #f8f9fa;
+                        border-radius: 8px;
+                        border-left: 4px solid #1957db;
+                    }
+
+                    .metric-value {
+                        font-size: 32px;
+                        font-weight: 700;
+                        color: #1957db;
+                        margin-bottom: 5px;
+                    }
+
+                    .metric-label {
+                        font-size: 14px;
+                        color: #6e6e6e;
+                    }
+
+                    .summary-slide {
+                        background: linear-gradient(135deg, #2d9d78, #34d399);
+                        color: white;
+                    }
+
+                    .summary-list li {
+                        font-size: 20px;
+                        margin-bottom: 15px;
+                        padding-left: 30px;
+                    }
+
+                    .timestamp {
+                        font-size: 16px;
+                        opacity: 0.8;
+                    }
+
+                    @media print {
+                        body { padding: 0; }
+                        .slide {
+                            display: block;
+                            margin: 0;
+                            page-break-after: always;
+                            width: 100%;
+                            height: 100vh;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                ${slidesHTML}
+                <script>
+                    // Add navigation with arrow keys
+                    let currentSlide = 0;
+                    const slides = document.querySelectorAll('.slide');
+
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) {
+                            currentSlide++;
+                            slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                        } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                            currentSlide--;
+                            slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+
+                    // Click to navigate
+                    slides.forEach((slide, index) => {
+                        slide.addEventListener('click', () => {
+                            currentSlide = index;
+                        });
+                    });
+                </script>
+            </body>
+            </html>
+        `;
+    }
+
+    generateGoogleSlidesFormat(slideData) {
+        // Similar to PowerPoint but optimized for Google Slides import
+        return this.generatePowerPointHTML(slideData);
+    }
+
+    convertToMarkdown(contentElement, title) {
+        const timestamp = new Date().toLocaleDateString();
+        let markdown = `# ${title}\n\n`;
+        markdown += `*Generated by Marketing SuperAgent on ${timestamp}*\n\n`;
+
+        // Extract and convert sections
+        const sections = contentElement.querySelectorAll('.agent-analysis-card, .creative-concepts-section, .competitive-intelligence-section, .strategic-recommendations, .timeline-section, .knowledge-base-section');
+
+        sections.forEach(section => {
+            const sectionTitle = section.querySelector('h3, h4')?.textContent;
+            if (sectionTitle) {
+                markdown += `## ${sectionTitle}\n\n`;
+            }
+
+            // Extract insights
+            const insights = section.querySelectorAll('.insight-highlight');
+            if (insights.length > 0) {
+                markdown += `### Key Insights\n\n`;
+                insights.forEach(insight => {
+                    markdown += `- ${insight.textContent.trim()}\n`;
+                });
+                markdown += `\n`;
+            }
+
+            // Extract metrics
+            const metrics = section.querySelectorAll('.metric-item');
+            if (metrics.length > 0) {
+                markdown += `### Metrics\n\n`;
+                metrics.forEach(metric => {
+                    const value = metric.querySelector('.metric-value')?.textContent || '';
+                    const desc = metric.querySelector('.metric-desc, .metric-label')?.textContent || '';
+                    markdown += `- **${value}** - ${desc}\n`;
+                });
+                markdown += `\n`;
+            }
+
+            // Extract general content
+            const paragraphs = section.querySelectorAll('p');
+            paragraphs.forEach(p => {
+                const text = p.textContent.trim();
+                if (text && !text.includes('Updated:') && text.length > 10) {
+                    markdown += `${text}\n\n`;
+                }
+            });
+        });
+
+        markdown += `\n---\n\n*Generated by Marketing SuperAgent - AI-Native Marketing Platform*`;
+
+        return markdown;
+    }
+
+    downloadFile(content, filename, mimeType) {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     saveToHistory(messageType, title, content) {
@@ -5864,6 +8084,10 @@ class MarketingSuperAgentV4 {
                 this.duplicateJourney();
             } else if (e.target.closest('#activate-journey-btn')) {
                 this.activateJourney();
+            } else if (e.target.closest('#create-journey-btn')) {
+                const button = e.target.closest('#create-journey-btn');
+                const journeyType = button.getAttribute('data-journey-type') || 'reactivation';
+                this.createJourneyFlow(journeyType);
             }
         });
     }
@@ -6025,6 +8249,41 @@ class MarketingSuperAgentV4 {
         }, 2000);
     }
 
+    createJourneyFlow(journeyType = 'reactivation') {
+        console.log('🚀 Creating journey flow for:', journeyType);
+
+        // Add user action message
+        this.addMessage(`Create ${journeyType} journey flow`, 'user');
+
+        // Show agent progress for journey creation
+        this.showAgentProgress('journey', `Creating ${journeyType} journey flow`);
+
+        // Generate the journey flow after agent progress
+        setTimeout(() => {
+            // Create a journey-specific message to pass to generateJourneyFlowOutput
+            let journeyMessage = '';
+            switch(journeyType) {
+                case 'reactivation':
+                    journeyMessage = 'Create a customer reactivation journey for inactive subscribers';
+                    break;
+                case 'cart-abandonment':
+                    journeyMessage = 'Create a cart abandonment recovery journey';
+                    break;
+                case 'welcome':
+                    journeyMessage = 'Create a welcome onboarding journey';
+                    break;
+                default:
+                    journeyMessage = 'Create a customer journey flow';
+            }
+
+            // Generate the journey flow using the existing method
+            const journeyOutput = this.generateJourneyFlowOutput('journey', journeyMessage);
+
+            // Display the journey flow with action buttons
+            this.displayOutput(journeyOutput, 'Journey Flow Created', 'Journey Agent');
+        }, 3000);
+    }
+
     closeEditModal() {
         // Return to journey view
         const lastJourneyOutput = this.generateJourneyFlowOutput({}, 'customer journey');
@@ -6060,7 +8319,7 @@ class MarketingSuperAgentV4 {
 
         // Create Export button
         const exportBtn = document.createElement('button');
-        exportBtn.className = 'workspace-btn';
+        exportBtn.className = 'workspace-btn primary';
         exportBtn.innerHTML = `
             <i class="fas fa-download"></i>
             <span>Export</span>
@@ -6069,15 +8328,15 @@ class MarketingSuperAgentV4 {
 
         // Create Share button
         const shareBtn = document.createElement('button');
-        shareBtn.className = 'workspace-btn primary';
+        shareBtn.className = 'workspace-btn';
         shareBtn.innerHTML = `
             <i class="fas fa-share-alt"></i>
             <span>Share</span>
         `;
         shareBtn.addEventListener('click', () => this.shareOutput());
 
-        actionsContainer.appendChild(shareBtn);
         actionsContainer.appendChild(exportBtn);
+        actionsContainer.appendChild(shareBtn);
 
         // Add to header
         const outputTitleSection = outputHeader.querySelector('.output-title-section');
@@ -6159,6 +8418,1032 @@ class MarketingSuperAgentV4 {
             textarea.select();
         }
     }
+
+    handleCreativePrompt(prompt) {
+        console.log('🎨 handleCreativePrompt called with:', prompt); // Debug log
+
+        // Ensure we're in working mode (but don't clear messages if already in working mode)
+        console.log('🔄 Checking current mode...'); // Debug log
+        if (this.currentView !== 'working') {
+            console.log('🔄 Switching to working mode...'); // Debug log
+            this.showWorkingInterface();
+        } else {
+            console.log('✅ Already in working mode, preserving chat history'); // Debug log
+        }
+
+        // Add user selection message
+        console.log('💬 Adding user message...'); // Debug log
+        this.addMessage(prompt, 'user');
+
+        // Show specialist agent progress for creative tasks
+        console.log('⏳ Showing agent progress for creative task...'); // Debug log
+        this.showAgentProgress('creative', prompt);
+
+        // Generate appropriate creative output based on the prompt
+        setTimeout(() => {
+            console.log('🚀 Generating output for:', prompt); // Debug log
+            if (prompt.includes('Instagram ad variations')) {
+                console.log('📸 Generating Instagram ad variations...'); // Debug log
+                this.generateInstagramAdVariations();
+            } else if (prompt.includes('hero images')) {
+                console.log('🖼️ Generating DAM image recommendations...'); // Debug log
+                this.generateDAMImageRecommendations();
+            } else if (prompt.includes('email subject lines')) {
+                console.log('📧 Generating email subject lines...'); // Debug log
+                this.generateEmailSubjectLines();
+            } else if (prompt.includes('landing page headline')) {
+                console.log('📄 Generating headline test variations...'); // Debug log
+                this.generateHeadlineTestVariations();
+            } else {
+                console.log('❓ No matching generator found for prompt:', prompt); // Debug log
+                // Fallback - generate generic creative output
+                this.generateGenericCreativeOutput(prompt);
+            }
+        }, 1500);
+    }
+
+    handleCreativeKBToggle(isEnabled) {
+        const statusElement = document.getElementById('creative-kb-status');
+        if (statusElement) {
+            if (isEnabled) {
+                statusElement.innerHTML = '✅ Using your brand guidelines and creative briefs for personalized suggestions';
+                statusElement.style.color = 'var(--accent-green)';
+            } else {
+                statusElement.innerHTML = '⚪ Using general creative best practices only';
+                statusElement.style.color = 'var(--text-secondary)';
+            }
+        }
+    }
+
+
+    generateInstagramAdVariations() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-palette" style="color: var(--accent-red);"></i> Instagram Ad Variations</h2>
+                        <p class="output-subtitle">3 creative variations for Fall Collection launch</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Variations</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">85%</span>
+                            <span class="stat-label">Predicted CTR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creative-concepts-section">
+                    <h3><i class="fas fa-lightbulb"></i> Creative Variations</h3>
+                    <div class="concepts-grid">
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Lifestyle Focus</h4>
+                                <div class="concept-type">Carousel</div>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop&auto=format"
+                                     alt="Fall Collection Lifestyle - Woman in cozy sweater walking through autumn leaves"
+                                     class="concept-image">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Copy:</strong> "Fall into style 🍂 Discover our new collection featuring cozy knits and warm tones perfect for autumn adventures."</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">Engagement: <strong>High</strong></div>
+                                    <div class="metric">CTR: <strong>4.2%</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Product Showcase</h4>
+                                <div class="concept-type">Single Image</div>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=300&fit=crop&auto=format"
+                                     alt="Fall Collection Product - Elegant autumn clothing laid out with warm accessories"
+                                     class="concept-image">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Copy:</strong> "New arrivals just dropped! ✨ Shop our Fall Collection with 25% off your first order. Limited time only."</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">Conversion: <strong>High</strong></div>
+                                    <div class="metric">ROAS: <strong>3.8x</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Social Proof</h4>
+                                <div class="concept-type">Video</div>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&h=300&fit=crop&auto=format"
+                                     alt="Fall Collection Social Proof - Happy customers wearing fall fashion in natural setting"
+                                     class="concept-image">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Copy:</strong> "Join 50K+ happy customers loving our Fall Collection! See why everyone's talking about our quality and style."</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">Trust Score: <strong>9.2/10</strong></div>
+                                    <div class="metric">Share Rate: <strong>12%</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'Instagram Ad Variations', 'Creative AI Assistant');
+    }
+
+    generateDAMImageRecommendations() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-images" style="color: var(--accent-orange);"></i> DAM Image Recommendations</h2>
+                        <p class="output-subtitle">Best-performing hero images for Black Friday campaign</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">12</span>
+                            <span class="stat-label">Images Analyzed</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">92%</span>
+                            <span class="stat-label">Performance Score</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creative-concepts-section">
+                    <h3><i class="fas fa-star"></i> Top Performing Images</h3>
+                    <div class="concepts-grid">
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Hero_BF_2023_Main.jpg</h4>
+                                <div class="concept-type">Hero Image</div>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?w=400&h=250&fit=crop&auto=format"
+                                     alt="Black Friday Hero Image"
+                                     class="concept-image"
+                                     style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Performance:</strong> This image drove 34% higher CTR in previous Black Friday campaigns with strong conversion metrics.</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">CTR: <strong>6.8%</strong></div>
+                                    <div class="metric">CVR: <strong>4.2%</strong></div>
+                                    <div class="metric">Engagement: <strong>High</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Product_Grid_Sale.jpg</h4>
+                                <div class="concept-type">Product Grid</div>
+                            </div>
+                            <div class="concept-preview">
+                                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=250&fit=crop&auto=format"
+                                     alt="Product Grid Sale Image"
+                                     class="concept-image"
+                                     style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Performance:</strong> Product grid format showed 28% higher add-to-cart rates during sale events.</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">ATC Rate: <strong>8.5%</strong></div>
+                                    <div class="metric">Dwell Time: <strong>45s</strong></div>
+                                    <div class="metric">Mobile Optimized: <strong>Yes</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'DAM Image Recommendations', 'Creative AI Assistant');
+    }
+
+    generateEmailSubjectLines() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-envelope" style="color: var(--accent-primary);"></i> Email Subject Line Optimization</h2>
+                        <p class="output-subtitle">Cart abandonment email subject lines with A/B test recommendations</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">2</span>
+                            <span class="stat-label">Variations</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">+35%</span>
+                            <span class="stat-label">Expected Open Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="variation-cards">
+                    <div class="variation-card test">
+                        <div class="variation-header">
+                            <h4>Subject Line A (Urgency Focus)</h4>
+                            <div class="variation-badge test">Test</div>
+                        </div>
+                        <div style="padding: 1rem; background: var(--gray-50); border-radius: var(--radius-md); margin: 1rem 0;">
+                            <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                                "Your cart is about to expire ⏰ Complete your order now"
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                                <strong>Strategy:</strong> Creates urgency while being clear about the deadline
+                            </div>
+                        </div>
+                        <div class="concept-metrics">
+                            <div class="metric">Predicted Open Rate: <strong>28%</strong></div>
+                            <div class="metric">Urgency Score: <strong>9/10</strong></div>
+                            <div class="metric">Spam Risk: <strong>Low</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="variation-card control">
+                        <div class="variation-header">
+                            <h4>Subject Line B (Value Focus)</h4>
+                            <div class="variation-badge control">Control</div>
+                        </div>
+                        <div style="padding: 1rem; background: var(--gray-50); border-radius: var(--radius-md); margin: 1rem 0;">
+                            <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                                "Still thinking? Here's 10% off to help you decide 💭"
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                                <strong>Strategy:</strong> Empathetic tone with added incentive to complete purchase
+                            </div>
+                        </div>
+                        <div class="concept-metrics">
+                            <div class="metric">Predicted Open Rate: <strong>32%</strong></div>
+                            <div class="metric">Empathy Score: <strong>8/10</strong></div>
+                            <div class="metric">Conversion Potential: <strong>High</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'Email Subject Line Tests', 'Creative AI Assistant');
+    }
+
+    generateHeadlineTestVariations() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-text-height" style="color: var(--accent-green);"></i> Landing Page Headline Tests</h2>
+                        <p class="output-subtitle">Alternative copy variations for headline optimization</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Variations</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">+42%</span>
+                            <span class="stat-label">Expected CVR Lift</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hypothesis-grid">
+                    <div class="hypothesis-card">
+                        <h5><i class="fas fa-trophy"></i> Current Headline (Control)</h5>
+                        <div style="padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-md); margin: 1rem 0;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); text-align: center;">
+                                "Get the Best Deals on Fashion"
+                            </div>
+                        </div>
+                        <div class="concept-metrics">
+                            <div class="metric">Current CVR: <strong>2.4%</strong></div>
+                            <div class="metric">Clarity Score: <strong>6/10</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="hypothesis-card">
+                        <h5><i class="fas fa-bullseye"></i> Variation A (Benefit-Focused)</h5>
+                        <div style="padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-md); margin: 1rem 0;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); text-align: center;">
+                                "Save Up to 70% on Designer Fashion"
+                            </div>
+                        </div>
+                        <div class="concept-metrics">
+                            <div class="metric">Predicted CVR: <strong>3.2%</strong></div>
+                            <div class="metric">Value Clarity: <strong>9/10</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="hypothesis-card">
+                        <h5><i class="fas fa-heart"></i> Variation B (Emotional Appeal)</h5>
+                        <div style="padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-md); margin: 1rem 0;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); text-align: center;">
+                                "Transform Your Style, Transform Your Confidence"
+                            </div>
+                        </div>
+                        <div class="concept-metrics">
+                            <div class="metric">Predicted CVR: <strong>3.6%</strong></div>
+                            <div class="metric">Emotional Score: <strong>8/10</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="statistical-framework">
+                    <h4>A/B Test Framework</h4>
+                    <div class="framework-grid">
+                        <div class="framework-item">
+                            <span class="framework-value">95%</span>
+                            <span class="framework-label">Confidence Level</span>
+                        </div>
+                        <div class="framework-item">
+                            <span class="framework-value">10,000</span>
+                            <span class="framework-label">Sample Size</span>
+                        </div>
+                        <div class="framework-item">
+                            <span class="framework-value">14</span>
+                            <span class="framework-label">Test Duration (Days)</span>
+                        </div>
+                        <div class="framework-item">
+                            <span class="framework-value">20%</span>
+                            <span class="framework-label">Minimum Detectable Effect</span>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'Headline A/B Tests', 'Creative AI Assistant');
+    }
+
+    generateGenericCreativeOutput(prompt) {
+        console.log('🎯 Generating generic creative output for:', prompt); // Debug log
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-magic" style="color: var(--accent-primary);"></i> Creative AI Output</h2>
+                        <p class="output-subtitle">AI-generated creative response</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">1</span>
+                            <span class="stat-label">Task</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creative-concepts-section">
+                    <h3><i class="fas fa-lightbulb"></i> Creative Response</h3>
+                    <div class="concepts-grid">
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Creative Solution</h4>
+                                <div class="concept-type">AI Generated</div>
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Task:</strong> ${prompt}</p>
+                                <p><strong>Response:</strong> I've processed your creative request. This is a demonstration of the Creative AI functionality working correctly.</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">Status: <strong>Complete</strong></div>
+                                    <div class="metric">Confidence: <strong>High</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        console.log('📤 Displaying generic creative output...'); // Debug log
+        this.displayOutput(output, 'Creative AI Response', 'Creative AI Assistant');
+    }
+
+    showAgentProgressForEngagePrompt(prompt) {
+        // Map prompts to appropriate agent configurations
+        let agentConfig;
+
+        if (prompt.includes('cart abandoners')) {
+            // Audience building task
+            agentConfig = 'audience';
+        } else if (prompt.includes('reactivation journey')) {
+            // Journey design task
+            agentConfig = 'journey';
+        } else if (prompt.includes('email campaign')) {
+            // Email campaign task
+            agentConfig = 'paid-media';
+        } else if (prompt.includes('open and click rates')) {
+            // Analytics task
+            agentConfig = 'performance';
+        } else {
+            // Default engagement task
+            agentConfig = 'audience';
+        }
+
+        console.log('🎯 Using agent config:', agentConfig, 'for prompt:', prompt);
+        this.showAgentProgress(agentConfig, prompt);
+    }
+
+    handleEngagePrompt(prompt) {
+        console.log('🎯 handleEngagePrompt called with:', prompt); // Debug log
+
+        // Ensure we're in working mode (but don't clear messages if already in working mode)
+        console.log('🔄 Checking current mode...'); // Debug log
+        if (this.currentView !== 'working') {
+            console.log('🔄 Switching to working mode...'); // Debug log
+            this.showWorkingInterface();
+        } else {
+            console.log('✅ Already in working mode, preserving chat history'); // Debug log
+        }
+
+        // Add user selection message
+        console.log('💬 Adding user message...'); // Debug log
+        this.addMessage(prompt, 'user');
+
+        // Show relevant agent progress based on the prompt
+        console.log('⏳ Showing agent progress for engagement task...'); // Debug log
+        this.showAgentProgressForEngagePrompt(prompt);
+
+        // Generate appropriate engagement output based on the prompt
+        setTimeout(() => {
+            console.log('🚀 Generating engagement output for:', prompt); // Debug log
+            if (prompt.includes('cart abandoners')) {
+                console.log('🛒 Generating cart abandoner audience...'); // Debug log
+                this.generateCartAbandonerAudience();
+            } else if (prompt.includes('reactivation journey')) {
+                console.log('🔄 Generating reactivation journey...'); // Debug log
+                this.generateReactivationJourney();
+            } else if (prompt.includes('email campaign')) {
+                console.log('📧 Generating VIP email campaign...'); // Debug log
+                this.generateVIPEmailCampaign();
+            } else if (prompt.includes('open and click rates')) {
+                console.log('📊 Generating email performance report...'); // Debug log
+                this.generateEmailPerformanceReport();
+            } else {
+                console.log('❓ No matching generator found for prompt:', prompt); // Debug log
+                // Fallback - generate generic engagement output
+                this.generateGenericEngagementOutput(prompt);
+            }
+        }, 1500);
+    }
+
+    generateCartAbandonerAudience() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-users" style="color: var(--accent-green);"></i> Cart Abandoner Audience</h2>
+                        <p class="output-subtitle">Segmented audience built from last 14 days of cart abandonment data</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">2,847</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">$127</span>
+                            <span class="stat-label">Avg Cart Value</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-users"></i></div>
+                            <h4>Audience Segmentation</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-bullseye"></i>
+                            <span>High-value cart abandoners with strong re-engagement potential</span>
+                        </div>
+                        <div class="audience-breakdown">
+                            <h5>Audience Segments</h5>
+                            <div class="segment-bars">
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">High Value ($100+)</span>
+                                        <span class="segment-percentage">42%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 42%; background: var(--accent-green);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Medium Value ($50-99)</span>
+                                        <span class="segment-percentage">35%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 35%; background: var(--accent-primary);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Low Value ($25-49)</span>
+                                        <span class="segment-percentage">23%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 23%; background: var(--accent-orange);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Engagement Strategy</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Personalized recovery campaigns with time-sensitive offers</span>
+                        </div>
+                        <div class="forecast-grid">
+                            <div class="forecast-item">
+                                <div class="forecast-icon awareness">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="forecast-details">
+                                    <div class="forecast-metric">Email Recovery Campaign</div>
+                                    <div class="forecast-value">Expected 24% recovery rate</div>
+                                </div>
+                            </div>
+                            <div class="forecast-item">
+                                <div class="forecast-icon conversions">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="forecast-details">
+                                    <div class="forecast-metric">SMS Follow-up</div>
+                                    <div class="forecast-value">+8% additional recovery</div>
+                                </div>
+                            </div>
+                            <div class="forecast-item">
+                                <div class="forecast-icon roi">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div class="forecast-details">
+                                    <div class="forecast-metric">Retargeting Ads</div>
+                                    <div class="forecast-value">+12% reach extension</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'Cart Abandoner Audience', 'Engage AI Assistant');
+    }
+
+    generateReactivationJourney() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-sitemap" style="color: var(--accent-orange);"></i> Reactivation Journey</h2>
+                        <p class="output-subtitle">Multi-channel journey to re-engage inactive subscribers</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Touchpoints</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">28%</span>
+                            <span class="stat-label">Expected Reactivation</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">14</span>
+                            <span class="stat-label">Days Duration</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card journey">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-sitemap"></i></div>
+                            <h4>Journey Strategy</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Progressive value approach with escalating incentives for maximum reactivation</span>
+                        </div>
+                        <div class="journey-insights">
+                            <h5>Journey Flow Design</h5>
+                            <ul>
+                                <li><strong>Day 1:</strong> "We miss you" soft re-engagement email</li>
+                                <li><strong>Day 3:</strong> Value reminder with popular content</li>
+                                <li><strong>Day 7:</strong> Exclusive 15% discount offer</li>
+                                <li><strong>Day 10:</strong> SMS with limited-time 25% offer</li>
+                                <li><strong>Day 14:</strong> Final chance 30% discount + free shipping</li>
+                            </ul>
+                            <div style="margin-top: var(--space-lg); text-align: center;">
+                                <button class="journey-btn primary" id="create-journey-btn" data-journey-type="reactivation">
+                                    <i class="fas fa-plus"></i>
+                                    Create Journey
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-users"></i></div>
+                            <h4>Target Audience Analysis</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-bullseye"></i>
+                            <span>12,450 inactive subscribers (no engagement in 60+ days)</span>
+                        </div>
+                        <div class="audience-breakdown">
+                            <h5>Subscriber Segments</h5>
+                            <div class="segment-bars">
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">High Lifetime Value</span>
+                                        <span class="segment-percentage">35%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 35%; background: var(--accent-green);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Recent Purchasers</span>
+                                        <span class="segment-percentage">28%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 28%; background: var(--accent-primary);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Long-term Inactive</span>
+                                        <span class="segment-percentage">37%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 37%; background: var(--accent-orange);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'Reactivation Journey', 'Engage AI Assistant');
+    }
+
+    generateVIPEmailCampaign() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-envelope" style="color: var(--accent-primary);"></i> VIP Email Campaign</h2>
+                        <p class="output-subtitle">Exclusive campaign for high-value customers</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">1,247</span>
+                            <span class="stat-label">VIP Recipients</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">52%</span>
+                            <span class="stat-label">Expected Open Rate</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">$385</span>
+                            <span class="stat-label">Avg Customer Value</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creative-concepts-section">
+                    <h3><i class="fas fa-star"></i> VIP Campaign Elements</h3>
+                    <div class="concepts-grid">
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Early Access Offer</h4>
+                                <div class="concept-type">Email</div>
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Subject:</strong> "VIP Early Access: New Collection Preview ⭐"</p>
+                                <p><strong>Copy:</strong> "As one of our most valued customers, you get first access to our new collection 48 hours before everyone else. Plus, enjoy exclusive VIP pricing."</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">Open Rate: <strong>58%</strong></div>
+                                    <div class="metric">CTR: <strong>12.5%</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Personalized Recommendations</h4>
+                                <div class="concept-type">Dynamic Content</div>
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Strategy:</strong> AI-powered product recommendations based on purchase history</p>
+                                <p><strong>Personalization:</strong> "Based on your love for [Category], we think you'll adore these new arrivals"</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">Relevance Score: <strong>94%</strong></div>
+                                    <div class="metric">Conversion: <strong>18.2%</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-header">
+                                <h4>Exclusive VIP Benefits</h4>
+                                <div class="concept-type">Value Proposition</div>
+                            </div>
+                            <div class="concept-details">
+                                <p><strong>Benefits:</strong> Free shipping, extended returns, priority customer service, birthday month discount</p>
+                                <p><strong>CTA:</strong> "Continue Your VIP Journey"</p>
+                                <div class="concept-metrics">
+                                    <div class="metric">Engagement: <strong>High</strong></div>
+                                    <div class="metric">Loyalty Impact: <strong>+32%</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'VIP Email Campaign', 'Engage AI Assistant');
+    }
+
+    generateEmailPerformanceReport() {
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-chart-bar" style="color: var(--accent-purple);"></i> Email Performance Report</h2>
+                        <p class="output-subtitle">Performance analysis for your last 3 email campaigns</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Campaigns</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">43.2%</span>
+                            <span class="stat-label">Avg Open Rate</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">8.7%</span>
+                            <span class="stat-label">Avg Click Rate</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">2.1%</span>
+                            <span class="stat-label">Conversion Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Campaign Performance Analysis</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-trending-up"></i>
+                            <span>Open rates trending upward, but click rates show opportunity for improvement</span>
+                        </div>
+                        <div class="key-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value">+12%</span>
+                                <span class="metric-desc">Open Rate vs Industry</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">-3%</span>
+                                <span class="metric-desc">Click Rate vs Industry</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">0.8%</span>
+                                <span class="metric-desc">Unsubscribe Rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card analytics">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chart-line"></i></div>
+                            <h4>Detailed Campaign Breakdown</h4>
+                        </div>
+                        <div class="creative-insights">
+                            <h5>Individual Campaign Performance</h5>
+                            <ul>
+                                <li><strong>Holiday Promo (Dec 15):</strong> 48.3% open rate, 11.2% click rate, $12,450 revenue</li>
+                                <li><strong>New Arrivals (Dec 8):</strong> 41.7% open rate, 7.8% click rate, $8,290 revenue</li>
+                                <li><strong>Flash Sale (Dec 1):</strong> 39.6% open rate, 7.1% click rate, $15,680 revenue</li>
+                            </ul>
+                        </div>
+                        <div class="research-findings">
+                            <h5>Optimization Recommendations</h5>
+                            <ul>
+                                <li><strong>Subject Lines:</strong> A/B test urgency vs. curiosity-driven subjects</li>
+                                <li><strong>Send Time:</strong> Tuesday 10 AM shows highest engagement</li>
+                                <li><strong>Content:</strong> Include more personalized product recommendations</li>
+                                <li><strong>CTAs:</strong> Test button color and placement variations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        this.displayOutput(output, 'Email Performance Report', 'Engage AI Assistant');
+    }
+
+    generateGenericEngagementOutput(prompt) {
+        console.log('🎯 Generating generic engagement output for:', prompt); // Debug log
+        const output = `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-users" style="color: var(--accent-green);"></i> Engage AI Output</h2>
+                        <p class="output-subtitle">AI-generated engagement response</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">1</span>
+                            <span class="stat-label">Task</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agent-analysis-grid">
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-users"></i></div>
+                            <h4>Engagement Solution</h4>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>AI-powered engagement strategy delivered successfully</span>
+                        </div>
+                        <div style="margin-top: var(--space-md);">
+                            <p><strong>Task:</strong> ${prompt}</p>
+                            <p><strong>Response:</strong> I've processed your engagement request. This demonstrates the Engage AI functionality working correctly for audience building, journey orchestration, and engagement optimization.</p>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
+            </div>
+        `;
+
+        console.log('📤 Displaying generic engagement output...'); // Debug log
+        this.displayOutput(output, 'Engage AI Response', 'Engage AI Assistant');
+    }
+
+    generateKnowledgeBaseSection() {
+        return `
+            <div class="knowledge-base-section">
+                <h3><i class="fas fa-book"></i> Knowledge Base Sources</h3>
+                <div class="knowledge-sources">
+                    <div class="knowledge-source-card">
+                        <div class="source-header">
+                            <div class="source-icon brand"><i class="fas fa-palette"></i></div>
+                            <div class="source-info">
+                                <h4>Brand Guidelines</h4>
+                                <span class="source-status active">Active</span>
+                            </div>
+                        </div>
+                        <p class="source-details">Voice, tone, visual identity, and messaging standards</p>
+                        <div class="source-metrics">
+                            <span class="source-metric">Last updated: <strong>2 days ago</strong></span>
+                            <span class="source-metric">Documents: <strong>12</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="knowledge-source-card">
+                        <div class="source-header">
+                            <div class="source-icon compliance"><i class="fas fa-shield-alt"></i></div>
+                            <div class="source-info">
+                                <h4>Compliance Rules</h4>
+                                <span class="source-status active">Active</span>
+                            </div>
+                        </div>
+                        <p class="source-details">Legal requirements, claims restrictions, and approval processes</p>
+                        <div class="source-metrics">
+                            <span class="source-metric">Last updated: <strong>1 week ago</strong></span>
+                            <span class="source-metric">Documents: <strong>8</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="knowledge-source-card">
+                        <div class="source-header">
+                            <div class="source-icon customer"><i class="fas fa-users"></i></div>
+                            <div class="source-info">
+                                <h4>Customer Personas</h4>
+                                <span class="source-status synced">Synced</span>
+                            </div>
+                        </div>
+                        <p class="source-details">Target audience profiles, behaviors, and preferences</p>
+                        <div class="source-metrics">
+                            <span class="source-metric">Last updated: <strong>3 days ago</strong></span>
+                            <span class="source-metric">Segments: <strong>6</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="knowledge-source-card">
+                        <div class="source-header">
+                            <div class="source-icon product"><i class="fas fa-box"></i></div>
+                            <div class="source-info">
+                                <h4>Product Catalog</h4>
+                                <span class="source-status synced">Synced</span>
+                            </div>
+                        </div>
+                        <p class="source-details">Product specifications, features, and positioning</p>
+                        <div class="source-metrics">
+                            <span class="source-metric">Last updated: <strong>1 hour ago</strong></span>
+                            <span class="source-metric">Products: <strong>247</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    initializeKnowledgeBaseSearch() {
+        const searchContainer = document.querySelector('.kb-search-hover-container');
+        const searchInput = document.getElementById('kb-search');
+
+        if (searchContainer && searchInput) {
+            // Auto-focus when search expands on hover
+            searchContainer.addEventListener('mouseenter', () => {
+                setTimeout(() => {
+                    if (searchInput.offsetWidth > 0) {
+                        searchInput.focus();
+                    }
+                }, 350); // Delay to allow animation to complete
+            });
+
+            // Handle escape key to clear search
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    searchInput.blur();
+                }
+            });
+
+            // Keep search open when input is focused
+            searchInput.addEventListener('focus', () => {
+                searchContainer.style.zIndex = '100';
+            });
+
+            searchInput.addEventListener('blur', () => {
+                searchContainer.style.zIndex = '';
+            });
+        }
+    }
 }
 
 // Initialize the app when DOM is loaded
@@ -6166,5 +9451,6 @@ let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new MarketingSuperAgentV4();
     app.handleJourneyActions();
+    app.initializeKnowledgeBaseSearch();
     console.log('Marketing SuperAgent v4 loaded successfully');
 });

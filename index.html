@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketing SuperAgent - AI-Native Marketing Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=24">
+    <link rel="stylesheet" href="css/styles.css?v=25">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -762,70 +762,36 @@
                 <div class="kb-container">
                     <!-- Knowledge Base Home -->
                     <div class="kb-home" id="kb-home">
-                        <!-- Page Header -->
+                        <!-- Page Header with Actions -->
                         <div class="kb-page-header">
-                            <h1>Knowledge Base</h1>
-                            <p>Secure, organization-scoped repository for your SuperAgent</p>
-                        </div>
-
-                        <!-- Search Bar -->
-                        <div class="kb-search-section">
-                            <div class="kb-search-container">
-                                <input type="text" id="kb-search" placeholder="Search your knowledge base...">
-                                <button class="kb-search-btn">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                            <div class="kb-header-content">
+                                <h1>Knowledge Base</h1>
+                                <p>Secure, organization-scoped repository for your SuperAgent</p>
                             </div>
-                        </div>
 
-                        <!-- Quick Actions -->
-                        <div class="kb-actions-section">
-                            <h4 class="actions-header">Quick Actions</h4>
-                            <div class="action-buttons">
-                                <button class="kb-action-btn primary">
-                                    <i class="fas fa-upload"></i>
-                                    <span>Upload Documents</span>
-                                </button>
-                                <button class="kb-action-btn">
-                                    <i class="fas fa-link"></i>
-                                    <span>Connect Source</span>
-                                </button>
-                                <button class="kb-action-btn">
-                                    <i class="fas fa-cog"></i>
-                                    <span>Manage Settings</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Knowledge Health Widget -->
-                        <div class="kb-health-widget">
-                            <div class="health-header">
-                                <h4>Knowledge Health</h4>
-                                <div class="health-score">
-                                    <span class="score-number">87</span>
-                                    <span class="score-label">Health Score</span>
-                                </div>
-                            </div>
-                            <div class="health-stats">
-                                <div class="health-stat">
-                                    <div class="stat-icon fresh"><i class="fas fa-check-circle"></i></div>
-                                    <div class="stat-info">
-                                        <span class="stat-value">23</span>
-                                        <span class="stat-label">Fresh sources</span>
+                            <!-- Top Actions -->
+                            <div class="kb-top-actions">
+                                <!-- Search Container with Hover -->
+                                <div class="kb-search-hover-container">
+                                    <div class="kb-search-expandable">
+                                        <input type="text" id="kb-search" placeholder="Search your knowledge base...">
                                     </div>
+                                    <button class="kb-search-toggle" id="kb-search-toggle">
+                                        <i class="fas fa-search"></i>
+                                    </button>
                                 </div>
-                                <div class="health-stat">
-                                    <div class="stat-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
-                                    <div class="stat-info">
-                                        <span class="stat-value">2</span>
-                                        <span class="stat-label">Needs attention</span>
-                                    </div>
-                                </div>
-                                <div class="health-stat">
-                                    <div class="stat-icon secure"><i class="fas fa-shield-alt"></i></div>
-                                    <div class="stat-info">
-                                        <span class="stat-value">0</span>
-                                        <span class="stat-label">PII flags</span>
+
+                                <!-- Quick Actions -->
+                                <div class="kb-actions-section">
+                                    <div class="action-buttons">
+                                        <button class="kb-action-btn primary">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Upload</span>
+                                        </button>
+                                        <button class="kb-action-btn">
+                                            <i class="fas fa-link"></i>
+                                            <span>Connect</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -881,40 +847,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Recently Synced -->
-                                <div class="kb-recent-section">
-                                    <h4>Recently Synced</h4>
-                                    <div class="recent-items">
-                                        <div class="recent-item">
-                                            <div class="recent-icon success"><i class="fas fa-cloud-download-alt"></i></div>
-                                            <div class="recent-info">
-                                                <span class="recent-title">Google Drive: Brand Assets</span>
-                                                <span class="recent-time">2 minutes ago</span>
-                                            </div>
-                                            <div class="recent-status success">Synced</div>
-                                        </div>
-                                        <div class="recent-item">
-                                            <div class="recent-icon success"><i class="fas fa-database"></i></div>
-                                            <div class="recent-info">
-                                                <span class="recent-title">Salesforce: Lead Segments</span>
-                                                <span class="recent-time">1 hour ago</span>
-                                            </div>
-                                            <div class="recent-status success">Synced</div>
-                                        </div>
-                                        <div class="recent-item">
-                                            <div class="recent-icon error"><i class="fas fa-exclamation-circle"></i></div>
-                                            <div class="recent-info">
-                                                <span class="recent-title">SharePoint: Legal Documents</span>
-                                                <span class="recent-time">3 hours ago</span>
-                                            </div>
-                                            <div class="recent-status error">Failed</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right Column -->
-                            <div class="kb-right-column">
                                 <!-- Context Packs -->
                                 <div class="kb-packs-section">
                                     <div class="section-header">
@@ -998,7 +930,74 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
+                            <!-- Right Column -->
+                            <div class="kb-right-column">
+                                <!-- Knowledge Health Widget -->
+                                <div class="kb-health-widget">
+                                    <div class="health-header">
+                                        <h4>Knowledge Health</h4>
+                                        <div class="health-score">
+                                            <span class="score-number">87</span>
+                                            <span class="score-label">Health Score</span>
+                                        </div>
+                                    </div>
+                                    <div class="health-stats">
+                                        <div class="health-stat">
+                                            <div class="stat-icon fresh"><i class="fas fa-check-circle"></i></div>
+                                            <div class="stat-info">
+                                                <span class="stat-value">23</span>
+                                                <span class="stat-label">Fresh sources</span>
+                                            </div>
+                                        </div>
+                                        <div class="health-stat">
+                                            <div class="stat-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                                            <div class="stat-info">
+                                                <span class="stat-value">2</span>
+                                                <span class="stat-label">Needs attention</span>
+                                            </div>
+                                        </div>
+                                        <div class="health-stat">
+                                            <div class="stat-icon secure"><i class="fas fa-shield-alt"></i></div>
+                                            <div class="stat-info">
+                                                <span class="stat-value">0</span>
+                                                <span class="stat-label">PII flags</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Recently Synced -->
+                                <div class="kb-recent-section">
+                                    <h4>Recently Synced</h4>
+                                    <div class="recent-items">
+                                        <div class="recent-item">
+                                            <div class="recent-icon success"><i class="fas fa-cloud-download-alt"></i></div>
+                                            <div class="recent-info">
+                                                <span class="recent-title">Google Drive: Brand Assets</span>
+                                                <span class="recent-time">2 minutes ago</span>
+                                            </div>
+                                            <div class="recent-status success">Synced</div>
+                                        </div>
+                                        <div class="recent-item">
+                                            <div class="recent-icon success"><i class="fas fa-database"></i></div>
+                                            <div class="recent-info">
+                                                <span class="recent-title">Salesforce: Lead Segments</span>
+                                                <span class="recent-time">1 hour ago</span>
+                                            </div>
+                                            <div class="recent-status success">Synced</div>
+                                        </div>
+                                        <div class="recent-item">
+                                            <div class="recent-icon error"><i class="fas fa-exclamation-circle"></i></div>
+                                            <div class="recent-info">
+                                                <span class="recent-title">SharePoint: Legal Documents</span>
+                                                <span class="recent-time">3 hours ago</span>
+                                            </div>
+                                            <div class="recent-status error">Failed</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1007,6 +1006,6 @@
         </div>
     </div>
 
-    <script src="js/app.js?v=26"></script>
+    <script src="js/app.js?v=27"></script>
 </body>
 </html>
