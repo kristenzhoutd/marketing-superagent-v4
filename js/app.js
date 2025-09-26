@@ -946,6 +946,11 @@ class MarketingSuperAgentV4 {
                         taskDiv.innerHTML = `<i class="fas fa-brain" style="margin-right: 6px; color: var(--accent-purple);"></i>${thought}`;
                     }
                 }
+
+                // Also add thought process to chat for transparency
+                if (thoughtIndex < 3) { // Show only first 3 thoughts to avoid spam
+                    this.addMessage(`🧠 **${agentName} Agent thinking:** ${thought}`, 'agent', `${agentName} Agent`);
+                }
             }, (thoughtIndex * 350) + 200);
         });
 
@@ -1124,9 +1129,9 @@ class MarketingSuperAgentV4 {
                         <i class="fas fa-brain" style="color: var(--accent-purple);"></i>
                         <span style="font-weight: 600; color: var(--text-primary); font-size: var(--label);">${agentName} Agent - Thought Process</span>
                     </div>
-                    <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast);"></i>
+                    <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast); transform: rotate(180deg);"></i>
                 </div>
-                <div class="thought-process-content" id="${thoughtProcessId}" style="display: none; padding: var(--space-md); background: white; border-radius: 0 0 var(--radius-md) var(--radius-md);">
+                <div class="thought-process-content" id="${thoughtProcessId}" style="display: block; padding: var(--space-md); background: white; border-radius: 0 0 var(--radius-md) var(--radius-md);">
                     <div class="thought-process-insight" style="margin-bottom: var(--space-sm);">
                         <div style="display: flex; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-xs);">
                             <i class="fas fa-lightbulb" style="color: var(--accent-orange); font-size: 12px;"></i>
@@ -1156,7 +1161,7 @@ class MarketingSuperAgentV4 {
         const chevron = document.getElementById(`chevron-${thoughtProcessId}`);
 
         if (content && chevron) {
-            if (content.style.display === 'none') {
+            if (content.style.display === 'none' || content.style.display === '') {
                 content.style.display = 'block';
                 chevron.style.transform = 'rotate(180deg)';
             } else {
@@ -1513,9 +1518,9 @@ class MarketingSuperAgentV4 {
                             <i class="fas fa-brain" style="color: var(--accent-purple); font-size: 14px;"></i>
                             <span style="font-weight: 600; color: var(--text-primary); font-size: var(--font-base);">${process.agentName} Agent</span>
                         </div>
-                        <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast);"></i>
+                        <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast); transform: rotate(180deg);"></i>
                     </div>
-                    <div class="thought-process-content" id="${thoughtProcessId}" style="display: none; padding: var(--space-lg); background: white; border-radius: 0 0 var(--radius-md) var(--radius-md);">
+                    <div class="thought-process-content" id="${thoughtProcessId}" style="display: block; padding: var(--space-lg); background: white; border-radius: 0 0 var(--radius-md) var(--radius-md);">
                         <div class="thought-process-insight" style="margin-bottom: var(--space-lg);">
                             <div style="display: flex; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-sm);">
                                 <i class="fas fa-lightbulb" style="color: var(--accent-orange); font-size: 14px;"></i>
@@ -1546,7 +1551,7 @@ class MarketingSuperAgentV4 {
         const chevron = document.getElementById(`chevron-${thoughtProcessId}`);
 
         if (content && chevron) {
-            if (content.style.display === 'none') {
+            if (content.style.display === 'none' || content.style.display === '') {
                 content.style.display = 'block';
                 chevron.style.transform = 'rotate(180deg)';
             } else {
@@ -1573,7 +1578,7 @@ class MarketingSuperAgentV4 {
         if (allContents.length === 0) return;
 
         // Check current state based on first item
-        const isCurrentlyExpanded = allContents[0].style.display === 'block';
+        const isCurrentlyExpanded = allContents[0].style.display === 'block' || allContents[0].style.display === '';
 
         // Toggle all items
         allContents.forEach(content => {
@@ -3668,21 +3673,209 @@ class MarketingSuperAgentV4 {
                 </div>
 
                 <div class="journey-actions">
-                    <button class="btn-secondary">
+                    <button class="journey-btn secondary" id="edit-journey-btn">
                         <i class="fas fa-edit"></i>
-                        Edit Journey
+                        <span>Edit Journey</span>
                     </button>
-                    <button class="btn-secondary">
+                    <button class="journey-btn duplicate" id="duplicate-journey-btn">
                         <i class="fas fa-copy"></i>
-                        Duplicate
+                        <span>Duplicate</span>
                     </button>
-                    <button class="btn-primary">
+                    <button class="journey-btn activate" id="activate-journey-btn">
                         <i class="fas fa-play"></i>
-                        Activate Journey
+                        <span>Activate Journey</span>
                     </button>
                 </div>
             </div>
         `;
+    }
+
+    handleJourneyActions() {
+        // Add event listeners for journey action buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#edit-journey-btn')) {
+                this.editJourney();
+            } else if (e.target.closest('#duplicate-journey-btn')) {
+                this.duplicateJourney();
+            } else if (e.target.closest('#activate-journey-btn')) {
+                this.activateJourney();
+            }
+        });
+    }
+
+    editJourney() {
+        // Create edit journey interface
+        const editInterface = `
+            <div class="journey-edit-modal">
+                <div class="edit-modal-header">
+                    <h3>Edit Journey Configuration</h3>
+                    <button class="close-edit-btn" id="close-edit-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="edit-modal-content">
+                    <div class="edit-section">
+                        <h4>Journey Settings</h4>
+                        <div class="form-group">
+                            <label>Journey Name</label>
+                            <input type="text" value="Customer Journey Flow" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-input" rows="2">Automated marketing journey</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Entry Criteria</label>
+                            <select class="form-input">
+                                <option>Campaign subscription</option>
+                                <option>Segment qualification</option>
+                                <option>Event trigger</option>
+                                <option>Custom condition</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="edit-section">
+                        <h4>Journey Steps</h4>
+                        <div class="steps-editor">
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <span class="step-number">1</span>
+                                    <span class="step-title">Entry Point</span>
+                                    <button class="edit-step-btn"><i class="fas fa-edit"></i></button>
+                                </div>
+                                <div class="step-config">
+                                    <div class="form-group">
+                                        <label>Wait Duration</label>
+                                        <input type="text" value="Immediate" class="form-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <span class="step-number">2</span>
+                                    <span class="step-title">Wait Period</span>
+                                    <button class="edit-step-btn"><i class="fas fa-edit"></i></button>
+                                </div>
+                                <div class="step-config">
+                                    <div class="form-group">
+                                        <label>Wait Duration</label>
+                                        <input type="text" value="24 hours" class="form-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <span class="step-number">3</span>
+                                    <span class="step-title">Email Campaign</span>
+                                    <button class="edit-step-btn"><i class="fas fa-edit"></i></button>
+                                </div>
+                                <div class="step-config">
+                                    <div class="form-group">
+                                        <label>Email Template</label>
+                                        <select class="form-input">
+                                            <option>Welcome Email</option>
+                                            <option>Promotional Email</option>
+                                            <option>Newsletter</option>
+                                            <option>Custom Template</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-secondary add-step-btn">
+                            <i class="fas fa-plus"></i>
+                            Add Step
+                        </button>
+                    </div>
+
+                    <div class="edit-section">
+                        <h4>Decision Logic</h4>
+                        <div class="form-group">
+                            <label>Engagement Criteria</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" checked>
+                                    <span>Email opened</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" checked>
+                                    <span>Link clicked</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox">
+                                    <span>Email replied to</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-modal-actions">
+                    <button class="journey-btn cancel" id="cancel-edit">
+                        <i class="fas fa-times"></i>
+                        <span>Cancel</span>
+                    </button>
+                    <button class="journey-btn primary" id="save-journey">
+                        <i class="fas fa-save"></i>
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add modal to output panel
+        const outputContent = document.getElementById('output-content');
+        if (outputContent) {
+            outputContent.innerHTML = editInterface;
+
+            // Add event listeners for modal actions
+            document.getElementById('close-edit-modal')?.addEventListener('click', () => {
+                this.closeEditModal();
+            });
+            document.getElementById('cancel-edit')?.addEventListener('click', () => {
+                this.closeEditModal();
+            });
+            document.getElementById('save-journey')?.addEventListener('click', () => {
+                this.saveJourneyChanges();
+            });
+        }
+    }
+
+    duplicateJourney() {
+        this.addMessage('Creating a duplicate of this journey...', 'agent');
+
+        setTimeout(() => {
+            this.addMessage('✅ Journey duplicated successfully! The new journey "Customer Journey Flow (Copy)" has been created and saved to your drafts.', 'agent');
+        }, 1500);
+    }
+
+    activateJourney() {
+        this.addMessage('Activating journey and starting customer processing...', 'agent');
+
+        setTimeout(() => {
+            this.addMessage('🚀 Journey activated successfully! Customers meeting the entry criteria will now be automatically enrolled. You can monitor progress in the dashboard.', 'agent');
+        }, 2000);
+    }
+
+    closeEditModal() {
+        // Return to journey view
+        const lastJourneyOutput = this.generateJourneyFlowOutput({}, 'customer journey');
+        const outputContent = document.getElementById('output-content');
+        if (outputContent) {
+            outputContent.innerHTML = lastJourneyOutput;
+        }
+    }
+
+    saveJourneyChanges() {
+        this.addMessage('Saving journey configuration changes...', 'agent');
+
+        setTimeout(() => {
+            this.addMessage('✅ Journey changes saved successfully! The updated configuration is now active.', 'agent');
+            this.closeEditModal();
+        }, 1500);
     }
 }
 
@@ -3690,5 +3883,6 @@ class MarketingSuperAgentV4 {
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new MarketingSuperAgentV4();
+    app.handleJourneyActions();
     console.log('Marketing SuperAgent v4 loaded successfully');
 });
