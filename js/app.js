@@ -3482,91 +3482,102 @@ class MarketingSuperAgentV4 {
                 </div>
 
                 <div class="journey-flow-modern">
-                    <!-- Stage 1: Entry -->
-                    <div class="journey-stage">
-                        <div class="stage-header">
-                            <span class="stage-number">1</span>
-                            <span class="stage-title">Entry Point</span>
-                        </div>
-                        <div class="journey-card entry-card">
-                            <div class="card-icon">
-                                <i class="fas fa-sign-in-alt"></i>
+                    <!-- Main horizontal flow -->
+                    <div class="journey-main-flow">
+                        <!-- Stage 1: Entry -->
+                        <div class="journey-stage">
+                            <div class="stage-header">
+                                <span class="stage-number">1</span>
+                                <span class="stage-title">Entry Point</span>
                             </div>
-                            <div class="card-content">
-                                <h4>Campaign Subscribe</h4>
-                                <p>Customer subscribes to campaign or meets segment criteria</p>
-                                <div class="card-metrics">
-                                    <span class="metric">1,240 entries</span>
+                            <div class="journey-card entry-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>Campaign Subscribe</h4>
+                                    <p>Customer subscribes to campaign or meets segment criteria</p>
+                                    <div class="card-metrics">
+                                        <span class="metric">1,240 entries</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Connector -->
-                    <div class="journey-connector">
-                        <div class="connector-line"></div>
-                        <div class="connector-arrow">
-                            <i class="fas fa-chevron-down"></i>
+                        <!-- Horizontal Connector -->
+                        <div class="horizontal-connector">
+                            <i class="fas fa-chevron-right"></i>
                         </div>
-                    </div>
 
-                    <!-- Stage 2: Wait -->
-                    <div class="journey-stage">
-                        <div class="stage-header">
-                            <span class="stage-number">2</span>
-                            <span class="stage-title">Wait Period</span>
-                        </div>
-                        <div class="journey-card wait-card">
-                            <div class="card-icon">
-                                <i class="fas fa-clock"></i>
+                        <!-- Stage 2: Wait -->
+                        <div class="journey-stage">
+                            <div class="stage-header">
+                                <span class="stage-number">2</span>
+                                <span class="stage-title">Wait Period</span>
                             </div>
-                            <div class="card-content">
-                                <h4>24 Hour Wait</h4>
-                                <p>Strategic delay for optimal engagement timing</p>
-                                <div class="card-metrics">
-                                    <span class="metric">Processing 892 customers</span>
+                            <div class="journey-card wait-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>24 Hour Wait</h4>
+                                    <p>Strategic delay for optimal engagement timing</p>
+                                    <div class="card-metrics">
+                                        <span class="metric">Processing 892</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Connector -->
-                    <div class="journey-connector">
-                        <div class="connector-line"></div>
-                        <div class="connector-arrow">
-                            <i class="fas fa-chevron-down"></i>
+                        <!-- Horizontal Connector -->
+                        <div class="horizontal-connector">
+                            <i class="fas fa-chevron-right"></i>
                         </div>
-                    </div>
 
-                    <!-- Stage 3: Email -->
-                    <div class="journey-stage">
-                        <div class="stage-header">
-                            <span class="stage-number">3</span>
-                            <span class="stage-title">Engagement</span>
-                        </div>
-                        <div class="journey-card email-card">
-                            <div class="card-icon">
-                                <i class="fas fa-envelope"></i>
+                        <!-- Stage 3: Email -->
+                        <div class="journey-stage">
+                            <div class="stage-header">
+                                <span class="stage-number">3</span>
+                                <span class="stage-title">Engagement</span>
                             </div>
-                            <div class="card-content">
-                                <h4>Welcome Email</h4>
-                                <p>Personalized email with tracking enabled</p>
-                                <div class="card-metrics">
-                                    <span class="metric">67% open rate</span>
-                                    <span class="metric">34% click rate</span>
+                            <div class="journey-card email-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>Welcome Email</h4>
+                                    <p>Personalized email with tracking enabled</p>
+                                    <div class="card-metrics">
+                                        <span class="metric">67% open</span>
+                                        <span class="metric">34% click</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Decision Split -->
-                    <div class="journey-connector">
-                        <div class="connector-line"></div>
-                        <div class="decision-split-modern">
-                            <div class="split-icon">
-                                <i class="fas fa-code-branch"></i>
+                        <!-- Horizontal Connector -->
+                        <div class="horizontal-connector">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+
+                        <!-- Stage 4: Decision -->
+                        <div class="journey-stage">
+                            <div class="stage-header">
+                                <span class="stage-number">4</span>
+                                <span class="stage-title">Decision Split</span>
                             </div>
-                            <span class="split-label">Engagement Decision</span>
+                            <div class="journey-card decision-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-code-branch"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>Engagement Check</h4>
+                                    <p>Route customers based on email interaction</p>
+                                    <div class="card-metrics">
+                                        <span class="metric">2 paths</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
