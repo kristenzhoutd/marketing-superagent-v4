@@ -1717,6 +1717,12 @@ class MarketingSuperAgentV4 {
         // Extract key elements from user message for context
         const context = this.extractContextFromMessage(userMessage);
 
+        // For journey type, show visual journey flow
+        if (messageType === 'journey') {
+            console.log('Journey messageType detected, generating journey flow output');
+            return this.generateJourneyFlowOutput(context, userMessage);
+        }
+
         // Generate agent-specific insights
         const insights = this.generateAgentInsights(messageType, context);
 
@@ -2459,7 +2465,7 @@ class MarketingSuperAgentV4 {
         // Simulate updating output panel
         setTimeout(() => {
             const messageType = this.analyzeMessage(message);
-            this.updateOutputPanel(messageType);
+            this.updateOutputPanel(messageType, message);
         }, thinkingProcess.length * 600 + 2000);
     }
 
@@ -3431,6 +3437,177 @@ class MarketingSuperAgentV4 {
         });
 
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    generateJourneyFlowOutput(context, userMessage) {
+        const lowerMessage = userMessage.toLowerCase();
+
+        // Determine journey type based on message
+        let journeyType = 'Hotel Stay Purchase';
+        let journeyDescription = 'Corporate Retreat Targeting - Zenith Tech';
+
+        if (lowerMessage.includes('hotel') || lowerMessage.includes('travel')) {
+            journeyType = 'Hotel Stay Purchase';
+            journeyDescription = 'Corporate Retreat Targeting - Zenith Tech';
+        } else if (lowerMessage.includes('abandonment') || lowerMessage.includes('cart')) {
+            journeyType = 'Cart Abandonment Recovery';
+            journeyDescription = 'E-commerce Recovery Campaign';
+        } else if (lowerMessage.includes('welcome') || lowerMessage.includes('onboarding')) {
+            journeyType = 'Welcome Series';
+            journeyDescription = 'New Subscriber Onboarding';
+        } else if (lowerMessage.includes('retention') || lowerMessage.includes('win-back')) {
+            journeyType = 'Customer Reactivation';
+            journeyDescription = 'Win-Back Campaign Flow';
+        }
+
+        return `
+            <div class="journey-flow-container">
+                <div class="journey-header">
+                    <div class="journey-title">
+                        <h3>1 ${journeyType}</h3>
+                        <div class="journey-actions">
+                            <button class="journey-btn secondary">Set milestone</button>
+                            <button class="journey-btn secondary">Add exit criteria</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="journey-description">
+                    <p>Customers enter this journey when they subscribe to the campaign or meet segment criteria. After a wait step, they receive the Solis Hotel Email and are tracked for engagement.</p>
+                </div>
+
+                <div class="journey-flow-exact">
+                    <!-- Main horizontal flow -->
+                    <div class="main-flow">
+                        <div class="flow-step">
+                            <div class="step-icon entry">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="step-label">Entry Criteria<br><small>Segment qualification</small></div>
+                        </div>
+
+                        <div class="dotted-connector"></div>
+
+                        <div class="flow-step">
+                            <div class="step-icon wait">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="step-label">Wait Step<br><small>Delay before email</small></div>
+                        </div>
+
+                        <div class="dotted-connector"></div>
+
+                        <div class="flow-step">
+                            <div class="step-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="step-label">Solis Hotel Email<br><small>Track clicks</small></div>
+                        </div>
+
+                        <div class="dotted-connector"></div>
+
+                        <div class="decision-split">
+                            <div class="decision-card clicked">
+                                Clicked
+                            </div>
+
+                            <!-- Vertical lines down to branches -->
+                            <div class="vertical-connectors">
+                                <div class="vertical-line to-branch-1"></div>
+                                <div class="vertical-line to-branch-2"></div>
+                                <div class="vertical-line to-branch-3"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interest segmentation label -->
+                    <div class="interest-segmentation">
+                        <div class="segmentation-label">
+                            <div class="step-icon customer-interest">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="step-label">Customer Interest<br><small>Content-based segmentation</small></div>
+                        </div>
+                    </div>
+
+                    <!-- Branch paths -->
+                    <div class="branch-flows">
+                        <!-- Branch 1: Beachfront Interest → Google Ads -->
+                        <div class="branch-flow">
+                            <div class="decision-card beachfront">
+                                Beachfront
+                            </div>
+                            <div class="dotted-connector"></div>
+                            <div class="branch-step">
+                                <div class="step-icon send-ads">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div class="step-label">Send Google Ads<br><small>Beachfront offers</small></div>
+                            </div>
+                        </div>
+
+                        <!-- Branch 2: Adventures Interest → Follow-up Email -->
+                        <div class="branch-flow">
+                            <div class="decision-card adventures">
+                                Adventures
+                            </div>
+                            <div class="dotted-connector"></div>
+                            <div class="branch-step">
+                                <div class="step-icon send-email">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="step-label">Send Email<br><small>Adventure offerings</small></div>
+                            </div>
+                        </div>
+
+                        <!-- Branch 3: Home & Comfort Interest → Google Ads -->
+                        <div class="branch-flow">
+                            <div class="decision-card home-comfort">
+                                Home & Comfort
+                            </div>
+                            <div class="dotted-connector"></div>
+                            <div class="branch-step">
+                                <div class="step-icon send-ads">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div class="step-label">Send Google Ads<br><small>Comfort experiences</small></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom flow for "Not Clicked" -->
+                    <div class="bottom-flow">
+                        <div class="decision-card not-clicked">
+                            Not Clicked
+                        </div>
+                        <div class="dotted-connector"></div>
+                        <div class="branch-step">
+                            <div class="step-icon mobile-push">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="step-label">Mobile Push<br><small>Re-engagement</small></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="journey-logic-explanation">
+                    <h4>Journey Logic:</h4>
+                    <ul>
+                        <li><strong>Entry:</strong> Customers qualify through campaign subscription or segment criteria</li>
+                        <li><strong>Wait:</strong> Strategic delay allows for optimal email engagement timing</li>
+                        <li><strong>Email Tracking:</strong> Solis Hotel Email tracks recipient click behavior</li>
+                        <li><strong>Interest Segmentation:</strong> Click patterns determine content preference</li>
+                        <li><strong>Personalized Follow-up:</strong> Targeted messaging based on expressed interest</li>
+                        <li><strong>Re-engagement:</strong> Non-clickers receive mobile push to maintain engagement</li>
+                    </ul>
+                </div>
+
+                <div class="journey-actions-bottom">
+                    <button class="journey-btn cancel">Cancel</button>
+                    <button class="journey-btn primary">Launch Journey</button>
+                </div>
+            </div>
+        `;
     }
 }
 
