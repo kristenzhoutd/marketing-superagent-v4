@@ -1889,58 +1889,58 @@ class MarketingSuperAgentV4 {
                         'Setup performance tracking'
                     ],
                     'creative': [
+                        'Test these creatives with A/B experiments',
                         'Generate additional creative variations',
-                        'Setup A/B testing framework',
-                        'Launch creative optimization campaign',
-                        'Analyze creative performance metrics'
+                        'Setup creative performance tracking',
+                        'Launch multi-channel creative campaigns'
                     ],
                     'journey': [
                         'Activate this customer journey',
-                        'Create creative assets for touchpoints',
-                        'Setup advanced segmentation',
-                        'Launch performance monitoring'
+                        'Create personalized content for each touchpoint',
+                        'Setup journey performance monitoring',
+                        'Build advanced audience segmentation for this flow'
                     ],
                     'audience': [
                         'Create targeted campaigns for each segment',
                         'Generate personalized creative assets',
                         'Design multi-channel customer journeys',
-                        'Setup advanced tracking and attribution'
+                        'Setup lookalike audience expansion'
                     ],
                     'performance': [
-                        'Optimize budget allocation',
-                        'Create new audience segments',
+                        'Optimize budget allocation based on insights',
+                        'Create new audience segments from learnings',
                         'Generate improved creative variants',
-                        'Setup automated bidding strategies'
+                        'Setup automated optimization rules'
                     ],
                     'budget': [
-                        'Setup budget alerts',
-                        'Create scenario planning',
-                        'Implement auto-bidding rules',
-                        'Schedule budget reviews'
+                        'Setup budget alerts and monitoring',
+                        'Create scenario planning models',
+                        'Implement auto-bidding strategies',
+                        'Schedule regular budget reviews'
                     ],
                     'ab-test': [
-                        'Setup additional test variations',
-                        'Create test monitoring dashboard',
+                        'Launch these test variations',
+                        'Setup test monitoring dashboard',
                         'Plan follow-up experiments',
-                        'Document testing methodology'
+                        'Create testing documentation'
                     ],
                     'research': [
-                        'Set up competitor monitoring',
-                        'Create competitive positioning map',
-                        'Analyze competitor ad creative',
-                        'Track competitor pricing changes'
+                        'Set up competitive monitoring alerts',
+                        'Create competitive positioning strategy',
+                        'Analyze competitor creative strategies',
+                        'Build market intelligence dashboard'
                     ],
                     'optimization': [
-                        'Review ad creative performance',
-                        'Analyze audience segment effectiveness',
-                        'Adjust budget allocation by channel',
-                        'Test new bidding strategies'
+                        'Implement optimization recommendations',
+                        'Setup automated optimization rules',
+                        'Create performance monitoring alerts',
+                        'Plan next optimization experiments'
                     ],
                     'email': [
-                        'Design welcome email series',
+                        'Activate this email campaign',
                         'Setup automated email workflows',
-                        'Create email performance tracking',
-                        'Plan email content calendar'
+                        'Create email performance dashboard',
+                        'Design follow-up email sequences'
                     ],
                     'general': [
                         'Continue with creative asset generation',
@@ -1970,15 +1970,15 @@ class MarketingSuperAgentV4 {
         const titleLower = title.toLowerCase();
 
         if (titleLower.includes('campaign brief') || titleLower.includes('brief')) return 'campaign-brief';
-        if (titleLower.includes('creative') || titleLower.includes('ad variations') || titleLower.includes('instagram')) return 'creative';
-        if (titleLower.includes('journey') || titleLower.includes('flow')) return 'journey';
-        if (titleLower.includes('audience') || titleLower.includes('segment')) return 'audience';
-        if (titleLower.includes('performance') || titleLower.includes('analytics') || titleLower.includes('report')) return 'performance';
-        if (titleLower.includes('budget') || titleLower.includes('allocation')) return 'budget';
-        if (titleLower.includes('a/b test') || titleLower.includes('test') || titleLower.includes('headline')) return 'ab-test';
-        if (titleLower.includes('competitor') || titleLower.includes('research')) return 'research';
+        if (titleLower.includes('creative') || titleLower.includes('ad variations') || titleLower.includes('instagram') || titleLower.includes('dam image') || titleLower.includes('asset')) return 'creative';
+        if (titleLower.includes('journey') || titleLower.includes('flow') || titleLower.includes('reactivation')) return 'journey';
+        if (titleLower.includes('audience') || titleLower.includes('segment') || titleLower.includes('abandoner') || titleLower.includes('targeting')) return 'audience';
+        if (titleLower.includes('performance') || titleLower.includes('analytics') || titleLower.includes('report') || titleLower.includes('analysis')) return 'performance';
+        if (titleLower.includes('budget') || titleLower.includes('allocation') || titleLower.includes('media plan')) return 'budget';
+        if (titleLower.includes('a/b test') || titleLower.includes('test') || titleLower.includes('headline') || titleLower.includes('subject line')) return 'ab-test';
+        if (titleLower.includes('competitor') || titleLower.includes('research') || titleLower.includes('market')) return 'research';
         if (titleLower.includes('optimization') || titleLower.includes('optimize')) return 'optimization';
-        if (titleLower.includes('email') || titleLower.includes('engagement')) return 'email';
+        if (titleLower.includes('email') || titleLower.includes('engagement') || titleLower.includes('vip')) return 'email';
 
         return 'general';
     }
