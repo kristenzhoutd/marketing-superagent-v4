@@ -2990,6 +2990,12 @@ class MarketingSuperAgentV4 {
     generateResponse(message, messageType) {
         const lowerMessage = message.toLowerCase();
 
+        // Skip response generation if we're already handling a creative prompt
+        if (this.isHandlingCreativePrompt && messageType === 'creative') {
+            console.log('🎨 Skipping generateResponse for creative - already handled by handleCreativePrompt');
+            return;
+        }
+
         // Check if this is a task-specific request
         if (this.currentTask && this.currentTaskAgents) {
             console.log('Generating task-specific response for:', this.currentTask, 'with agents:', this.currentTaskAgents);
@@ -3046,6 +3052,13 @@ class MarketingSuperAgentV4 {
 
     updateOutputPanel(messageType, userMessage = '') {
         console.log('updateOutputPanel called with:', messageType, 'currentTask:', this.currentTask, 'currentTaskAgents:', this.currentTaskAgents);
+
+        // Skip output panel update if we're already handling a creative prompt
+        if (this.isHandlingCreativePrompt && messageType === 'creative') {
+            console.log('🎨 Skipping updateOutputPanel for creative - already handled by handleCreativePrompt');
+            return;
+        }
+
         const outputTitle = document.getElementById('output-title');
         const outputContent = document.getElementById('output-content');
         const workspaceTitle = document.getElementById('workspace-title');
@@ -8482,6 +8495,9 @@ class MarketingSuperAgentV4 {
             console.log('✅ Already in working mode, preserving chat history'); // Debug log
         }
 
+        // Set creative handling flag to prevent duplicate processing
+        this.isHandlingCreativePrompt = true;
+
         // Add user selection message
         console.log('💬 Adding user message...'); // Debug log
         this.addMessage(prompt, 'user');
@@ -8511,6 +8527,11 @@ class MarketingSuperAgentV4 {
                 this.generateGenericCreativeOutput(prompt);
             }
         }, 1500);
+
+        // Clear the flag after processing completes
+        setTimeout(() => {
+            this.isHandlingCreativePrompt = false;
+        }, 5000);
     }
 
     handleCreativeKBToggle(isEnabled) {
