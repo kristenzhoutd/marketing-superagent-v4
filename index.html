@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketing SuperAgent - AI-Native Marketing Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=31">
+    <link rel="stylesheet" href="css/styles.css?v=34">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -40,6 +40,10 @@
                         <div class="nav-item active">
                             <i class="fas fa-home"></i>
                             <span>Home</span>
+                        </div>
+                        <div class="nav-item" id="sidebar-autopilot-btn">
+                            <i class="fas fa-robot"></i>
+                            <span>Autopilot</span>
                         </div>
                         <div class="nav-item" id="sidebar-knowledge-btn">
                             <i class="fas fa-book"></i>
@@ -563,6 +567,10 @@
                             <i class="fas fa-comments"></i>
                             <span>Chat</span>
                         </div>
+                        <div class="nav-item" id="sidebar-autopilot-btn-working">
+                            <i class="fas fa-robot"></i>
+                            <span>Autopilot</span>
+                        </div>
                         <div class="nav-item" id="sidebar-knowledge-btn-working">
                             <i class="fas fa-book"></i>
                             <span>Knowledge Base</span>
@@ -704,6 +712,10 @@
                     <div class="nav-item" id="kb-back-to-home">
                         <i class="fas fa-home"></i>
                         <span>Home</span>
+                    </div>
+                    <div class="nav-item" id="kb-autopilot-btn">
+                        <i class="fas fa-robot"></i>
+                        <span>Autopilot</span>
                     </div>
                     <div class="nav-item active">
                         <i class="fas fa-book"></i>
@@ -1004,8 +1016,178 @@
                 </div>
             </div>
         </div>
+
+        <!-- Autopilot Page (Hidden by default) -->
+        <div class="autopilot-page" id="autopilot-page" style="display: none;">
+            <!-- Left Sidebar Navigation for Autopilot -->
+            <div class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-item" id="autopilot-back-to-home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="nav-item active">
+                        <i class="fas fa-robot"></i>
+                        <span>Autopilot</span>
+                    </div>
+                    <div class="nav-item" id="autopilot-knowledge-btn">
+                        <i class="fas fa-book"></i>
+                        <span>Knowledge Base</span>
+                    </div>
+                    <div class="nav-item" id="autopilot-sidebar-history-btn">
+                        <i class="fas fa-history"></i>
+                        <span>History</span>
+                    </div>
+                </div>
+
+                <div class="agent-status-sidebar">
+                    <div class="status-header">
+                        <i class="fas fa-robot"></i>
+                        <span>Specialist Agents</span>
+                    </div>
+                    <div class="agent-indicators">
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Research Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Creative Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Performance Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Audience Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Journey Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Historical Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Personalization Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Analytics Agent</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Autopilot Content -->
+            <div class="autopilot-main-content">
+                <div class="autopilot-container">
+                    <!-- Autopilot Home -->
+                    <div class="autopilot-home" id="autopilot-home">
+                        <!-- Page Header with Actions -->
+                        <div class="autopilot-page-header">
+                            <div class="autopilot-header-content">
+                                <h1>Autopilot</h1>
+                                <p>Autonomous marketing tasks that run on schedules and triggers</p>
+                            </div>
+
+                            <!-- Top Actions -->
+                            <div class="autopilot-top-actions">
+                                <div class="autopilot-actions-section">
+                                    <div class="action-buttons">
+                                        <button class="autopilot-action-btn primary" id="create-task-btn">
+                                            <i class="fas fa-plus"></i>
+                                            <span>Create Task</span>
+                                        </button>
+                                        <button class="autopilot-action-btn" id="bulk-actions-btn">
+                                            <i class="fas fa-list"></i>
+                                            <span>Bulk Actions</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="autopilot-content-grid">
+                            <!-- Task Overview Cards -->
+                            <div class="autopilot-overview-section">
+                                <h3>Task Overview</h3>
+                                <div class="autopilot-stats-grid">
+                                    <div class="autopilot-stat-card">
+                                        <div class="stat-icon active">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <div class="stat-number">4</div>
+                                            <div class="stat-label">Active Tasks</div>
+                                        </div>
+                                    </div>
+                                    <div class="autopilot-stat-card">
+                                        <div class="stat-icon success">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <div class="stat-number">127</div>
+                                            <div class="stat-label">Actions This Week</div>
+                                        </div>
+                                    </div>
+                                    <div class="autopilot-stat-card">
+                                        <div class="stat-icon warning">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <div class="stat-number">23h</div>
+                                            <div class="stat-label">Time Saved</div>
+                                        </div>
+                                    </div>
+                                    <div class="autopilot-stat-card">
+                                        <div class="stat-icon performance">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <div class="stat-number">+18%</div>
+                                            <div class="stat-label">ROAS Improvement</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Active Tasks List -->
+                            <div class="autopilot-tasks-section">
+                                <div class="section-header">
+                                    <h3>Active Tasks</h3>
+                                    <div class="task-filters">
+                                        <select class="filter-select" id="task-status-filter">
+                                            <option value="all">All Status</option>
+                                            <option value="enabled">Enabled</option>
+                                            <option value="paused">Paused</option>
+                                            <option value="error">Error</option>
+                                        </select>
+                                        <select class="filter-select" id="task-type-filter">
+                                            <option value="all">All Types</option>
+                                            <option value="budget">Budget Rebalancer</option>
+                                            <option value="creative">Creative Winner</option>
+                                            <option value="audience">Audience Refresher</option>
+                                            <option value="insights">Insights Digest</option>
+                                            <option value="watchdog">Cost Watchdog</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="autopilot-task-list" id="autopilot-task-list">
+                                    <!-- Tasks will be dynamically populated -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="js/app.js?v=37"></script>
+    <script src="js/app.js?v=39"></script>
 </body>
 </html>

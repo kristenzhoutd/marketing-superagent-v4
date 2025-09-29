@@ -7,10 +7,16 @@ class MarketingSuperAgentV4 {
         this.outputHistory = [];
         this.currentSuiteTitle = 'Creative AI Suite'; // Store current AI suite title - default to Creative
         this.currentRoute = 'home';
+
+        // Autopilot system
+        this.autopilotTasks = [];
+        this.taskTemplates = this.initializeTaskTemplates();
+
         this.init();
         this.loadHistoryFromStorage();
-        this.initRouting();
         this.setupUniversalNextStepsListeners();
+        this.initializeAutopilot();
+        this.initRouting();
     }
 
     init() {
@@ -6843,6 +6849,38 @@ class MarketingSuperAgentV4 {
                 }
                 break;
 
+            case 'autopilot':
+                console.log('Switching to Autopilot page');
+                // Show autopilot page
+                const autopilotPage = document.getElementById('autopilot-page');
+                if (autopilotPage) {
+                    console.log('Found Autopilot page element, setting display to grid');
+                    autopilotPage.style.display = 'grid';
+                    console.log('Autopilot page display set to:', autopilotPage.style.display);
+                } else {
+                    console.error('Autopilot page element not found');
+                }
+
+                // Update main content class
+                const mainContentAutopilot = document.querySelector('.main-content');
+                if (mainContentAutopilot) {
+                    console.log('Updating main content class to home-mode');
+                    mainContentAutopilot.className = 'main-content home-mode';
+                } else {
+                    console.error('Main content element not found');
+                }
+
+                // Hide header
+                const headerAutopilot = document.querySelector('.app-header');
+                if (headerAutopilot) {
+                    console.log('Hiding app header');
+                    headerAutopilot.style.display = 'none';
+                }
+
+                // Populate task list
+                this.renderTaskList();
+                break;
+
             case 'home':
             default:
                 console.log('Displaying Home page');
@@ -7031,6 +7069,8 @@ class MarketingSuperAgentV4 {
             switch(route) {
                 case 'knowledge-base':
                     return 'knowledge-base';
+                case 'autopilot':
+                    return 'autopilot';
                 default:
                     return 'home';
             }
@@ -7041,6 +7081,8 @@ class MarketingSuperAgentV4 {
         switch(path) {
             case '/knowledge-base':
                 return 'knowledge-base';
+            case '/autopilot':
+                return 'autopilot';
             case '/':
             default:
                 return 'home';
@@ -9953,6 +9995,471 @@ class MarketingSuperAgentV4 {
                 searchContainer.style.zIndex = '';
             });
         }
+    }
+
+    // =====================================
+    // AUTOPILOT SYSTEM
+    // =====================================
+
+    initializeTaskTemplates() {
+        return {
+            'BUDGET_REBALANCER': {
+                name: 'Budget Rebalancer',
+                description: 'Automatically rebalance paid media budgets to maximize ROAS',
+                icon: 'fas fa-chart-line',
+                category: 'Paid Media',
+                autonomyLevels: ['SUGGEST', 'GUARDED_AUTO', 'FULL_AUTO'],
+                defaultTrigger: { type: 'CRON', expr: '0 7 * * *' }
+            },
+            'CREATIVE_WINNER': {
+                name: 'Creative Winner Roll-forward',
+                description: 'Identify winning creative assets and scale them across campaigns',
+                icon: 'fas fa-trophy',
+                category: 'Creative',
+                autonomyLevels: ['SUGGEST', 'GUARDED_AUTO', 'FULL_AUTO'],
+                defaultTrigger: { type: 'CRON', expr: '0 9 * * *' }
+            },
+            'AUDIENCE_REFRESHER': {
+                name: 'Audience Refresher',
+                description: 'Keep audience segments fresh by adding new prospects and removing converters',
+                icon: 'fas fa-users-cog',
+                category: 'Audience',
+                autonomyLevels: ['SUGGEST', 'GUARDED_AUTO', 'FULL_AUTO'],
+                defaultTrigger: { type: 'CRON', expr: '0 18 * * *' }
+            },
+            'INSIGHTS_DIGEST': {
+                name: 'Weekly Insights Digest',
+                description: 'Compile and send weekly performance insights and recommendations',
+                icon: 'fas fa-chart-bar',
+                category: 'Analytics',
+                autonomyLevels: ['SUGGEST', 'FULL_AUTO'],
+                defaultTrigger: { type: 'CRON', expr: '0 9 * * MON' }
+            },
+            'COST_WATCHDOG': {
+                name: 'Cost Anomaly Watchdog',
+                description: 'Monitor campaign costs and alert on unusual spending patterns',
+                icon: 'fas fa-shield-alt',
+                category: 'Performance',
+                autonomyLevels: ['SUGGEST', 'GUARDED_AUTO'],
+                defaultTrigger: { type: 'REALTIME', condition: 'cost_spike > threshold' }
+            },
+            'EXPERIMENT_LAUNCHER': {
+                name: 'A/B Test Launcher',
+                description: 'Automatically launch A/B tests based on performance patterns',
+                icon: 'fas fa-flask',
+                category: 'Testing',
+                autonomyLevels: ['SUGGEST', 'GUARDED_AUTO'],
+                defaultTrigger: { type: 'EVENT', condition: 'performance_plateau' }
+            }
+        };
+    }
+
+    initializeAutopilot() {
+        // Load sample tasks for demo
+        this.loadSampleTasks();
+
+        // Setup navigation handlers
+        this.setupAutopilotNavigation();
+
+        // Setup action handlers
+        this.setupAutopilotActions();
+
+        console.log('Autopilot system initialized');
+    }
+
+    setupAutopilotNavigation() {
+        // Home page Autopilot navigation
+        const autopilotBtn = document.getElementById('sidebar-autopilot-btn');
+        const autopilotBtnWorking = document.getElementById('sidebar-autopilot-btn-working');
+        const autopilotBackToHome = document.getElementById('autopilot-back-to-home');
+        const autopilotKnowledgeBtn = document.getElementById('autopilot-knowledge-btn');
+        const kbAutopilotBtn = document.getElementById('kb-autopilot-btn');
+
+        if (autopilotBtn) {
+            autopilotBtn.addEventListener('click', () => this.showAutopilotPage());
+        }
+
+        if (autopilotBtnWorking) {
+            autopilotBtnWorking.addEventListener('click', () => this.showAutopilotPage());
+        }
+
+        if (autopilotBackToHome) {
+            autopilotBackToHome.addEventListener('click', () => this.showHomePage());
+        }
+
+        if (autopilotKnowledgeBtn) {
+            autopilotKnowledgeBtn.addEventListener('click', () => this.openKnowledgeBase());
+        }
+
+        if (kbAutopilotBtn) {
+            kbAutopilotBtn.addEventListener('click', () => this.showAutopilotPage());
+        }
+    }
+
+    setupAutopilotActions() {
+        // Create task button
+        const createTaskBtn = document.getElementById('create-task-btn');
+        if (createTaskBtn) {
+            createTaskBtn.addEventListener('click', () => this.showTaskCreationWizard());
+        }
+
+        // Bulk actions button
+        const bulkActionsBtn = document.getElementById('bulk-actions-btn');
+        if (bulkActionsBtn) {
+            bulkActionsBtn.addEventListener('click', () => this.showBulkActionsDialog());
+        }
+
+        // Task filters
+        const statusFilter = document.getElementById('task-status-filter');
+        const typeFilter = document.getElementById('task-type-filter');
+
+        if (statusFilter) {
+            statusFilter.addEventListener('change', () => this.filterTasks());
+        }
+
+        if (typeFilter) {
+            typeFilter.addEventListener('change', () => this.filterTasks());
+        }
+    }
+
+    showAutopilotPage() {
+        console.log('showAutopilotPage called');
+        this.navigateToRoute('autopilot');
+    }
+
+    loadSampleTasks() {
+        this.autopilotTasks = [
+            {
+                task_id: 'br-001',
+                name: 'Q4 Budget Rebalancer',
+                type: 'BUDGET_REBALANCER',
+                status: 'ENABLED',
+                owner: 'kristen@td.com',
+                approver: 'cpo@td.com',
+                last_run: '2024-01-15T07:00:00Z',
+                next_run: '2024-01-16T07:00:00Z',
+                actions_this_week: 12,
+                kpi_trend: [3.2, 3.1, 3.4, 3.3, 3.5, 3.4, 3.6],
+                objective: { metric: 'ROAS', target: 3.5, current: 3.6 },
+                scope: {
+                    campaign_ids: ['meta:holiday-2024', 'google:black-friday'],
+                    total_budget: 50000
+                },
+                constraints: {
+                    max_daily_shift_pct: 10,
+                    channel_caps: { meta: 30000, google: 20000 }
+                },
+                trigger: { type: 'CRON', expr: '0 7 * * *', timezone: 'America/Los_Angeles' },
+                autonomy_level: 'GUARDED_AUTO',
+                created_at: '2024-01-01T00:00:00Z'
+            },
+            {
+                task_id: 'cw-001',
+                name: 'Holiday Creative Winner',
+                type: 'CREATIVE_WINNER',
+                status: 'PAUSED',
+                owner: 'kristen@td.com',
+                approver: 'cpo@td.com',
+                last_run: '2024-01-14T09:00:00Z',
+                next_run: 'paused',
+                actions_this_week: 3,
+                kpi_trend: [2.8, 3.2, 2.9, 3.1, 2.7, 3.0, 3.1],
+                objective: { metric: 'CTR', target: 3.0, current: 3.1 },
+                scope: {
+                    campaign_ids: ['meta:holiday-creatives', 'google:seasonal-ads'],
+                    creative_types: ['video', 'carousel', 'static']
+                },
+                constraints: {
+                    min_performance_threshold: 2.5,
+                    max_budget_shift: 5000
+                },
+                trigger: { type: 'CRON', expr: '0 9 * * *', timezone: 'America/Los_Angeles' },
+                autonomy_level: 'SUGGEST',
+                created_at: '2024-01-02T00:00:00Z'
+            },
+            {
+                task_id: 'ar-001',
+                name: 'Nightly Audience Refresh',
+                type: 'AUDIENCE_REFRESHER',
+                status: 'ENABLED',
+                owner: 'kristen@td.com',
+                approver: 'cpo@td.com',
+                last_run: '2024-01-15T18:00:00Z',
+                next_run: '2024-01-16T18:00:00Z',
+                actions_this_week: 35,
+                kpi_trend: [87000, 89000, 91000, 88000, 92000, 90000, 91000],
+                objective: { metric: 'Audience_Size', target: 90000, current: 91000 },
+                scope: {
+                    audience_segments: ['lookalike-purchasers', 'interest-based', 'behavioral'],
+                    platforms: ['meta', 'google', 'linkedin']
+                },
+                constraints: {
+                    min_audience_size: 50000,
+                    max_daily_additions: 10000,
+                    exclude_converters_days: 30
+                },
+                trigger: { type: 'CRON', expr: '0 18 * * *', timezone: 'America/Los_Angeles' },
+                autonomy_level: 'FULL_AUTO',
+                created_at: '2024-01-03T00:00:00Z'
+            },
+            {
+                task_id: 'cw-002',
+                name: 'API Cost Watchdog',
+                type: 'COST_WATCHDOG',
+                status: 'ENABLED',
+                owner: 'kristen@td.com',
+                approver: 'cpo@td.com',
+                last_run: '2024-01-15T22:30:00Z',
+                next_run: 'realtime',
+                actions_this_week: 2,
+                kpi_trend: [1200, 1150, 1300, 1180, 1220, 2100, 1190],
+                objective: { metric: 'Daily_Cost', target: 1500, current: 1190 },
+                scope: {
+                    services: ['meta-api', 'google-ads-api', 'analytics-api'],
+                    environments: ['prod', 'staging']
+                },
+                constraints: {
+                    spike_threshold: 40,
+                    daily_cap: 2500
+                },
+                trigger: { type: 'REALTIME', condition: 'cost_spike > 40%' },
+                autonomy_level: 'GUARDED_AUTO',
+                created_at: '2024-01-01T00:00:00Z'
+            }
+        ];
+    }
+
+    renderTaskList() {
+        const taskList = document.getElementById('autopilot-task-list');
+        if (!taskList) return;
+
+        const filteredTasks = this.getFilteredTasks();
+
+        if (filteredTasks.length === 0) {
+            taskList.innerHTML = `
+                <div style="text-align: center; padding: var(--space-xl); color: var(--text-secondary);">
+                    <i class="fas fa-robot" style="font-size: 48px; margin-bottom: var(--space-md); opacity: 0.3;"></i>
+                    <h3>No tasks found</h3>
+                    <p>Create your first autonomous task to get started.</p>
+                    <button class="autopilot-action-btn primary" onclick="app.showTaskCreationWizard()" style="margin-top: var(--space-md);">
+                        <i class="fas fa-plus"></i>
+                        <span>Create Task</span>
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        taskList.innerHTML = filteredTasks.map(task => this.renderTaskCard(task)).join('');
+    }
+
+    renderTaskCard(task) {
+        const template = this.taskTemplates[task.type] || {};
+        const statusClass = task.status.toLowerCase();
+        const nextRunText = task.next_run === 'realtime' ? 'Real-time' :
+                           task.next_run ? new Date(task.next_run).toLocaleString() : 'Paused';
+
+        const trendSparkline = this.generateSparkline(task.kpi_trend);
+        const typeClass = task.type.toLowerCase().replace(/_/g, '-');
+
+        return `
+            <div class="task-card ${statusClass}" onclick="app.showTaskDetail('${task.task_id}')">
+                <div class="task-header">
+                    <div class="task-info">
+                        <div class="task-icon ${typeClass}">
+                            <i class="${template.icon || 'fas fa-cog'}"></i>
+                        </div>
+                        <div class="task-details">
+                            <div class="task-name">${task.name}</div>
+                            <div class="task-description">${template.name || task.type} • Next: ${nextRunText} • ${task.actions_this_week} actions this week</div>
+                        </div>
+                    </div>
+                    <div class="task-actions-right">
+                        <div class="task-status-badge ${statusClass}">
+                            ${task.status}
+                        </div>
+                        <div class="task-control-buttons" onclick="event.stopPropagation();">
+                            <button class="task-control-btn" onclick="app.toggleTask('${task.task_id}')" title="${task.status === 'ENABLED' ? 'Pause' : 'Enable'} Task">
+                                <i class="fas fa-${task.status === 'ENABLED' ? 'pause' : 'play'}"></i>
+                            </button>
+                            <button class="task-control-btn" onclick="app.runTaskNow('${task.task_id}')" title="Run Now">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="task-control-btn" onclick="app.editTask('${task.task_id}')" title="Edit Task">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="task-metrics-right">
+                    <div class="metric-with-chart">
+                        <div>
+                            <div class="metric-label-small">${task.objective.metric}:</div>
+                            <div class="metric-value-small">${task.objective.current}</div>
+                        </div>
+                        ${trendSparkline}
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    generateSparkline(data) {
+        if (!data || data.length === 0) return '<div style="width: 60px; height: 20px;"></div>';
+
+        const max = Math.max(...data);
+        const min = Math.min(...data);
+        const range = max - min || 1;
+
+        // Create points with proper scaling for 60x20 viewport
+        const width = 60;
+        const height = 20;
+        const padding = 2; // Small padding to prevent clipping
+
+        const points = data.map((value, index) => {
+            const x = (index / (data.length - 1)) * (width - 2 * padding) + padding;
+            const y = height - padding - ((value - min) / range) * (height - 2 * padding);
+            return `${x},${y}`;
+        }).join(' ');
+
+        const lastValue = data[data.length - 1];
+        const secondLastValue = data[data.length - 2] || lastValue;
+        const isUp = lastValue >= secondLastValue;
+        const color = isUp ? '#10b981' : '#ef4444';
+
+        return `
+            <svg width="60" height="20" viewBox="0 0 60 20" style="display: block;">
+                <polyline
+                    points="${points}"
+                    fill="none"
+                    stroke="${color}"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+            </svg>
+        `;
+    }
+
+    getFilteredTasks() {
+        const statusFilter = document.getElementById('task-status-filter')?.value || 'all';
+        const typeFilter = document.getElementById('task-type-filter')?.value || 'all';
+
+        return this.autopilotTasks.filter(task => {
+            const statusMatch = statusFilter === 'all' || task.status.toLowerCase() === statusFilter;
+            const typeMatch = typeFilter === 'all' || this.getTypeCategory(task.type).toLowerCase() === typeFilter;
+            return statusMatch && typeMatch;
+        });
+    }
+
+    getTypeCategory(type) {
+        const categoryMap = {
+            'BUDGET_REBALANCER': 'budget',
+            'CREATIVE_WINNER': 'creative',
+            'AUDIENCE_REFRESHER': 'audience',
+            'INSIGHTS_DIGEST': 'insights',
+            'COST_WATCHDOG': 'watchdog',
+            'EXPERIMENT_LAUNCHER': 'experiments'
+        };
+        return categoryMap[type] || type;
+    }
+
+    filterTasks() {
+        this.renderTaskList();
+    }
+
+    // Task actions
+    toggleTask(taskId) {
+        const task = this.autopilotTasks.find(t => t.task_id === taskId);
+        if (task) {
+            task.status = task.status === 'ENABLED' ? 'PAUSED' : 'ENABLED';
+            this.renderTaskList();
+
+            // Show notification
+            this.showNotification(
+                `Task ${task.status === 'ENABLED' ? 'enabled' : 'paused'}: ${task.name}`,
+                task.status === 'ENABLED' ? 'success' : 'warning'
+            );
+        }
+    }
+
+    runTaskNow(taskId) {
+        const task = this.autopilotTasks.find(t => t.task_id === taskId);
+        if (task) {
+            this.showNotification(`Running task: ${task.name}`, 'info');
+
+            // Simulate task execution
+            setTimeout(() => {
+                task.last_run = new Date().toISOString();
+                task.actions_this_week += 1;
+                this.renderTaskList();
+                this.showNotification(`Task completed: ${task.name}`, 'success');
+            }, 2000);
+        }
+    }
+
+    editTask(taskId) {
+        const task = this.autopilotTasks.find(t => t.task_id === taskId);
+        if (task) {
+            this.showTaskCreationWizard(task);
+        }
+    }
+
+    showTaskDetail(taskId) {
+        const task = this.autopilotTasks.find(t => t.task_id === taskId);
+        if (task) {
+            this.showNotification(`Task Details: ${task.name} - ${task.status}`, 'info');
+        }
+    }
+
+    showTaskCreationWizard(existingTask = null) {
+        this.showNotification('Task creation wizard coming soon!', 'info');
+    }
+
+    showBulkActionsDialog() {
+        this.showNotification('Bulk actions dialog coming soon!', 'info');
+    }
+
+    showNotification(message, type = 'info') {
+        // Create a simple notification
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: var(--space-md);
+            background: ${type === 'success' ? '#22c55e' : type === 'warning' ? '#f59e0b' : type === 'error' ? '#ef4444' : '#3b82f6'};
+            color: white;
+            border-radius: var(--radius-md);
+            z-index: 1000;
+            font-size: var(--font-sm);
+            max-width: 300px;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease-out;
+        `;
+
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    hideAllPages() {
+        const pages = [
+            'home-screen',
+            'working-interface',
+            'knowledge-base-page',
+            'autopilot-page'
+        ];
+
+        pages.forEach(pageId => {
+            const page = document.getElementById(pageId);
+            if (page) {
+                page.style.display = 'none';
+            }
+        });
     }
 }
 
