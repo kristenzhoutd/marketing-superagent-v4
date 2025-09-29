@@ -213,6 +213,12 @@ class MarketingSuperAgentV4 {
                 e.stopPropagation();
                 this.showCampaignsPage();
             }
+            if (e.target.closest('#create-task-btn')) {
+                console.log('Create task button clicked via event delegation');
+                e.preventDefault();
+                e.stopPropagation();
+                this.showAutopilotTaskCreation();
+            }
         });
 
         // Example cards
@@ -10303,12 +10309,20 @@ class MarketingSuperAgentV4 {
 
 
     setupAutopilotChat() {
+        console.log('setupAutopilotChat called');
         // Create Task button handler
         const createTaskBtn = document.getElementById('create-task-btn');
+        console.log('Create task button found:', createTaskBtn);
         if (createTaskBtn) {
-            createTaskBtn.addEventListener('click', () => {
+            createTaskBtn.addEventListener('click', (e) => {
+                console.log('Create task button clicked!');
+                e.preventDefault();
+                e.stopPropagation();
                 this.showAutopilotTaskCreation();
             });
+            console.log('Event listener added to create task button');
+        } else {
+            console.error('Create task button not found!');
         }
 
         // Close chat button handler
@@ -10409,7 +10423,7 @@ class MarketingSuperAgentV4 {
     }
 
     showAutopilotTaskCreation() {
-        console.log('showAutopilotTaskCreation called');
+        console.log('=== showAutopilotTaskCreation called ===');
 
         // Set context for autopilot task creation
         this.currentTask = 'autopilot-task-creation';
