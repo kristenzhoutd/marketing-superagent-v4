@@ -207,6 +207,12 @@ class MarketingSuperAgentV4 {
                 e.stopPropagation();
                 this.showAutopilotPage();
             }
+            if (e.target.closest('#sidebar-campaigns-btn') || e.target.closest('#autopilot-campaigns-btn') || e.target.closest('#kb-campaigns-btn')) {
+                console.log('Campaigns button clicked via event delegation');
+                e.preventDefault();
+                e.stopPropagation();
+                this.showCampaignsPage();
+            }
         });
 
         // Example cards
@@ -10218,7 +10224,12 @@ class MarketingSuperAgentV4 {
         const kbCampaignsBtn = document.getElementById('kb-campaigns-btn');
 
         if (campaignsBtn) {
-            campaignsBtn.addEventListener('click', () => this.showCampaignsPage());
+            campaignsBtn.addEventListener('click', (e) => {
+                console.log('Campaigns button clicked!');
+                e.preventDefault();
+                e.stopPropagation();
+                this.showCampaignsPage();
+            });
         }
 
         if (campaignsBackToHome) {
@@ -10418,7 +10429,15 @@ class MarketingSuperAgentV4 {
 
     showCampaignsPage() {
         console.log('showCampaignsPage called');
+        console.log('Current window.location.hash before navigation:', window.location.hash);
         this.navigateToRoute('campaigns');
+        // Force hash update as backup
+        setTimeout(() => {
+            if (window.location.hash !== '#campaigns') {
+                console.log('Hash not set correctly, forcing update');
+                window.location.hash = '#campaigns';
+            }
+        }, 10);
     }
 
     loadSampleTasks() {
