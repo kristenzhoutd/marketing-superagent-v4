@@ -1894,6 +1894,13 @@ class MarketingSuperAgentV4 {
         if (outputContent) {
             outputContent.innerHTML = content;
 
+            // Restore thought processes after setting content
+            setTimeout(() => {
+                if (this.currentThoughtProcesses && this.currentThoughtProcesses.length > 0) {
+                    this.updateOutputThoughtProcesses();
+                }
+            }, 100);
+
             // Add universal suggested next steps to chat
             setTimeout(() => {
                 try {
@@ -3154,6 +3161,13 @@ class MarketingSuperAgentV4 {
 
         // Add export button to the output content
         outputContent.innerHTML = content;
+
+        // Restore thought processes after setting content
+        setTimeout(() => {
+            if (this.currentThoughtProcesses && this.currentThoughtProcesses.length > 0) {
+                this.updateOutputThoughtProcesses();
+            }
+        }, 100);
 
         // Add universal suggested next steps to chat
         setTimeout(() => {
