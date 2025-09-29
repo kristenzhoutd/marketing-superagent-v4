@@ -10295,51 +10295,19 @@ class MarketingSuperAgentV4 {
             }
         }, 10);
 
-        // Setup AI action card handlers and create task functionality
+        // Setup create task functionality
         setTimeout(() => {
-            this.setupAIActionCards();
             this.setupAutopilotChat();
         }, 100);
     }
 
-    setupAIActionCards() {
-        const actionCards = document.querySelectorAll('.ai-action-card');
-        actionCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const prompt = card.getAttribute('data-prompt');
-                if (prompt) {
-                    this.triggerAIChat(prompt);
-                }
-            });
-        });
-    }
-
-    triggerAIChat(prompt) {
-        // Navigate to home page to access chat
-        this.navigateToRoute('home');
-
-        // Wait for navigation to complete, then populate chat input
-        setTimeout(() => {
-            const chatInput = document.getElementById('main-input');
-            if (chatInput) {
-                chatInput.value = prompt;
-                chatInput.focus();
-
-                // Show visual feedback
-                this.showNotification('AI prompt loaded - press Enter to start chat', 'info');
-
-                // Optional: auto-trigger the chat
-                // this.handleMainSend();
-            }
-        }, 200);
-    }
 
     setupAutopilotChat() {
         // Create Task button handler
         const createTaskBtn = document.getElementById('create-task-btn');
         if (createTaskBtn) {
             createTaskBtn.addEventListener('click', () => {
-                this.showAutopilotChat();
+                this.showAutopilotTaskCreation();
             });
         }
 
@@ -10438,6 +10406,110 @@ class MarketingSuperAgentV4 {
                 window.location.hash = '#campaigns';
             }
         }, 10);
+    }
+
+    showAutopilotTaskCreation() {
+        console.log('showAutopilotTaskCreation called');
+
+        // Set context for autopilot task creation
+        this.currentTask = 'autopilot-task-creation';
+        this.currentTaskAgents = ['Research Agent', 'Creative Agent', 'Performance Agent', 'Audience Agent'];
+        this.currentSuiteTitle = 'Autopilot Task Creation';
+
+        // Transition to working interface
+        this.showWorkingInterface();
+
+        // Add initial message to chat
+        this.addMessage('I\'d like to create a new autopilot task. What would you like me to help you build?', 'user');
+
+        // Show the 6 AI action suggestions in the chat
+        setTimeout(() => {
+            this.showAutopilotSuggestions();
+        }, 500);
+    }
+
+    showAutopilotSuggestions() {
+        const chatMessages = document.getElementById('chat-messages');
+        if (!chatMessages) return;
+
+        // Create a suggestions message
+        const suggestionsHtml = `
+            <div class="message assistant-message">
+                <div class="message-content">
+                    <p><strong>Here are some suggested autopilot tasks you can create:</strong></p>
+                    <div class="autopilot-suggestions-grid">
+                        <button class="autopilot-suggestion-btn" data-prompt="Analyze budget allocation across my active campaigns and suggest optimizations">
+                            <div class="suggestion-icon budget">💰</div>
+                            <div class="suggestion-content">
+                                <h4>Optimize Budget Allocation</h4>
+                                <p>Analyze spend distribution and suggest rebalancing opportunities</p>
+                            </div>
+                        </button>
+
+                        <button class="autopilot-suggestion-btn" data-prompt="Review my autopilot agents performance and recommend improvements">
+                            <div class="suggestion-icon performance">🤖</div>
+                            <div class="suggestion-content">
+                                <h4>Agent Performance Review</h4>
+                                <p>Get insights on agent efficiency and optimization recommendations</p>
+                            </div>
+                        </button>
+
+                        <button class="autopilot-suggestion-btn" data-prompt="Create a new autopilot agent to handle creative testing for my campaigns">
+                            <div class="suggestion-icon creative">🎨</div>
+                            <div class="suggestion-content">
+                                <h4>Setup Creative Testing Agent</h4>
+                                <p>Build an agent to automatically test and optimize ad creatives</p>
+                            </div>
+                        </button>
+
+                        <button class="autopilot-suggestion-btn" data-prompt="Analyze my campaign performance trends and identify areas needing attention">
+                            <div class="suggestion-icon analytics">📈</div>
+                            <div class="suggestion-content">
+                                <h4>Performance Trend Analysis</h4>
+                                <p>Deep dive into metrics to spot declining performance early</p>
+                            </div>
+                        </button>
+
+                        <button class="autopilot-suggestion-btn" data-prompt="Set up audience refresh automation for my retargeting campaigns">
+                            <div class="suggestion-icon audience">👥</div>
+                            <div class="suggestion-content">
+                                <h4>Automate Audience Refresh</h4>
+                                <p>Create smart audience management for optimal reach</p>
+                            </div>
+                        </button>
+
+                        <button class="autopilot-suggestion-btn" data-prompt="Generate a comprehensive report on my Q4 marketing performance">
+                            <div class="suggestion-icon reporting">📊</div>
+                            <div class="suggestion-content">
+                                <h4>Generate Performance Report</h4>
+                                <p>Create detailed analytics report with actionable insights</p>
+                            </div>
+                        </button>
+                    </div>
+                    <p style="margin-top: 16px; font-size: 14px; color: #64748b;">Click on any suggestion above or type your own custom autopilot task below.</p>
+                </div>
+            </div>
+        `;
+
+        chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Add click handlers for the suggestion buttons
+        const suggestionBtns = chatMessages.querySelectorAll('.autopilot-suggestion-btn');
+        suggestionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const prompt = btn.getAttribute('data-prompt');
+                if (prompt) {
+                    const chatInput = document.getElementById('chat-input');
+                    if (chatInput) {
+                        chatInput.value = prompt;
+                        chatInput.focus();
+                        // Optional: Auto-send the prompt
+                        // this.handleChatSend();
+                    }
+                }
+            });
+        });
     }
 
     loadSampleTasks() {

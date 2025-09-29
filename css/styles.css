@@ -7549,134 +7549,6 @@ body {
     font-weight: 600;
 }
 
-/* AI Actions Section */
-.ai-actions-section {
-    margin-bottom: 32px;
-}
-
-.ai-actions-section h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #0f172a;
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
-}
-
-.ai-actions-section .section-description {
-    font-size: 14px;
-    color: #64748b;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.ai-actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 16px;
-}
-
-.ai-action-card {
-    background: white;
-    border: 1px solid #f1f5f9;
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.ai-action-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: transparent;
-    transition: all 0.3s ease;
-}
-
-.ai-action-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #e2e8f0;
-}
-
-.ai-action-card:hover::before {
-    background: #3b82f6;
-}
-
-.action-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 20px;
-    flex-shrink: 0;
-}
-
-.action-icon.budget {
-    background: #3b82f6;
-}
-
-.action-icon.performance {
-    background: #10b981;
-}
-
-.action-icon.creative {
-    background: #f59e0b;
-}
-
-.action-icon.analytics {
-    background: #8b5cf6;
-}
-
-.action-icon.audience {
-    background: #ef4444;
-}
-
-.action-icon.reporting {
-    background: #06b6d4;
-}
-
-.action-content {
-    flex: 1;
-}
-
-.action-content h4 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #0f172a;
-    margin-bottom: 4px;
-    line-height: 1.3;
-}
-
-.action-content p {
-    font-size: 13px;
-    color: #64748b;
-    line-height: 1.4;
-    margin: 0;
-}
-
-.action-trigger {
-    color: #94a3b8;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    opacity: 0.6;
-}
-
-.ai-action-card:hover .action-trigger {
-    color: #3b82f6;
-    opacity: 1;
-    transform: translateX(4px);
-}
 
 /* Autopilot Chat Interface */
 .autopilot-chat-interface {
@@ -7847,6 +7719,84 @@ body {
 
 .autopilot-chat-interface .send-button:hover {
     background: #2563eb;
+}
+
+/* ===== AUTOPILOT SUGGESTIONS IN CHAT ===== */
+.autopilot-suggestions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.autopilot-suggestion-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.autopilot-suggestion-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.autopilot-suggestion-btn .suggestion-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.autopilot-suggestion-btn .suggestion-icon.budget {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.autopilot-suggestion-btn .suggestion-icon.performance {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.autopilot-suggestion-btn .suggestion-icon.creative {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+}
+
+.autopilot-suggestion-btn .suggestion-icon.analytics {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.autopilot-suggestion-btn .suggestion-icon.audience {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.autopilot-suggestion-btn .suggestion-icon.reporting {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+.autopilot-suggestion-btn .suggestion-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.autopilot-suggestion-btn .suggestion-content p {
+    margin: 0;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
 }
 
 .autopilot-overview-section {
