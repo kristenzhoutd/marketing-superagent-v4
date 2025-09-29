@@ -10368,7 +10368,6 @@ class MarketingSuperAgentV4 {
             }, 500);
         } catch (error) {
             console.error('Error in showAutopilotTaskCreation:', error);
-            alert('Error in showAutopilotTaskCreation: ' + error.message);
         }
     }
 
@@ -10835,7 +10834,6 @@ class MarketingSuperAgentV4 {
 
     showTaskCreationWizard(existingTask = null) {
         console.log('OLD showTaskCreationWizard called - redirecting to new method');
-        alert('OLD method called - redirecting to new method');
         this.showAutopilotTaskCreation();
     }
 
