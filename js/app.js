@@ -10268,7 +10268,12 @@ class MarketingSuperAgentV4 {
         // Create task button
         const createTaskBtn = document.getElementById('create-task-btn');
         if (createTaskBtn) {
-            createTaskBtn.addEventListener('click', () => this.showTaskCreationWizard());
+            createTaskBtn.addEventListener('click', (e) => {
+                console.log('Create task button clicked in setupAutopilotActions');
+                e.preventDefault();
+                e.stopPropagation();
+                this.showAutopilotTaskCreation();
+            });
         }
 
         // Bulk actions button
