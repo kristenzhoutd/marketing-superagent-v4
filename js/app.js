@@ -128,6 +128,47 @@ class MarketingSuperAgentV4 {
             console.log('Knowledge Base working button not found');
         }
 
+        // Autopilot buttons
+        const sidebarAutopilotBtn = document.getElementById('sidebar-autopilot-btn');
+        if (sidebarAutopilotBtn) {
+            console.log('Found Autopilot button, adding event listener');
+            sidebarAutopilotBtn.addEventListener('click', (e) => {
+                console.log('=== AUTOPILOT BUTTON CLICKED ===');
+                console.log('Event target:', e.target);
+                console.log('Current hash before click:', window.location.hash);
+
+                // Visual confirmation the click was captured
+                sidebarAutopilotBtn.style.backgroundColor = 'red';
+                setTimeout(() => {
+                    sidebarAutopilotBtn.style.backgroundColor = '';
+                }, 200);
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Direct hash setting test
+                console.log('Setting hash directly to #autopilot');
+                window.location.hash = '#autopilot';
+                console.log('Hash after direct setting:', window.location.hash);
+
+                // Also call the normal navigation
+                this.showAutopilotPage();
+
+                // Check hash after a delay to see if something overwrites it
+                setTimeout(() => {
+                    console.log('Hash after 100ms:', window.location.hash);
+                }, 100);
+
+                setTimeout(() => {
+                    console.log('Hash after 500ms:', window.location.hash);
+                }, 500);
+
+                console.log('=== END AUTOPILOT CLICK HANDLER ===');
+            });
+        } else {
+            console.log('Autopilot button not found');
+        }
+
         if (closeHistory) {
             closeHistory.addEventListener('click', () => {
                 this.closeHistoryPanel();
@@ -154,11 +195,17 @@ class MarketingSuperAgentV4 {
         // Knowledge Base interactions
         this.setupKnowledgeBaseInteractions();
 
-        // Fallback event delegation for Knowledge Base buttons
+        // Fallback event delegation for Knowledge Base and Autopilot buttons
         document.addEventListener('click', (e) => {
             if (e.target.closest('#sidebar-knowledge-btn') || e.target.closest('#sidebar-knowledge-btn-working')) {
                 console.log('Knowledge Base button clicked via event delegation');
                 this.openKnowledgeBase();
+            }
+            if (e.target.closest('#sidebar-autopilot-btn')) {
+                console.log('Autopilot button clicked via event delegation');
+                e.preventDefault();
+                e.stopPropagation();
+                this.showAutopilotPage();
             }
         });
 
@@ -6808,7 +6855,9 @@ class MarketingSuperAgentV4 {
 
         // Update URL with hash-based routing
         const url = route === 'home' ? '#' : `#${route}`;
+        console.log('Setting window.location.hash to:', url);
         window.location.hash = url;
+        console.log('window.location.hash after setting:', window.location.hash);
     }
 
     showPage(route) {
@@ -6850,15 +6899,22 @@ class MarketingSuperAgentV4 {
                 break;
 
             case 'autopilot':
+                console.log('=== SHOWING AUTOPILOT PAGE ===');
                 console.log('Switching to Autopilot page');
                 // Show autopilot page
                 const autopilotPage = document.getElementById('autopilot-page');
                 if (autopilotPage) {
                     console.log('Found Autopilot page element, setting display to grid');
                     autopilotPage.style.display = 'grid';
+                    autopilotPage.style.visibility = 'visible';
+                    autopilotPage.style.opacity = '1';
                     console.log('Autopilot page display set to:', autopilotPage.style.display);
+                    console.log('Autopilot page computed style:', window.getComputedStyle(autopilotPage).display);
                 } else {
                     console.error('Autopilot page element not found');
+                    // List all elements with autopilot in the ID
+                    const allAutopilotElements = document.querySelectorAll('[id*="autopilot"]');
+                    console.log('All elements with autopilot in ID:', allAutopilotElements);
                 }
 
                 // Update main content class
@@ -6881,6 +6937,40 @@ class MarketingSuperAgentV4 {
                 this.renderTaskList();
                 break;
 
+            case 'campaigns':
+                console.log('Switching to Campaigns page');
+                // Show campaigns page
+                const campaignsPage = document.getElementById('campaigns-page');
+                if (campaignsPage) {
+                    console.log('Found Campaigns page element, setting display to grid');
+                    campaignsPage.style.display = 'grid';
+                    console.log('Campaigns page display set to:', campaignsPage.style.display);
+                } else {
+                    console.error('Campaigns page element not found');
+                }
+
+                // Update main content class
+                const mainContentCampaigns = document.querySelector('.main-content');
+                if (mainContentCampaigns) {
+                    console.log('Updating main content class to home-mode');
+                    mainContentCampaigns.className = 'main-content home-mode';
+                } else {
+                    console.error('Main content element not found');
+                }
+
+                // Hide header
+                const headerCampaigns = document.querySelector('.app-header');
+                if (headerCampaigns) {
+                    console.log('Hiding app header');
+                    headerCampaigns.style.display = 'none';
+                } else {
+                    console.error('App header element not found');
+                }
+
+                // Populate campaigns list
+                this.renderCampaignsList();
+                break;
+
             case 'home':
             default:
                 console.log('Displaying Home page');
@@ -6894,7 +6984,8 @@ class MarketingSuperAgentV4 {
             'home-screen',
             'working-interface',
             'knowledge-base-page',
-            'autopilot-page'
+            'autopilot-page',
+            'campaigns-page'
         ];
 
         pages.forEach(pageId => {
@@ -7051,11 +7142,16 @@ class MarketingSuperAgentV4 {
 
     initRouting() {
         // Handle hash changes (browser back/forward buttons and direct URL access)
-        window.addEventListener('hashchange', () => {
+        window.addEventListener('hashchange', (e) => {
+            console.log('=== HASHCHANGE EVENT ===');
+            console.log('Old URL:', e.oldURL);
+            console.log('New URL:', e.newURL);
+            console.log('Current hash:', window.location.hash);
             const route = this.getRouteFromURL();
             console.log('Hash changed to route:', route);
             this.currentRoute = route;
             this.showPage(route);
+            console.log('=== END HASHCHANGE EVENT ===');
         });
 
         // Handle initial page load
@@ -7077,6 +7173,8 @@ class MarketingSuperAgentV4 {
                     return 'knowledge-base';
                 case 'autopilot':
                     return 'autopilot';
+                case 'campaigns':
+                    return 'campaigns';
                 default:
                     return 'home';
             }
@@ -7089,6 +7187,8 @@ class MarketingSuperAgentV4 {
                 return 'knowledge-base';
             case '/autopilot':
                 return 'autopilot';
+            case '/campaigns':
+                return 'campaigns';
             case '/':
             default:
                 return 'home';
@@ -10066,6 +10166,7 @@ class MarketingSuperAgentV4 {
 
         // Setup navigation handlers
         this.setupAutopilotNavigation();
+        this.setupCampaignsNavigation();
 
         // Setup action handlers
         this.setupAutopilotActions();
@@ -10102,6 +10203,49 @@ class MarketingSuperAgentV4 {
         }
     }
 
+    setupCampaignsNavigation() {
+        // Home page Campaigns navigation
+        const campaignsBtn = document.getElementById('sidebar-campaigns-btn');
+        const campaignsBackToHome = document.getElementById('campaigns-back-to-home');
+        const campaignsAutopilotBtn = document.getElementById('campaigns-autopilot-btn');
+        const campaignsKnowledgeBtn = document.getElementById('campaigns-knowledge-btn');
+        const campaignsHistoryBtn = document.getElementById('campaigns-history-btn');
+
+        // Autopilot page Campaigns navigation
+        const autopilotCampaignsBtn = document.getElementById('autopilot-campaigns-btn');
+
+        // Knowledge base page Campaigns navigation
+        const kbCampaignsBtn = document.getElementById('kb-campaigns-btn');
+
+        if (campaignsBtn) {
+            campaignsBtn.addEventListener('click', () => this.showCampaignsPage());
+        }
+
+        if (campaignsBackToHome) {
+            campaignsBackToHome.addEventListener('click', () => this.showHomePage());
+        }
+
+        if (campaignsAutopilotBtn) {
+            campaignsAutopilotBtn.addEventListener('click', () => this.showAutopilotPage());
+        }
+
+        if (campaignsKnowledgeBtn) {
+            campaignsKnowledgeBtn.addEventListener('click', () => this.openKnowledgeBase());
+        }
+
+        if (campaignsHistoryBtn) {
+            campaignsHistoryBtn.addEventListener('click', () => this.openHistory());
+        }
+
+        if (autopilotCampaignsBtn) {
+            autopilotCampaignsBtn.addEventListener('click', () => this.showCampaignsPage());
+        }
+
+        if (kbCampaignsBtn) {
+            kbCampaignsBtn.addEventListener('click', () => this.showCampaignsPage());
+        }
+    }
+
     setupAutopilotActions() {
         // Create task button
         const createTaskBtn = document.getElementById('create-task-btn');
@@ -10130,7 +10274,151 @@ class MarketingSuperAgentV4 {
 
     showAutopilotPage() {
         console.log('showAutopilotPage called');
+        console.log('Current window.location.hash before navigation:', window.location.hash);
         this.navigateToRoute('autopilot');
+        // Force hash update as backup
+        setTimeout(() => {
+            if (window.location.hash !== '#autopilot') {
+                console.log('Hash not set correctly, forcing update');
+                window.location.hash = '#autopilot';
+            }
+        }, 10);
+
+        // Setup AI action card handlers and create task functionality
+        setTimeout(() => {
+            this.setupAIActionCards();
+            this.setupAutopilotChat();
+        }, 100);
+    }
+
+    setupAIActionCards() {
+        const actionCards = document.querySelectorAll('.ai-action-card');
+        actionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const prompt = card.getAttribute('data-prompt');
+                if (prompt) {
+                    this.triggerAIChat(prompt);
+                }
+            });
+        });
+    }
+
+    triggerAIChat(prompt) {
+        // Navigate to home page to access chat
+        this.navigateToRoute('home');
+
+        // Wait for navigation to complete, then populate chat input
+        setTimeout(() => {
+            const chatInput = document.getElementById('main-input');
+            if (chatInput) {
+                chatInput.value = prompt;
+                chatInput.focus();
+
+                // Show visual feedback
+                this.showNotification('AI prompt loaded - press Enter to start chat', 'info');
+
+                // Optional: auto-trigger the chat
+                // this.handleMainSend();
+            }
+        }, 200);
+    }
+
+    setupAutopilotChat() {
+        // Create Task button handler
+        const createTaskBtn = document.getElementById('create-task-btn');
+        if (createTaskBtn) {
+            createTaskBtn.addEventListener('click', () => {
+                this.showAutopilotChat();
+            });
+        }
+
+        // Close chat button handler
+        const closeChatBtn = document.getElementById('close-autopilot-chat');
+        if (closeChatBtn) {
+            closeChatBtn.addEventListener('click', () => {
+                this.hideAutopilotChat();
+            });
+        }
+
+        // Chat suggestion cards handlers
+        const suggestionCards = document.querySelectorAll('.chat-suggestion-card');
+        suggestionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const prompt = card.getAttribute('data-prompt');
+                if (prompt) {
+                    const chatInput = document.getElementById('autopilot-chat-input');
+                    if (chatInput) {
+                        chatInput.value = prompt;
+                        chatInput.focus();
+                    }
+                }
+            });
+        });
+
+        // Chat input send handler
+        const chatSendBtn = document.getElementById('autopilot-chat-send');
+        const chatInput = document.getElementById('autopilot-chat-input');
+
+        if (chatSendBtn && chatInput) {
+            const handleSend = () => {
+                const prompt = chatInput.value.trim();
+                if (prompt) {
+                    this.hideAutopilotChat();
+                    this.navigateToRoute('home');
+
+                    setTimeout(() => {
+                        const mainInput = document.getElementById('main-input');
+                        if (mainInput) {
+                            mainInput.value = prompt;
+                            mainInput.focus();
+                            this.showNotification('Task prompt loaded - press Enter to start chat', 'info');
+                        }
+                    }, 200);
+                }
+            };
+
+            chatSendBtn.addEventListener('click', handleSend);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSend();
+                }
+            });
+        }
+
+        // Close on background click
+        const chatInterface = document.getElementById('autopilot-chat-interface');
+        if (chatInterface) {
+            chatInterface.addEventListener('click', (e) => {
+                if (e.target === chatInterface) {
+                    this.hideAutopilotChat();
+                }
+            });
+        }
+    }
+
+    showAutopilotChat() {
+        const chatInterface = document.getElementById('autopilot-chat-interface');
+        if (chatInterface) {
+            chatInterface.style.display = 'flex';
+            // Clear previous input
+            const chatInput = document.getElementById('autopilot-chat-input');
+            if (chatInput) {
+                chatInput.value = '';
+                setTimeout(() => chatInput.focus(), 100);
+            }
+        }
+    }
+
+    hideAutopilotChat() {
+        const chatInterface = document.getElementById('autopilot-chat-interface');
+        if (chatInterface) {
+            chatInterface.style.display = 'none';
+        }
+    }
+
+    showCampaignsPage() {
+        console.log('showCampaignsPage called');
+        this.navigateToRoute('campaigns');
     }
 
     loadSampleTasks() {
@@ -10143,7 +10431,7 @@ class MarketingSuperAgentV4 {
                 owner: 'kristen@td.com',
                 approver: 'cpo@td.com',
                 last_run: '2024-01-15T07:00:00Z',
-                next_run: '2024-01-16T07:00:00Z',
+                next_run: '2024-01-15T23:00:00Z',
                 actions_this_week: 12,
                 kpi_trend: [3.2, 3.1, 3.4, 3.3, 3.5, 3.4, 3.6],
                 objective: { metric: 'ROAS', target: 3.5, current: 3.6 },
@@ -10167,7 +10455,7 @@ class MarketingSuperAgentV4 {
                 owner: 'kristen@td.com',
                 approver: 'cpo@td.com',
                 last_run: '2024-01-14T09:00:00Z',
-                next_run: 'paused',
+                next_run: 'Invalid Date',
                 actions_this_week: 3,
                 kpi_trend: [2.8, 3.2, 2.9, 3.1, 2.7, 3.0, 3.1],
                 objective: { metric: 'CTR', target: 3.0, current: 3.1 },
@@ -10191,7 +10479,7 @@ class MarketingSuperAgentV4 {
                 owner: 'kristen@td.com',
                 approver: 'cpo@td.com',
                 last_run: '2024-01-15T18:00:00Z',
-                next_run: '2024-01-16T18:00:00Z',
+                next_run: '2024-01-16T10:00:00Z',
                 actions_this_week: 35,
                 kpi_trend: [87000, 89000, 91000, 88000, 92000, 90000, 91000],
                 objective: { metric: 'Audience_Size', target: 90000, current: 91000 },
@@ -10236,12 +10524,19 @@ class MarketingSuperAgentV4 {
     }
 
     renderTaskList() {
+        console.log('renderTaskList called');
         const taskList = document.getElementById('autopilot-task-list');
-        if (!taskList) return;
+        if (!taskList) {
+            console.log('Task list element not found');
+            return;
+        }
 
+        console.log('autopilotTasks:', this.autopilotTasks);
         const filteredTasks = this.getFilteredTasks();
+        console.log('filteredTasks:', filteredTasks);
 
         if (filteredTasks.length === 0) {
+            console.log('No filtered tasks, showing empty state');
             taskList.innerHTML = `
                 <div style="text-align: center; padding: var(--space-xl); color: var(--text-secondary);">
                     <i class="fas fa-robot" style="font-size: 48px; margin-bottom: var(--space-md); opacity: 0.3;"></i>
@@ -10256,7 +10551,12 @@ class MarketingSuperAgentV4 {
             return;
         }
 
-        taskList.innerHTML = filteredTasks.map(task => this.renderTaskCard(task)).join('');
+        console.log('Rendering', filteredTasks.length, 'tasks');
+        const taskCards = filteredTasks.map(task => {
+            console.log('Rendering task:', task.name);
+            return this.renderTaskCard(task);
+        });
+        taskList.innerHTML = taskCards.join('');
     }
 
     renderTaskCard(task) {
@@ -10264,49 +10564,124 @@ class MarketingSuperAgentV4 {
         const statusClass = task.status.toLowerCase();
         const nextRunText = task.next_run === 'realtime' ? 'Real-time' :
                            task.next_run ? new Date(task.next_run).toLocaleString() : 'Paused';
-
-        const trendSparkline = this.generateSparkline(task.kpi_trend);
+        const lastRunText = task.last_run ? this.timeAgo(task.last_run) : 'Never';
         const typeClass = task.type.toLowerCase().replace(/_/g, '-');
 
+        // Get agent-specific KPIs
+        const kpis = this.getAgentKPIs(task.type, task);
+        const sparklines = this.getAgentSparklines(task.type, task);
+        const impactBadges = this.getImpactBadges(task.type, task);
+        const systemKPIs = this.getSystemKPIs(task);
+
         return `
-            <div class="task-card ${statusClass}" onclick="app.showTaskDetail('${task.task_id}')">
-                <div class="task-header">
-                    <div class="task-info">
-                        <div class="task-icon ${typeClass}">
-                            <i class="${template.icon || 'fas fa-cog'}"></i>
+            <div class="autopilot-agent-card" data-agent-id="${task.task_id}">
+                <!-- Card Header -->
+                <div class="agent-card-header">
+                    <div class="agent-header-top">
+                        <div class="agent-title-section">
+                            <h3 class="agent-title">${task.name}</h3>
+                            <div class="agent-meta">
+                                <span><i class="fas fa-clock"></i> ${task.schedule || 'Daily at 9:00 AM'}</span>
+                                <span><i class="fas fa-history"></i> Last run: ${lastRunText}</span>
+                                <span><i class="fas fa-forward"></i> Next run: ${nextRunText}</span>
+                            </div>
                         </div>
-                        <div class="task-details">
-                            <div class="task-name">${task.name}</div>
-                            <div class="task-description">${template.name || task.type} • Next: ${nextRunText} • ${task.actions_this_week} actions this week</div>
+                        <div class="agent-header-actions">
+                            <div class="agent-status-pill ${statusClass}">
+                                <div class="status-dot"></div>
+                                ${task.status}
+                            </div>
+                            <div class="agent-quick-actions">
+                                <button class="agent-action-btn" onclick="app.toggleTask('${task.task_id}')" title="${task.status === 'ENABLED' ? 'Pause' : 'Resume'}">
+                                    <i class="fas fa-${task.status === 'ENABLED' ? 'pause' : 'play'}"></i>
+                                </button>
+                                <button class="agent-action-btn" onclick="app.runTaskNow('${task.task_id}')" title="Run now">
+                                    <i class="fas fa-play-circle"></i>
+                                </button>
+                                <button class="agent-action-btn" onclick="app.editTask('${task.task_id}')" title="View config">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="task-actions-right">
-                        <div class="task-status-badge ${statusClass}">
-                            ${task.status}
-                        </div>
-                        <div class="task-control-buttons" onclick="event.stopPropagation();">
-                            <button class="task-control-btn" onclick="app.toggleTask('${task.task_id}')" title="${task.status === 'ENABLED' ? 'Pause' : 'Enable'} Task">
-                                <i class="fas fa-${task.status === 'ENABLED' ? 'pause' : 'play'}"></i>
-                            </button>
-                            <button class="task-control-btn" onclick="app.runTaskNow('${task.task_id}')" title="Run Now">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <button class="task-control-btn" onclick="app.editTask('${task.task_id}')" title="Edit Task">
-                                <i class="fas fa-edit"></i>
-                            </button>
+                </div>
+
+                <!-- KPI Strip -->
+                <div class="agent-kpi-strip">
+                    <div class="agent-kpis-grid">
+                        ${kpis.map(kpi => `
+                            <div class="agent-kpi-item">
+                                <div class="kpi-header">
+                                    <span class="kpi-name">${kpi.name}</span>
+                                    <div class="kpi-trend ${kpi.trend}">
+                                        <i class="fas fa-${kpi.trend === 'up' ? 'arrow-up' : kpi.trend === 'down' ? 'arrow-down' : 'minus'}"></i>
+                                        ${kpi.delta}
+                                    </div>
+                                </div>
+                                <div class="kpi-value">${kpi.value}</div>
+                                <div class="kpi-tooltip">${kpi.tooltip}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Sparklines -->
+                ${sparklines.length > 0 ? `
+                <div class="agent-sparklines">
+                    <div class="sparklines-grid">
+                        ${sparklines.slice(0, 2).map(sparkline => `
+                            <div class="sparkline-item">
+                                <div class="sparkline-header">
+                                    <span class="sparkline-name">${sparkline.name}</span>
+                                    <span class="sparkline-period">${sparkline.period}</span>
+                                </div>
+                                <div class="sparkline-chart" data-values="${sparkline.data.join(',')}">
+                                    ${this.generateSparklineSVG(sparkline.data, sparkline.color)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Impact Badges -->
+                ${impactBadges.length > 0 ? `
+                <div class="agent-impact-badges">
+                    <div class="impact-badges-grid">
+                        ${impactBadges.map(badge => `
+                            <div class="impact-badge ${badge.type}">${badge.text}</div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Card Footer -->
+                <div class="agent-card-footer">
+                    <button class="agent-footer-btn" onclick="app.showAnalyticsModal('${task.task_id}')">
+                        View Analytics
+                    </button>
+                    <button class="agent-footer-btn" onclick="app.showRunHistoryDrawer('${task.task_id}')">
+                        Run Log
+                    </button>
+                </div>
+
+                <!-- System KPIs Overlay -->
+                <div class="system-kpis-overlay">
+                    <div class="system-kpis-content">
+                        <h4 class="system-kpis-title">System KPIs</h4>
+                        <div class="system-kpis-grid">
+                            ${systemKPIs.map(kpi => `
+                                <div class="system-kpi-item">
+                                    <div class="system-kpi-value">${kpi.value}</div>
+                                    <div class="system-kpi-name">${kpi.name}</div>
+                                    <div class="system-kpi-period">(${kpi.period})</div>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 </div>
-                <div class="task-metrics-right">
-                    <div class="metric-with-chart">
-                        <div>
-                            <div class="metric-label-small">${task.objective.metric}:</div>
-                            <div class="metric-value-small">${task.objective.current}</div>
-                        </div>
-                        ${trendSparkline}
-                    </div>
-                </div>
-            </div>`;
+            </div>
+        `;
     }
 
     generateSparkline(data) {
@@ -10350,7 +10725,13 @@ class MarketingSuperAgentV4 {
         const statusFilter = document.getElementById('task-status-filter')?.value || 'all';
         const typeFilter = document.getElementById('task-type-filter')?.value || 'all';
 
-        return this.autopilotTasks.filter(task => {
+        // Ensure autopilotTasks is initialized
+        if (!this.autopilotTasks || this.autopilotTasks.length === 0) {
+            console.log('autopilotTasks not initialized, calling loadSampleTasks');
+            this.loadSampleTasks();
+        }
+
+        return (this.autopilotTasks || []).filter(task => {
             const statusMatch = statusFilter === 'all' || task.status.toLowerCase() === statusFilter;
             const typeMatch = typeFilter === 'all' || this.getTypeCategory(task.type).toLowerCase() === typeFilter;
             return statusMatch && typeMatch;
@@ -10451,14 +10832,604 @@ class MarketingSuperAgentV4 {
             notification.remove();
         }, 3000);
     }
+
+    // Campaigns Page Functionality
+    renderCampaignsList() {
+        const campaignsList = document.getElementById('campaigns-list');
+        if (!campaignsList) return;
+
+        // Mock campaigns data
+        const campaigns = [
+            {
+                id: 'camp-001',
+                name: 'Holiday Q4 Campaign',
+                platform: 'Meta',
+                status: 'active',
+                spend: '$12.4k',
+                roas: '4.8x',
+                conversions: 245,
+                lastUpdate: '2 hours ago',
+                performance: 'excellent'
+            },
+            {
+                id: 'camp-002',
+                name: 'Brand Awareness Drive',
+                platform: 'Google Ads',
+                status: 'active',
+                spend: '$8.7k',
+                roas: '3.2x',
+                conversions: 156,
+                lastUpdate: '4 hours ago',
+                performance: 'good'
+            },
+            {
+                id: 'camp-003',
+                name: 'Retargeting Campaign',
+                platform: 'TikTok',
+                status: 'paused',
+                spend: '$3.1k',
+                roas: '2.1x',
+                conversions: 78,
+                lastUpdate: '1 day ago',
+                performance: 'needs-attention'
+            }
+        ];
+
+        campaignsList.innerHTML = campaigns.map(campaign => `
+            <div class="campaign-card ${campaign.status}">
+                <div class="campaign-header">
+                    <div class="campaign-info">
+                        <h3 class="campaign-name">${campaign.name}</h3>
+                        <div class="campaign-meta">
+                            <span class="platform-badge ${campaign.platform.toLowerCase().replace(' ', '-')}">${campaign.platform}</span>
+                            <span class="status-badge ${campaign.status}">${campaign.status.charAt(0).toUpperCase() + campaign.status.slice(1)}</span>
+                        </div>
+                    </div>
+                    <div class="campaign-actions">
+                        <button class="action-btn" onclick="app.editCampaign('${campaign.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" onclick="app.toggleCampaign('${campaign.id}')">
+                            <i class="fas fa-${campaign.status === 'active' ? 'pause' : 'play'}"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="campaign-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Spend</span>
+                        <span class="metric-value">${campaign.spend}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">ROAS</span>
+                        <span class="metric-value">${campaign.roas}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Conversions</span>
+                        <span class="metric-value">${campaign.conversions}</span>
+                    </div>
+                </div>
+                <div class="campaign-footer">
+                    <span class="last-update">Updated ${campaign.lastUpdate}</span>
+                    <div class="performance-indicator ${campaign.performance}">
+                        <i class="fas fa-circle"></i>
+                        ${campaign.performance.replace('-', ' ')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    editCampaign(campaignId) {
+        this.showNotification(`Campaign editor for ${campaignId} coming soon!`, 'info');
+    }
+
+    toggleCampaign(campaignId) {
+        this.showNotification(`Campaign ${campaignId} status toggled`, 'success');
+        // Refresh the list after a brief delay
+        setTimeout(() => {
+            this.renderCampaignsList();
+        }, 1000);
+    }
+
+    timeAgo(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) {
+            return `${diffInSeconds} seconds ago`;
+        } else if (diffInSeconds < 3600) {
+            const minutes = Math.floor(diffInSeconds / 60);
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        } else if (diffInSeconds < 86400) {
+            const hours = Math.floor(diffInSeconds / 3600);
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        } else {
+            const days = Math.floor(diffInSeconds / 86400);
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+    }
+
+    // Enhanced Autopilot Functionality
+    setupAutopilotEnhancements() {
+        this.setupAnalyticsModal();
+        this.setupRunHistoryDrawer();
+        this.enhanceSparklines();
+    }
+
+    setupAnalyticsModal() {
+        // Create analytics modal HTML if it doesn't exist
+        if (!document.getElementById('analytics-modal')) {
+            const modalHTML = `
+                <div class="analytics-modal" id="analytics-modal">
+                    <div class="analytics-modal-content">
+                        <div class="analytics-modal-header">
+                            <div>
+                                <h2 class="analytics-modal-title" id="analytics-title">Agent Analytics</h2>
+                                <p class="analytics-modal-subtitle">Detailed performance metrics and insights</p>
+                            </div>
+                            <button class="analytics-close-btn" onclick="app.closeAnalyticsModal()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="analytics-tabs">
+                            <button class="analytics-tab active" data-tab="overview">Overview</button>
+                            <button class="analytics-tab" data-tab="actions">Actions & Impact</button>
+                            <button class="analytics-tab" data-tab="experiments">Experiments</button>
+                            <button class="analytics-tab" data-tab="costs">Costs & Savings</button>
+                            <button class="analytics-tab" data-tab="reliability">Reliability</button>
+                        </div>
+                        <div class="analytics-content" id="analytics-content">
+                            <!-- Dynamic content will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            // Setup tab navigation
+            document.querySelectorAll('.analytics-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    document.querySelectorAll('.analytics-tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    this.loadAnalyticsTab(e.target.dataset.tab);
+                });
+            });
+        }
+    }
+
+    setupRunHistoryDrawer() {
+        // Create run history drawer HTML if it doesn't exist
+        if (!document.getElementById('run-history-drawer')) {
+            const drawerHTML = `
+                <div class="run-history-drawer" id="run-history-drawer">
+                    <div class="run-history-header">
+                        <div>
+                            <h2 class="run-history-title" id="run-history-title">Run History</h2>
+                            <p class="run-history-subtitle">Execution logs and detailed run information</p>
+                        </div>
+                        <button class="run-history-close" onclick="app.closeRunHistoryDrawer()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="run-history-content">
+                        <div class="run-list">
+                            <div class="run-list-header">
+                                <h3 class="run-list-title">Recent Runs</h3>
+                            </div>
+                            <div id="run-list-items">
+                                <!-- Dynamic content will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="run-detail" id="run-detail">
+                            <div style="text-align: center; padding: 40px; color: #64748b;">
+                                <i class="fas fa-history" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+                                <h3>Select a run to view details</h3>
+                                <p>Choose a run from the list to see detailed execution information</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', drawerHTML);
+        }
+    }
+
+    enhanceSparklines() {
+        // Add sparkline interactivity
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest('.sparkline-chart')) {
+                this.showSparklineTooltip(e);
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest('.sparkline-chart')) {
+                this.hideSparklineTooltip(e);
+            }
+        });
+    }
+
+    // Agent-specific KPI functions
+    getAgentKPIs(type, task) {
+        const kpiConfig = {
+            'BUDGET_REBALANCER': [
+                { name: 'ROAS Δ (7d)', value: '+12.5%', delta: '+12.5%', trend: 'up', tooltip: 'Return on Ad Spend change vs previous 7 days' },
+                { name: 'Spend Reallocation (7d)', value: '$24.8k', delta: '+24.8k', trend: 'up', tooltip: 'Total spend moved between platforms' },
+                { name: 'Wasted Spend Prevented', value: '$8.2k', delta: '+8.2k', trend: 'up', tooltip: 'Estimated spend prevented from going to underperforming placements' }
+            ],
+            'CREATIVE_WINNER': [
+                { name: 'CTR Δ (vs control)', value: '+18.3%', delta: '+18.3%', trend: 'up', tooltip: 'Click-through rate improvement vs control group' },
+                { name: 'CVR Lift', value: '+22.1%', delta: '+22.1%', trend: 'up', tooltip: 'Conversion rate lift from creative optimization' },
+                { name: 'Win Rate', value: '73%', delta: '+8%', trend: 'up', tooltip: 'Champion vs challenger win rate' }
+            ],
+            'AUDIENCE_REFRESHER': [
+                { name: 'Audience Size Δ (7d)', value: '+125k', delta: '+125k', trend: 'up', tooltip: 'Change in reachable audience size over 7 days' },
+                { name: 'Reachable Users', value: '2.8M', delta: '+45k', trend: 'up', tooltip: 'Total reachable users after refresh' },
+                { name: 'Eligibility Errors', value: '0.8%', delta: '-0.3%', trend: 'down', tooltip: 'Percentage of users with eligibility errors' }
+            ],
+            'COST_WATCHDOG': [
+                { name: 'Daily Cost', value: '$142', delta: '-$23', trend: 'down', tooltip: 'Current daily API cost' },
+                { name: 'Anomaly Count (7d)', value: '3', delta: '-2', trend: 'down', tooltip: 'Number of cost anomalies detected in last 7 days' },
+                { name: 'Estimated Savings', value: '$1.2k', delta: '+$1.2k', trend: 'up', tooltip: 'Total estimated savings from optimizations' }
+            ]
+        };
+
+        return kpiConfig[type] || [
+            { name: 'Performance', value: 'N/A', delta: '0%', trend: 'stable', tooltip: 'No data available' },
+            { name: 'Impact', value: 'TBD', delta: '0%', trend: 'stable', tooltip: 'To be determined' },
+            { name: 'Status', value: 'Active', delta: '0%', trend: 'stable', tooltip: 'Current status' }
+        ];
+    }
+
+    getAgentSparklines(type, task) {
+        const sparklineData = {
+            'BUDGET_REBALANCER': [
+                { name: 'ROAS Trend', data: [4.2, 4.3, 4.1, 4.5, 4.7, 4.8, 4.9], period: '7d', color: '#059669' },
+                { name: 'Spend Reallocation', data: [18.2, 22.1, 19.5, 25.8, 23.4, 26.1, 24.8], period: '7d', color: '#3b82f6' }
+            ],
+            'CREATIVE_WINNER': [
+                { name: 'CTR Trend', data: [2.8, 3.1, 3.2, 3.4, 3.5, 3.6, 3.8], period: '7d', color: '#059669' }
+            ],
+            'AUDIENCE_REFRESHER': [
+                { name: 'Audience Size', data: [2.65, 2.68, 2.71, 2.74, 2.76, 2.78, 2.80], period: '7d', color: '#059669' }
+            ],
+            'COST_WATCHDOG': [
+                { name: 'Daily Cost', data: [165, 158, 152, 148, 145, 143, 142], period: '7d', color: '#dc2626' }
+            ]
+        };
+
+        return sparklineData[type] || [];
+    }
+
+    getImpactBadges(type, task) {
+        const badgeConfig = {
+            'BUDGET_REBALANCER': [
+                { text: 'Saved $4.2k this week', type: 'savings' },
+                { text: '+0.8 ROAS', type: 'improvement' }
+            ],
+            'CREATIVE_WINNER': [
+                { text: '-12% CPA', type: 'reduction' },
+                { text: '+$18k revenue', type: 'improvement' }
+            ],
+            'AUDIENCE_REFRESHER': [
+                { text: '+15% reach potential', type: 'improvement' },
+                { text: 'Reduced errors by 35%', type: 'reduction' }
+            ],
+            'COST_WATCHDOG': [
+                { text: 'Prevented $845 overage', type: 'savings' },
+                { text: '-14% API costs', type: 'reduction' }
+            ]
+        };
+
+        return badgeConfig[type] || [];
+    }
+
+    getSystemKPIs(task) {
+        return [
+            { name: 'Run Success Rate', value: '98.5%', period: '30d' },
+            { name: 'Mean Runtime', value: '4.2s', period: 'avg' },
+            { name: 'Action Failure', value: '1.2%', period: '30d' },
+            { name: 'SLA Breach Count', value: '0', period: '30d' }
+        ];
+    }
+
+    generateSparklineSVG(data, color = '#059669') {
+        if (!data || data.length === 0) return '';
+
+        const width = 100;
+        const height = 30;
+        const padding = 2;
+
+        const min = Math.min(...data);
+        const max = Math.max(...data);
+        const range = max - min || 1;
+
+        const points = data.map((value, index) => {
+            const x = (index / (data.length - 1)) * (width - 2 * padding) + padding;
+            const y = height - padding - ((value - min) / range) * (height - 2 * padding);
+            return `${x},${y}`;
+        }).join(' ');
+
+        return `
+            <svg class="sparkline-svg" viewBox="0 0 ${width} ${height}">
+                <polyline
+                    class="sparkline-path"
+                    points="${points}"
+                    stroke="${color}"
+                    fill="none"
+                    stroke-width="2"
+                />
+            </svg>
+        `;
+    }
+
+    // Modal and drawer functions
+    showAnalyticsModal(agentId) {
+        const modal = document.getElementById('analytics-modal');
+        const task = this.autopilotTasks.find(t => t.task_id === agentId);
+
+        if (task) {
+            document.getElementById('analytics-title').textContent = `${task.name} Analytics`;
+            this.loadAnalyticsTab('overview');
+            modal.classList.add('open');
+        }
+    }
+
+    closeAnalyticsModal() {
+        const modal = document.getElementById('analytics-modal');
+        modal.classList.remove('open');
+    }
+
+    showRunHistoryDrawer(agentId) {
+        const drawer = document.getElementById('run-history-drawer');
+        const task = this.autopilotTasks.find(t => t.task_id === agentId);
+
+        if (task) {
+            document.getElementById('run-history-title').textContent = `${task.name} - Run History`;
+            this.loadRunHistory(agentId);
+            drawer.classList.add('open');
+        }
+    }
+
+    closeRunHistoryDrawer() {
+        const drawer = document.getElementById('run-history-drawer');
+        drawer.classList.remove('open');
+    }
+
+    loadAnalyticsTab(tabName) {
+        const content = document.getElementById('analytics-content');
+
+        const tabContent = {
+            overview: `
+                <div style="padding: 20px;">
+                    <h3>Performance Overview</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                            <h4>ROAS Δ</h4>
+                            <div style="font-size: 24px; font-weight: bold; color: #059669;">+12.5%</div>
+                            <div style="font-size: 12px; color: #64748b;">vs last 7 days</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                            <h4>Spend Optimized</h4>
+                            <div style="font-size: 24px; font-weight: bold; color: #3b82f6;">$24.8k</div>
+                            <div style="font-size: 12px; color: #64748b;">reallocated this week</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                            <h4>Cost Savings</h4>
+                            <div style="font-size: 24px; font-weight: bold; color: #059669;">$8.2k</div>
+                            <div style="font-size: 12px; color: #64748b;">waste prevented</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            actions: `
+                <div style="padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>Recent Actions</h3>
+                        <button style="background: #3b82f6; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0;">Timestamp</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0;">Action</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0;">Impact</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9;">Jan 15, 09:00</td>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9;">Shifted $12K from Google Display to TikTok</td>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9; color: #059669;">+$2,400</td>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9; color: #059669;">Success</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9;">Jan 14, 09:00</td>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9;">Promoted creative variant #789</td>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9; color: #059669;">+$1,800</td>
+                                <td style="padding: 12px; border-bottom: 1px solid #f1f5f9; color: #059669;">Success</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            experiments: `
+                <div style="padding: 20px;">
+                    <h3>A/B Test Results</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th style="padding: 12px; text-align: left;">Variant</th>
+                                <th style="padding: 12px; text-align: left;">CTR</th>
+                                <th style="padding: 12px; text-align: left;">CVR</th>
+                                <th style="padding: 12px; text-align: left;">Significance</th>
+                                <th style="padding: 12px; text-align: left;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 12px;">Control</td>
+                                <td style="padding: 12px;">3.2%</td>
+                                <td style="padding: 12px;">4.1%</td>
+                                <td style="padding: 12px;">-</td>
+                                <td style="padding: 12px;">Baseline</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px;">Video A</td>
+                                <td style="padding: 12px;">3.8%</td>
+                                <td style="padding: 12px;">4.9%</td>
+                                <td style="padding: 12px;">95.2%</td>
+                                <td style="padding: 12px; color: #059669;">Winner</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            costs: `
+                <div style="padding: 20px;">
+                    <h3>Cost Analysis & Savings</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                            <h4>Daily Cost</h4>
+                            <div style="font-size: 24px; font-weight: bold;">$142</div>
+                            <div style="font-size: 12px; color: #059669;">-14% vs avg</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                            <h4>Total Savings</h4>
+                            <div style="font-size: 24px; font-weight: bold;">$8.2k</div>
+                            <div style="font-size: 12px; color: #64748b;">this month</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                            <h4>Efficiency Gain</h4>
+                            <div style="font-size: 24px; font-weight: bold;">23%</div>
+                            <div style="font-size: 12px; color: #64748b;">cost reduction</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            reliability: `
+                <div style="padding: 20px;">
+                    <h3>System Reliability</h3>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0;">
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold;">98.5%</div>
+                            <div style="font-size: 12px; color: #64748b;">Run Success Rate</div>
+                            <div style="font-size: 10px; color: #94a3b8;">(30d)</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold;">4.2s</div>
+                            <div style="font-size: 12px; color: #64748b;">Mean Runtime</div>
+                            <div style="font-size: 10px; color: #94a3b8;">(avg)</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold;">1.2%</div>
+                            <div style="font-size: 12px; color: #64748b;">Action Failure</div>
+                            <div style="font-size: 10px; color: #94a3b8;">(30d)</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold;">0</div>
+                            <div style="font-size: 12px; color: #64748b;">SLA Breaches</div>
+                            <div style="font-size: 10px; color: #94a3b8;">(30d)</div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        content.innerHTML = tabContent[tabName] || '<div>Content not available</div>';
+    }
+
+    loadRunHistory(agentId) {
+        const runListItems = document.getElementById('run-list-items');
+
+        const mockRuns = [
+            { id: 'run-001', timestamp: '2024-01-15 09:00:00', status: 'success', duration: '4.2s', actions: 3, impact: '+$2,400' },
+            { id: 'run-002', timestamp: '2024-01-14 09:00:00', status: 'success', duration: '3.8s', actions: 2, impact: '+$1,800' },
+            { id: 'run-003', timestamp: '2024-01-13 09:00:00', status: 'failed', duration: '12.1s', actions: 0, impact: '$0' }
+        ];
+
+        runListItems.innerHTML = mockRuns.map(run => `
+            <div class="run-item" onclick="app.showRunDetail('${run.id}')">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <i class="fas fa-${run.status === 'success' ? 'check-circle' : run.status === 'failed' ? 'times-circle' : 'clock'}"
+                       style="color: ${run.status === 'success' ? '#059669' : run.status === 'failed' ? '#dc2626' : '#3b82f6'};"></i>
+                    <span style="font-size: 12px; color: #64748b;">${new Date(run.timestamp).toLocaleString()}</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 11px;">
+                    <div>
+                        <div style="color: #94a3b8;">Duration</div>
+                        <div>${run.duration}</div>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8;">Actions</div>
+                        <div>${run.actions}</div>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8;">Impact</div>
+                        <div style="color: ${run.status === 'success' ? '#059669' : '#64748b'};">${run.impact}</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    showRunDetail(runId) {
+        document.querySelectorAll('.run-item').forEach(item => item.classList.remove('selected'));
+        event.target.closest('.run-item').classList.add('selected');
+
+        const runDetail = document.getElementById('run-detail');
+        runDetail.innerHTML = `
+            <div style="padding: 20px;">
+                <h3>Run Details - ${runId}</h3>
+                <div style="margin-top: 20px;">
+                    <h4>Execution Summary</h4>
+                    <div style="background: #f8fafc; padding: 16px; border-radius: 8px; margin: 12px 0;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; font-size: 14px;">
+                            <div><strong>Started:</strong> Jan 15, 2024 09:00:00</div>
+                            <div><strong>Duration:</strong> 4.2s</div>
+                            <div><strong>Actions:</strong> 3</div>
+                            <div><strong>Impact:</strong> +$2,400</div>
+                        </div>
+                    </div>
+
+                    <h4>Decisions Made</h4>
+                    <div style="margin: 12px 0;">
+                        <div style="background: #f8fafc; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
+                            <strong>TikTok:</strong> Increase budget <span style="color: #059669;">+12%</span>
+                        </div>
+                        <div style="background: #f8fafc; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
+                            <strong>Google Display:</strong> Decrease budget <span style="color: #dc2626;">-8%</span>
+                        </div>
+                        <div style="background: #f8fafc; padding: 12px; border-radius: 6px;">
+                            <strong>Meta:</strong> Maintain budget <span style="color: #64748b;">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    showSparklineTooltip(e) {
+        // Add sparkline tooltip functionality
+    }
+
+    hideSparklineTooltip(e) {
+        // Hide sparkline tooltip
+    }
 }
 
 // Initialize the app when DOM is loaded
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new MarketingSuperAgentV4();
+    window.app = app; // Make app available globally
     app.handleJourneyActions();
     app.handlePersonalizationActions();
     app.initializeKnowledgeBaseSearch();
+    app.setupAutopilotEnhancements();
     console.log('Marketing SuperAgent v4 loaded successfully');
 });

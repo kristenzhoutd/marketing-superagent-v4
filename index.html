@@ -41,6 +41,10 @@
                             <i class="fas fa-home"></i>
                             <span>Home</span>
                         </div>
+                        <div class="nav-item" id="sidebar-campaigns-btn">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Campaigns</span>
+                        </div>
                         <div class="nav-item" id="sidebar-autopilot-btn">
                             <i class="fas fa-robot"></i>
                             <span>Autopilot</span>
@@ -713,6 +717,10 @@
                         <i class="fas fa-home"></i>
                         <span>Home</span>
                     </div>
+                    <div class="nav-item" id="kb-campaigns-btn">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>Campaigns</span>
+                    </div>
                     <div class="nav-item" id="kb-autopilot-btn">
                         <i class="fas fa-robot"></i>
                         <span>Autopilot</span>
@@ -1026,6 +1034,10 @@
                         <i class="fas fa-home"></i>
                         <span>Home</span>
                     </div>
+                    <div class="nav-item" id="autopilot-campaigns-btn">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>Campaigns</span>
+                    </div>
                     <div class="nav-item active">
                         <i class="fas fa-robot"></i>
                         <span>Autopilot</span>
@@ -1102,16 +1114,279 @@
                                             <i class="fas fa-plus"></i>
                                             <span>Create Task</span>
                                         </button>
-                                        <button class="autopilot-action-btn" id="bulk-actions-btn">
-                                            <i class="fas fa-list"></i>
-                                            <span>Bulk Actions</span>
-                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Autopilot Chat Interface (Hidden by default) -->
+                        <div class="autopilot-chat-interface" id="autopilot-chat-interface" style="display: none;">
+                            <div class="autopilot-chat-container">
+                                <div class="chat-header">
+                                    <h3>Create New Autopilot Task</h3>
+                                    <button class="close-chat-btn" id="close-autopilot-chat">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+
+                                <div class="chat-content">
+                                    <div class="chat-suggestions">
+                                        <h4>Suggested Tasks</h4>
+                                        <div class="chat-suggestions-grid">
+                                            <div class="chat-suggestion-card" data-prompt="Create a new autopilot agent to optimize budget allocation across my campaigns">
+                                                <div class="suggestion-icon budget">
+                                                    <i class="fas fa-chart-pie"></i>
+                                                </div>
+                                                <div class="suggestion-content">
+                                                    <h5>Budget Optimizer</h5>
+                                                    <p>Automatically rebalance spend across platforms</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="chat-suggestion-card" data-prompt="Set up an autopilot agent for creative performance testing and optimization">
+                                                <div class="suggestion-icon creative">
+                                                    <i class="fas fa-palette"></i>
+                                                </div>
+                                                <div class="suggestion-content">
+                                                    <h5>Creative Tester</h5>
+                                                    <p>Test and optimize ad creatives automatically</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="chat-suggestion-card" data-prompt="Create an audience refresh agent for my retargeting campaigns">
+                                                <div class="suggestion-icon audience">
+                                                    <i class="fas fa-users"></i>
+                                                </div>
+                                                <div class="suggestion-content">
+                                                    <h5>Audience Refresher</h5>
+                                                    <p>Keep audiences fresh and engaged</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="chat-suggestion-card" data-prompt="Build a performance monitoring agent with automated alerts">
+                                                <div class="suggestion-icon analytics">
+                                                    <i class="fas fa-chart-line"></i>
+                                                </div>
+                                                <div class="suggestion-content">
+                                                    <h5>Performance Monitor</h5>
+                                                    <p>Track metrics and send smart alerts</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="chat-suggestion-card" data-prompt="Set up a cost watchdog agent to prevent budget overruns">
+                                                <div class="suggestion-icon reporting">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </div>
+                                                <div class="suggestion-content">
+                                                    <h5>Cost Watchdog</h5>
+                                                    <p>Monitor spend and prevent overages</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="chat-suggestion-card" data-prompt="Create a bid optimization agent for better campaign efficiency">
+                                                <div class="suggestion-icon performance">
+                                                    <i class="fas fa-bullseye"></i>
+                                                </div>
+                                                <div class="suggestion-content">
+                                                    <h5>Bid Optimizer</h5>
+                                                    <p>Optimize bids for maximum efficiency</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="chat-input-section">
+                                        <div class="chat-input-container">
+                                            <input type="text" id="autopilot-chat-input" placeholder="Describe the autopilot task you'd like to create..." autocomplete="off">
+                                            <button class="send-button" id="autopilot-chat-send">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="autopilot-content-grid">
+                            <!-- System KPI Section -->
+                            <div class="autopilot-system-kpi-section">
+                                <h3>System KPIs</h3>
+                                <div class="system-kpi-grid">
+                                    <div class="system-kpi-card">
+                                        <div class="kpi-header">
+                                            <div class="kpi-icon reliability">
+                                                <i class="fas fa-shield-check"></i>
+                                            </div>
+                                            <div class="kpi-meta">
+                                                <div class="kpi-value">98.5%</div>
+                                                <div class="kpi-label">Reliability</div>
+                                            </div>
+                                        </div>
+                                        <div class="kpi-details">
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">Success Rate</span>
+                                                <span class="metric-value">98.5%</span>
+                                            </div>
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">SLA Breaches</span>
+                                                <span class="metric-value">1</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="system-kpi-card">
+                                        <div class="kpi-header">
+                                            <div class="kpi-icon performance">
+                                                <i class="fas fa-tachometer-alt"></i>
+                                            </div>
+                                            <div class="kpi-meta">
+                                                <div class="kpi-value">6.8s</div>
+                                                <div class="kpi-label">Performance</div>
+                                            </div>
+                                        </div>
+                                        <div class="kpi-details">
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">Avg Runtime</span>
+                                                <span class="metric-value">6.8s</span>
+                                            </div>
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">Action Failures</span>
+                                                <span class="metric-value">1.0%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="system-kpi-card">
+                                        <div class="kpi-header">
+                                            <div class="kpi-icon efficiency">
+                                                <i class="fas fa-chart-line"></i>
+                                            </div>
+                                            <div class="kpi-meta">
+                                                <div class="kpi-value">$8.2k</div>
+                                                <div class="kpi-label">Cost Efficiency</div>
+                                            </div>
+                                        </div>
+                                        <div class="kpi-details">
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">Savings (7d)</span>
+                                                <span class="metric-value">$8.2k</span>
+                                            </div>
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">ROAS Lift</span>
+                                                <span class="metric-value">+12.5%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="system-kpi-card">
+                                        <div class="kpi-header">
+                                            <div class="kpi-icon activity">
+                                                <i class="fas fa-activity"></i>
+                                            </div>
+                                            <div class="kpi-meta">
+                                                <div class="kpi-value">127</div>
+                                                <div class="kpi-label">Activity</div>
+                                            </div>
+                                        </div>
+                                        <div class="kpi-details">
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">Actions (7d)</span>
+                                                <span class="metric-value">127</span>
+                                            </div>
+                                            <div class="kpi-metric">
+                                                <span class="metric-label">Time Saved</span>
+                                                <span class="metric-value">23h</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI Action Suggestions -->
+                            <div class="ai-actions-section">
+                                <h3>Suggested AI Actions</h3>
+                                <p class="section-description">Quick actions to optimize your campaigns and autopilot performance</p>
+                                <div class="ai-actions-grid">
+                                    <div class="ai-action-card" data-prompt="Analyze budget allocation across my active campaigns and suggest optimizations">
+                                        <div class="action-icon budget">
+                                            <i class="fas fa-chart-pie"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Optimize Budget Allocation</h4>
+                                            <p>Analyze spend distribution and suggest rebalancing opportunities</p>
+                                        </div>
+                                        <div class="action-trigger">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ai-action-card" data-prompt="Review my autopilot agents performance and recommend improvements">
+                                        <div class="action-icon performance">
+                                            <i class="fas fa-robot"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Agent Performance Review</h4>
+                                            <p>Get insights on agent efficiency and optimization recommendations</p>
+                                        </div>
+                                        <div class="action-trigger">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ai-action-card" data-prompt="Create a new autopilot agent to handle creative testing for my campaigns">
+                                        <div class="action-icon creative">
+                                            <i class="fas fa-palette"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Setup Creative Testing Agent</h4>
+                                            <p>Build an agent to automatically test and optimize ad creatives</p>
+                                        </div>
+                                        <div class="action-trigger">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ai-action-card" data-prompt="Analyze my campaign performance trends and identify areas needing attention">
+                                        <div class="action-icon analytics">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Performance Trend Analysis</h4>
+                                            <p>Deep dive into metrics to spot declining performance early</p>
+                                        </div>
+                                        <div class="action-trigger">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ai-action-card" data-prompt="Set up audience refresh automation for my retargeting campaigns">
+                                        <div class="action-icon audience">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Automate Audience Refresh</h4>
+                                            <p>Create smart audience management for optimal reach</p>
+                                        </div>
+                                        <div class="action-trigger">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ai-action-card" data-prompt="Generate a comprehensive report on my Q4 marketing performance">
+                                        <div class="action-icon reporting">
+                                            <i class="fas fa-file-chart"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Generate Performance Report</h4>
+                                            <p>Create detailed analytics report with actionable insights</p>
+                                        </div>
+                                        <div class="action-trigger">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Task Overview Cards -->
                             <div class="autopilot-overview-section">
                                 <h3>Task Overview</h3>
@@ -1180,6 +1455,190 @@
                                 <div class="autopilot-task-list" id="autopilot-task-list">
                                     <!-- Tasks will be dynamically populated -->
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaigns Page (Hidden by default) -->
+        <div class="campaigns-page" id="campaigns-page" style="display: none;">
+            <!-- Left Sidebar Navigation for Campaigns -->
+            <div class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-item" id="campaigns-back-to-home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="nav-item active">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>Campaigns</span>
+                    </div>
+                    <div class="nav-item" id="campaigns-autopilot-btn">
+                        <i class="fas fa-robot"></i>
+                        <span>Autopilot</span>
+                    </div>
+                    <div class="nav-item" id="campaigns-knowledge-btn">
+                        <i class="fas fa-book"></i>
+                        <span>Knowledge Base</span>
+                    </div>
+                    <div class="nav-item" id="campaigns-history-btn">
+                        <i class="fas fa-history"></i>
+                        <span>History</span>
+                    </div>
+                </div>
+
+                <div class="agent-status-sidebar">
+                    <div class="status-header">
+                        <i class="fas fa-robot"></i>
+                        <span>Specialist Agents</span>
+                    </div>
+                    <div class="agent-indicators">
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Research Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Creative Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Performance Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Audience Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Journey Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Historical Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Personalization Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Analytics Agent</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Campaigns Content -->
+            <div class="campaigns-main-content">
+                <div class="campaigns-container">
+                    <!-- Campaigns Home -->
+                    <div class="campaigns-home" id="campaigns-home">
+                        <!-- Page Header with Actions -->
+                        <div class="campaigns-page-header">
+                            <div class="campaigns-header-content">
+                                <h1>Campaigns</h1>
+                                <p>Manage, monitor, and optimize your marketing campaigns across all channels</p>
+                            </div>
+
+                            <!-- Top Actions -->
+                            <div class="campaigns-top-actions">
+                                <div class="campaigns-actions-section">
+                                    <div class="action-buttons">
+                                        <button class="campaigns-action-btn primary" id="create-campaign-btn">
+                                            <i class="fas fa-plus"></i>
+                                            <span>Create Campaign</span>
+                                        </button>
+                                        <button class="campaigns-action-btn" id="import-campaign-btn">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Import</span>
+                                        </button>
+                                        <button class="campaigns-action-btn" id="campaign-templates-btn">
+                                            <i class="fas fa-layer-group"></i>
+                                            <span>Templates</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Campaign Stats Overview -->
+                        <div class="campaigns-overview-section">
+                            <h3>Campaign Overview</h3>
+                            <div class="campaigns-stats-grid">
+                                <div class="campaigns-stat-card">
+                                    <div class="stat-icon active-campaigns">
+                                        <i class="fas fa-play-circle"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value">12</div>
+                                        <div class="stat-label">Active Campaigns</div>
+                                        <div class="stat-change positive">+3 this week</div>
+                                    </div>
+                                </div>
+
+                                <div class="campaigns-stat-card">
+                                    <div class="stat-icon total-spend">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value">$47.2k</div>
+                                        <div class="stat-label">Total Spend (30d)</div>
+                                        <div class="stat-change positive">+12.5%</div>
+                                    </div>
+                                </div>
+
+                                <div class="campaigns-stat-card">
+                                    <div class="stat-icon avg-roas">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value">4.8x</div>
+                                        <div class="stat-label">Avg ROAS</div>
+                                        <div class="stat-change positive">+0.3x</div>
+                                    </div>
+                                </div>
+
+                                <div class="campaigns-stat-card">
+                                    <div class="stat-icon conversions">
+                                        <i class="fas fa-bullseye"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value">1,284</div>
+                                        <div class="stat-label">Conversions</div>
+                                        <div class="stat-change positive">+23.1%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Campaigns List Section -->
+                        <div class="campaigns-list-section">
+                            <div class="section-header">
+                                <h3>All Campaigns</h3>
+                                <div class="campaigns-filters">
+                                    <select id="campaign-status-filter" class="filter-select">
+                                        <option value="all">All Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="paused">Paused</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="draft">Draft</option>
+                                    </select>
+                                    <select id="campaign-platform-filter" class="filter-select">
+                                        <option value="all">All Platforms</option>
+                                        <option value="google">Google Ads</option>
+                                        <option value="meta">Meta</option>
+                                        <option value="tiktok">TikTok</option>
+                                        <option value="linkedin">LinkedIn</option>
+                                        <option value="email">Email</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="campaigns-list" id="campaigns-list">
+                                <!-- Campaigns will be dynamically populated -->
                             </div>
                         </div>
                     </div>
