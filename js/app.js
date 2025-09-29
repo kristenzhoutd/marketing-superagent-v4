@@ -1827,7 +1827,17 @@ class MarketingSuperAgentV4 {
 
         console.log('🔗 Appending message to chat...'); // Debug log
         chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Scroll behavior: For agent messages, scroll to show the beginning of the message
+        // For user messages, scroll to bottom as usual
+        if (sender === 'agent') {
+            // Scroll to show the beginning of the agent message
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            // For user messages, scroll to bottom as before
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
         console.log('✅ Message appended successfully'); // Debug log
 
         this.messageHistory.push({
