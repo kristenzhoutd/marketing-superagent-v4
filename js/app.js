@@ -2170,6 +2170,9 @@ class MarketingSuperAgentV4 {
         // Store current agents for this session
         this.currentAgents = activeAgents;
 
+        // Clear previous thought processes for clean state
+        this.currentThoughtProcesses = [];
+
         // Simulate agent progress with v3 style
         this.simulateAgentProgressV3(activeAgents, timestamp, userMessage);
     }
@@ -2218,7 +2221,26 @@ class MarketingSuperAgentV4 {
         const maxCompletionTime = (agents.length) * 500 + 1500; // A bit after the last agent completes
         setTimeout(() => {
             this.updateProgressHeaderOnCompletion(timestamp, agents.length);
+            // Generate thought processes for all agents that actually ran
+            this.generateThoughtProcessesForCurrentAgents(userMessage);
         }, maxCompletionTime);
+    }
+
+    generateThoughtProcessesForCurrentAgents(userMessage = '') {
+        // Generate thought processes only for agents that actually ran
+        if (!this.currentAgents || this.currentAgents.length === 0) {
+            return;
+        }
+
+        // Clear any existing thought processes first
+        this.currentThoughtProcesses = [];
+
+        // Generate thought processes for each agent that ran
+        this.currentAgents.forEach((agentName, index) => {
+            setTimeout(() => {
+                this.addAgentReasoningToResponse(agentName, userMessage);
+            }, index * 300); // Stagger them for natural flow
+        });
     }
 
     showAgentThoughtProcess(agentName, itemId, index, userMessage = '') {
@@ -2530,6 +2552,54 @@ class MarketingSuperAgentV4 {
                 'google': 'Budget allocation optimization for Google Ads indicates 38% allocation optimal for search + shopping campaigns targeting high-intent keywords.',
                 'meta': 'Meta platform budget modeling suggests 32% allocation for video ads and retargeting achieves optimal audience engagement and conversion efficiency.',
                 'default': 'Budget optimization analysis recommends strategic reallocation across 7 channels with mathematical modeling projecting 31% ROI improvement and enhanced performance scalability.'
+            },
+            'Creative Agent': {
+                'instagram': 'Creative analysis shows Instagram carousel formats achieve 42% higher engagement with bold typography and 3-color palettes performing optimally for brand consistency.',
+                'video': 'Video creative research indicates 6-second hooks capture 73% more attention, with emotional storytelling frameworks outperforming product-focused content by 35%.',
+                'assets': 'Creative asset analysis reveals multi-variant testing across 3-5 concept directions optimizes campaign effectiveness while reducing creative fatigue through systematic rotation.',
+                'default': 'Creative performance modeling suggests strategic creative variations with A/B testing frameworks to optimize engagement and conversion across all touchpoints.'
+            },
+            'Research Agent': {
+                'competitor': 'Competitive analysis reveals 3 key market gaps: pricing strategy opportunities, underserved demographic segments, and timing advantages for promotional campaigns.',
+                'market': 'Market research indicates strong growth opportunities in emerging consumer segments, with data supporting a multi-channel approach for maximum reach and engagement.',
+                'analysis': 'Research analysis identifies market positioning opportunities with competitive intelligence supporting strategic differentiation and audience targeting refinements.',
+                'default': 'Market research indicates strategic opportunities for audience expansion and competitive positioning with data-driven insights supporting campaign optimization.'
+            },
+            'Audience Agent': {
+                'segments': 'Audience segmentation identifies 4 high-value behavioral segments representing 73% of revenue potential, with personalized messaging increasing relevance scores by 45%.',
+                'targeting': 'Targeting analysis reveals precision audience strategies that improve conversion rates by 31% through behavioral pattern recognition and demographic optimization.',
+                'persona': 'Audience persona analysis indicates 3 primary customer archetypes with distinct engagement preferences and purchasing behaviors for tailored campaign approaches.',
+                'default': 'Audience analysis reveals untapped segments with 40% higher lifetime value potential and specific messaging preferences that align with strategic positioning.'
+            },
+            'Performance Agent': {
+                'optimization': 'Performance analysis shows conversion rate optimization opportunities across 4 funnel stages, with landing page improvements projected to increase conversions by 23%.',
+                'analytics': 'Analytics insights reveal optimization opportunities that could improve campaign efficiency by 18-25% through strategic budget reallocation and targeting refinements.',
+                'tracking': 'Performance tracking analysis identifies key measurement frameworks and attribution models to optimize campaign effectiveness and ROI measurement accuracy.',
+                'default': 'Performance data analysis reveals optimization opportunities that could improve campaign efficiency by 18-25% through strategic refinements and data-driven adjustments.'
+            },
+            'Journey Agent': {
+                'flow': 'Journey mapping analysis identifies 7 key touchpoints with personalization opportunities that can increase conversion rates by an average of 31% through optimized sequencing.',
+                'automation': 'Customer journey automation reveals strategic touchpoint optimization opportunities with behavioral triggers increasing engagement rates by 45%.',
+                'touchpoints': 'Journey touchpoint analysis shows optimal messaging sequence timing can improve conversion flows by 28% through personalized engagement strategies.',
+                'default': 'Customer journey mapping identifies optimization opportunities across touchpoints with personalization strategies increasing conversion rates by an average of 31%.'
+            },
+            'Analytics Agent': {
+                'insights': 'Analytics framework reveals performance patterns and optimization opportunities with statistical modeling showing 27% improvement potential through data-driven adjustments.',
+                'metrics': 'Metrics analysis identifies key performance indicators and measurement strategies that optimize campaign tracking and attribution for enhanced decision-making.',
+                'reporting': 'Analytics reporting framework provides comprehensive performance insights with predictive modeling capabilities for proactive campaign optimization.',
+                'default': 'Analytics insights reveal comprehensive performance optimization opportunities with statistical modeling projecting 27% improvement through strategic data-driven adjustments.'
+            },
+            'Personalization Agent': {
+                'targeting': 'Personalization analysis reveals dynamic content strategies with behavioral triggers and customer preference mapping increasing engagement by 52%.',
+                'content': 'Content personalization framework shows individualized messaging approaches improving conversion rates by 38% through preference-based content delivery.',
+                'experience': 'Experience personalization strategies identify optimal user journey customization opportunities with behavioral data driving 41% engagement improvements.',
+                'default': 'Personalization analysis reveals dynamic content strategies designed with behavioral triggers and customer preference mapping for enhanced engagement effectiveness.'
+            },
+            'Historical Agent': {
+                'performance': 'Historical performance analysis reveals seasonal trends and cyclical behaviors with proven strategies that have consistently delivered 25-40% above-benchmark results.',
+                'trends': 'Historical trend analysis shows optimal timing and promotional strategies from past campaigns with success factors for repeatable performance improvements.',
+                'learnings': 'Historical learnings analysis identifies key success factors and failure indicators from past campaigns to inform current strategy optimization.',
+                'default': 'Historical performance patterns indicate seasonal trends and messaging strategies that have consistently delivered 25-40% above-benchmark results.'
             }
         };
 
@@ -2547,9 +2617,12 @@ class MarketingSuperAgentV4 {
         }
 
         // Add reasoning insight to output area thought process section
-        setTimeout(() => {
-            this.addThoughtProcessToOutput(agentName, insight, userMessage);
-        }, Math.random() * 2000 + 500); // Stagger insights naturally
+        // Only add if this agent actually ran in the current session
+        if (this.currentAgents && this.currentAgents.includes(agentName)) {
+            setTimeout(() => {
+                this.addThoughtProcessToOutput(agentName, insight, userMessage);
+            }, Math.random() * 2000 + 500); // Stagger insights naturally
+        }
     }
 
     addThoughtProcessSection(agentName, insight, userMessage) {
@@ -2861,15 +2934,18 @@ class MarketingSuperAgentV4 {
             this.currentThoughtProcesses = [];
         }
 
-        this.currentThoughtProcesses.push({
-            agentName,
-            insight,
-            userMessage,
-            framework: this.getAnalysisFramework(agentName, userMessage)
-        });
+        // Only add thought process if this agent actually ran
+        if (this.currentAgents && this.currentAgents.includes(agentName)) {
+            this.currentThoughtProcesses.push({
+                agentName,
+                insight,
+                userMessage,
+                framework: this.getAnalysisFramework(agentName, userMessage)
+            });
 
-        // Update the output area with thought processes
-        this.updateOutputThoughtProcesses();
+            // Update the output area with thought processes
+            this.updateOutputThoughtProcesses();
+        }
     }
 
     updateOutputThoughtProcesses() {
@@ -2949,7 +3025,7 @@ class MarketingSuperAgentV4 {
                     <div class="thought-process-header" onclick="app.toggleOutputThoughtProcess('${thoughtProcessId}')" style="padding: var(--space-sm) var(--space-md); cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-bottom: var(--border);">
                         <div style="display: flex; align-items: center; gap: var(--space-xs);">
                             <i class="fas fa-microchip" style="color: var(--accent-purple); font-size: 14px;"></i>
-                            <span style="font-weight: 600; color: var(--text-primary); font-size: var(--font-base);">${process.agentName} Agent</span>
+                            <span style="font-weight: 600; color: var(--text-primary); font-size: var(--font-base);">${process.agentName.replace(/ Agent$/, '')} Agent</span>
                         </div>
                         <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast); transform: rotate(180deg);"></i>
                     </div>
