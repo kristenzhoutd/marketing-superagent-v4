@@ -2505,6 +2505,24 @@ class MarketingSuperAgentV4 {
                 'strategy': 'Strategic synthesis recommends a phased approach prioritizing high-impact, low-risk initiatives first, with projected 32% improvement in overall marketing efficiency.',
                 'optimize': 'Optimization framework balances short-term performance gains with long-term brand building, projecting 28% improvement in customer lifetime value.',
                 'default': 'Strategic analysis recommends integrated approach across all channels with predictive modeling showing 35% improvement in campaign effectiveness and ROI.'
+            },
+            'Deep Research Agent': {
+                'budget': 'Market intelligence reveals optimal budget allocation opportunities based on competitive analysis and emerging digital advertising trends, with video content showing 73% growth in effectiveness.',
+                'google': 'Search advertising landscape analysis indicates high-intent keyword opportunities with 40% lower competition in premium inventory segments.',
+                'meta': 'Social platform analysis shows audience overlap optimization can reduce acquisition costs by 22% while maintaining reach objectives.',
+                'default': 'Comprehensive market research indicates strategic budget reallocation opportunities with projected 31% ROI improvement through data-driven channel optimization.'
+            },
+            'Historical Performance Agent': {
+                'budget': 'Historical performance patterns show seasonal budget allocation strategies yielding 45% higher conversion rates, with mobile engagement peaking during evening hours.',
+                'allocation': 'Past campaign data reveals optimal 38% search, 32% social, 18% display, 12% testing allocation produces highest sustained ROAS across quarterly cycles.',
+                'optimize': 'Performance trend analysis indicates budget reallocation timing within first 3 weeks of campaign launch maximizes scaling opportunities and efficiency gains.',
+                'default': 'Historical analysis reveals budget optimization opportunities with proven 23% performance improvement through strategic channel reallocation and timing adjustments.'
+            },
+            'Budget Optimization Agent': {
+                'allocation': 'AI-driven allocation modeling processes 24M data points to recommend optimal budget distribution with 95% confidence score and 31% projected ROI lift.',
+                'google': 'Budget allocation optimization for Google Ads indicates 38% allocation optimal for search + shopping campaigns targeting high-intent keywords.',
+                'meta': 'Meta platform budget modeling suggests 32% allocation for video ads and retargeting achieves optimal audience engagement and conversion efficiency.',
+                'default': 'Budget optimization analysis recommends strategic reallocation across 7 channels with mathematical modeling projecting 31% ROI improvement and enhanced performance scalability.'
             }
         };
 
