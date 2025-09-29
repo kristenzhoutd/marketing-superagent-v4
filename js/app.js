@@ -2124,7 +2124,7 @@ class MarketingSuperAgentV4 {
                                     <i class="${agent.icon}"></i>
                                 </div>
                                 <div class="agent-progress-content">
-                                    <div class="agent-progress-name">${agentName} Agent</div>
+                                    <div class="agent-progress-name">${agentName}</div>
                                     <div class="agent-progress-task">${agent.task}</div>
                                 </div>
                                 <div class="agent-status-indicator pending">
@@ -2514,7 +2514,7 @@ class MarketingSuperAgentV4 {
                 <div class="thought-process-header" onclick="app.toggleThoughtProcess('${thoughtProcessId}')" style="padding: var(--space-sm) var(--space-md); cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-bottom: var(--border);">
                     <div style="display: flex; align-items: center; gap: var(--space-xs);">
                         <i class="fas fa-microchip" style="color: var(--accent-purple);"></i>
-                        <span style="font-weight: 600; color: var(--text-primary); font-size: var(--label);">${agentName} Agent - Thought Process</span>
+                        <span style="font-weight: 600; color: var(--text-primary); font-size: var(--label);">${agentName} - Thought Process</span>
                     </div>
                     <i class="fas fa-chevron-down thought-process-chevron" id="chevron-${thoughtProcessId}" style="color: var(--text-secondary); font-size: 10px; transition: transform var(--transition-fast); transform: rotate(180deg);"></i>
                 </div>
