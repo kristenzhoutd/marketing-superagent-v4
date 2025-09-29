@@ -10325,89 +10325,9 @@ class MarketingSuperAgentV4 {
             console.error('Create task button not found!');
         }
 
-        // Close chat button handler
-        const closeChatBtn = document.getElementById('close-autopilot-chat');
-        if (closeChatBtn) {
-            closeChatBtn.addEventListener('click', () => {
-                this.hideAutopilotChat();
-            });
-        }
-
-        // Chat suggestion cards handlers
-        const suggestionCards = document.querySelectorAll('.chat-suggestion-card');
-        suggestionCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const prompt = card.getAttribute('data-prompt');
-                if (prompt) {
-                    const chatInput = document.getElementById('autopilot-chat-input');
-                    if (chatInput) {
-                        chatInput.value = prompt;
-                        chatInput.focus();
-                    }
-                }
-            });
-        });
-
-        // Chat input send handler
-        const chatSendBtn = document.getElementById('autopilot-chat-send');
-        const chatInput = document.getElementById('autopilot-chat-input');
-
-        if (chatSendBtn && chatInput) {
-            const handleSend = () => {
-                const prompt = chatInput.value.trim();
-                if (prompt) {
-                    this.hideAutopilotChat();
-                    this.navigateToRoute('home');
-
-                    setTimeout(() => {
-                        const mainInput = document.getElementById('main-input');
-                        if (mainInput) {
-                            mainInput.value = prompt;
-                            mainInput.focus();
-                            this.showNotification('Task prompt loaded - press Enter to start chat', 'info');
-                        }
-                    }, 200);
-                }
-            };
-
-            chatSendBtn.addEventListener('click', handleSend);
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    handleSend();
-                }
-            });
-        }
-
-        // Close on background click
-        const chatInterface = document.getElementById('autopilot-chat-interface');
-        if (chatInterface) {
-            chatInterface.addEventListener('click', (e) => {
-                if (e.target === chatInterface) {
-                    this.hideAutopilotChat();
-                }
-            });
-        }
+        // Note: Old modal functionality removed - now using main chat interface
     }
 
-    showAutopilotChat() {
-        const chatInterface = document.getElementById('autopilot-chat-interface');
-        if (chatInterface) {
-            chatInterface.style.display = 'flex';
-            // Clear previous input
-            const chatInput = document.getElementById('autopilot-chat-input');
-            if (chatInput) {
-                chatInput.value = '';
-                setTimeout(() => chatInput.focus(), 100);
-            }
-        }
-    }
-
-    hideAutopilotChat() {
-        const chatInterface = document.getElementById('autopilot-chat-interface');
-        if (chatInterface) {
-            chatInterface.style.display = 'none';
-        }
-    }
 
     showCampaignsPage() {
         console.log('showCampaignsPage called');
