@@ -870,7 +870,7 @@ class MarketingSuperAgentV4 {
             'setup-journey': ['Journey Agent', 'Audience Agent', 'Personalization Agent'],
             'generate-creative': ['Creative Agent', 'Research Agent', 'Audience Agent'],
             'audience-segments': ['Audience Agent', 'Analytics Agent', 'Research Agent'],
-            'budget-allocation': ['Performance Agent', 'Analytics Agent', 'Historical Agent'],
+            'budget-allocation': ['Deep Research Agent', 'Historical Performance Agent', 'Budget Optimization Agent'],
             'ab-test': ['Creative Agent', 'Performance Agent', 'Analytics Agent'],
             'competitor-analysis': ['Research Agent', 'Performance Agent', 'Historical Agent'],
             'content-calendar': ['Creative Agent', 'Research Agent', 'Journey Agent']
@@ -2108,7 +2108,9 @@ class MarketingSuperAgentV4 {
             'Historical Agent': { icon: 'fas fa-history', color: '#6366f1', task: 'Analyzing past campaign learnings' },
             'AI Decisioning': { icon: 'fas fa-microchip', color: '#ef4444', task: 'Processing strategic recommendations' },
             'Analytics Agent': { icon: 'fas fa-chart-line', color: '#2563eb', task: 'Analyzing data and metrics' },
-            'Personalization Agent': { icon: 'fas fa-user-edit', color: '#9256d9', task: 'Optimizing personalized experiences' }
+            'Personalization Agent': { icon: 'fas fa-user-edit', color: '#9256d9', task: 'Optimizing personalized experiences' },
+            'Budget Optimization Agent': { icon: 'fas fa-calculator', color: '#059669', task: 'Optimizing budget allocation and ROI' },
+            'Historical Performance Agent': { icon: 'fas fa-chart-bar', color: '#7c3aed', task: 'Analyzing historical campaign performance' }
         };
 
         // Generate a unique timestamp for this progress session
@@ -4497,32 +4499,265 @@ class MarketingSuperAgentV4 {
     }
 
     generateBudgetAllocationOutput(context, userMessage) {
+        const totalBudget = context.total_budget || '$50,000';
+        const timeframe = context.timeframe || 'Q4 2024';
+
         return `
-            <div class="task-specific-output">
-                <div class="output-section">
-                    <h3>Budget Allocation Optimization</h3>
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-chart-pie" style="color: var(--accent-primary);"></i> Intelligent Budget Allocation</h2>
+                        <p class="output-subtitle">AI-optimized budget distribution across channels for maximum ROI in ${timeframe}</p>
+                    </div>
+                    <div class="output-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">+31%</div>
+                            <div class="stat-label">Projected ROI Lift</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">7</div>
+                            <div class="stat-label">Channels Analyzed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">24M</div>
+                            <div class="stat-label">Data Points</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Confidence Score</div>
+                        </div>
+                    </div>
+                </div>
 
-                    <h4>Performance Agent Analysis</h4>
-                    <p>Channel performance analysis reveals optimal budget distribution for maximum ROI across your marketing mix.</p>
+                <!-- Agent Analysis Cards -->
+                <div class="agent-analysis-section">
+                    <div class="agent-analysis-card research">
+                        <div class="agent-card-header">
+                            <div class="agent-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h4>Deep Research Agent</h4>
+                        </div>
+                        <div class="agent-analysis-content">
+                            <h5>Market Intelligence & Opportunity Analysis</h5>
+                            <div class="research-insights">
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-chart-line"></i></div>
+                                    <div class="insight-content">
+                                        <strong>Market Growth Trends:</strong> Digital advertising spending increased 18% YoY, with video and social commerce driving 73% of new budget allocation
+                                    </div>
+                                </div>
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-target"></i></div>
+                                    <div class="insight-content">
+                                        <strong>Competitive Analysis:</strong> Top competitors allocating 40% to programmatic display, 35% to search, and 25% to social platforms
+                                    </div>
+                                </div>
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-users"></i></div>
+                                    <div class="insight-content">
+                                        <strong>Audience Behavior:</strong> Target demographics showing 65% mobile engagement, 23% desktop, 12% tablet across touchpoints
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <h4>Recommended Budget Allocation</h4>
-                    <ul>
-                        <li><strong>Google Ads:</strong> ${context.google_budget || '35%'} - High-intent search traffic</li>
-                        <li><strong>Meta Platforms:</strong> ${context.meta_budget || '30%'} - Social engagement and retargeting</li>
-                        <li><strong>LinkedIn:</strong> ${context.linkedin_budget || '20%'} - B2B targeting and lead generation</li>
-                        <li><strong>Other Channels:</strong> ${context.other_budget || '15%'} - Testing and diversification</li>
-                    </ul>
+                    <div class="agent-analysis-card performance">
+                        <div class="agent-card-header">
+                            <div class="agent-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h4>Historical Performance Agent</h4>
+                        </div>
+                        <div class="agent-analysis-content">
+                            <h5>Performance Pattern Analysis & Learnings</h5>
+                            <div class="performance-metrics">
+                                <div class="metric-grid">
+                                    <div class="metric-card">
+                                        <div class="metric-value">4.2x</div>
+                                        <div class="metric-label">Best Channel ROAS</div>
+                                        <div class="metric-detail">Google Ads (Search)</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-value">2.8x</div>
+                                        <div class="metric-label">Avg Cross-Channel</div>
+                                        <div class="metric-detail">Last 12 months</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-value">34%</div>
+                                        <div class="metric-label">Video CTR Lift</div>
+                                        <div class="metric-detail">vs Static Ads</div>
+                                    </div>
+                                </div>
+                                <div class="seasonal-trends">
+                                    <h6>Seasonal Performance Insights</h6>
+                                    <ul>
+                                        <li><strong>Q4 Peak:</strong> 45% higher conversion rates, optimal for brand awareness campaigns</li>
+                                        <li><strong>Mobile Surge:</strong> Evening hours (6-9 PM) show 67% higher engagement rates</li>
+                                        <li><strong>Creative Fatigue:</strong> Ad refresh needed every 21 days to maintain performance</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <h4>Analytics Agent Analysis</h4>
-                    <p>ROI modeling suggests ${context.roi_improvement || '23% performance increase'} with optimized allocation strategy.</p>
+                    <div class="agent-analysis-card creative">
+                        <div class="agent-card-header">
+                            <div class="agent-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <h4>Budget Optimization Agent</h4>
+                        </div>
+                        <div class="agent-analysis-content">
+                            <h5>AI-Driven Allocation Strategy</h5>
+                            <div class="allocation-strategy">
+                                <div class="budget-chart">
+                                    <div class="budget-item primary">
+                                        <div class="budget-bar" style="width: 38%;">
+                                            <span class="budget-percentage">38%</span>
+                                        </div>
+                                        <div class="budget-details">
+                                            <strong>Google Ads</strong> - $${(parseFloat(totalBudget.replace(/[^0-9.]/g, '')) * 0.38 / 1000).toFixed(0)}K
+                                            <small>Search + Shopping campaigns, high-intent keywords</small>
+                                        </div>
+                                    </div>
+                                    <div class="budget-item secondary">
+                                        <div class="budget-bar" style="width: 32%;">
+                                            <span class="budget-percentage">32%</span>
+                                        </div>
+                                        <div class="budget-details">
+                                            <strong>Meta Platforms</strong> - $${(parseFloat(totalBudget.replace(/[^0-9.]/g, '')) * 0.32 / 1000).toFixed(0)}K
+                                            <small>Video ads, retargeting, lookalike audiences</small>
+                                        </div>
+                                    </div>
+                                    <div class="budget-item tertiary">
+                                        <div class="budget-bar" style="width: 18%;">
+                                            <span class="budget-percentage">18%</span>
+                                        </div>
+                                        <div class="budget-details">
+                                            <strong>Programmatic Display</strong> - $${(parseFloat(totalBudget.replace(/[^0-9.]/g, '')) * 0.18 / 1000).toFixed(0)}K
+                                            <small>Premium inventory, brand safety, viewability</small>
+                                        </div>
+                                    </div>
+                                    <div class="budget-item quaternary">
+                                        <div class="budget-bar" style="width: 12%;">
+                                            <span class="budget-percentage">12%</span>
+                                        </div>
+                                        <div class="budget-details">
+                                            <strong>Testing & Innovation</strong> - $${(parseFloat(totalBudget.replace(/[^0-9.]/g, '')) * 0.12 / 1000).toFixed(0)}K
+                                            <small>TikTok, Connected TV, emerging platforms</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <h4>Historical Agent Analysis</h4>
-                    <ul>
-                        <li>Historical performance data supports reallocation strategy</li>
-                        <li>Seasonal budget adjustment recommendations</li>
-                        <li>Competitive spending insights and opportunities</li>
-                        <li>Long-term budget scaling projections</li>
-                    </ul>
+                <!-- ROI Projection Section -->
+                <div class="roi-projection-section">
+                    <h3><i class="fas fa-rocket"></i> Performance Projections</h3>
+                    <div class="projection-grid">
+                        <div class="projection-card">
+                            <div class="projection-header">
+                                <h4>Expected ROAS</h4>
+                                <div class="projection-value">3.4x</div>
+                            </div>
+                            <div class="projection-details">
+                                <div class="projection-change positive">+31% vs current allocation</div>
+                                <div class="projection-confidence">95% confidence interval: 2.8x - 4.1x</div>
+                            </div>
+                        </div>
+                        <div class="projection-card">
+                            <div class="projection-header">
+                                <h4>Reach Estimate</h4>
+                                <div class="projection-value">2.3M</div>
+                            </div>
+                            <div class="projection-details">
+                                <div class="projection-change positive">+18% unique users</div>
+                                <div class="projection-confidence">Frequency cap: 4.2 impressions/user</div>
+                            </div>
+                        </div>
+                        <div class="projection-card">
+                            <div class="projection-header">
+                                <h4>Conversion Lift</h4>
+                                <div class="projection-value">+27%</div>
+                            </div>
+                            <div class="projection-details">
+                                <div class="projection-change positive">Cross-channel attribution</div>
+                                <div class="projection-confidence">View-through + click-through</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation Roadmap -->
+                <div class="implementation-section">
+                    <h3><i class="fas fa-route"></i> Implementation Roadmap</h3>
+                    <div class="implementation-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker week-1"></div>
+                            <div class="timeline-content">
+                                <h4>Week 1: Foundation Setup</h4>
+                                <ul>
+                                    <li>Account restructuring and campaign migration</li>
+                                    <li>Budget reallocation across platforms</li>
+                                    <li>Enhanced tracking and attribution setup</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker week-2"></div>
+                            <div class="timeline-content">
+                                <h4>Week 2-3: Launch & Monitor</h4>
+                                <ul>
+                                    <li>Gradual budget shift to high-performing channels</li>
+                                    <li>Daily performance monitoring and adjustments</li>
+                                    <li>Creative rotation and messaging optimization</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker week-4"></div>
+                            <div class="timeline-content">
+                                <h4>Week 4+: Optimize & Scale</h4>
+                                <ul>
+                                    <li>Performance-based budget rebalancing</li>
+                                    <li>Audience expansion and lookalike scaling</li>
+                                    <li>Cross-channel attribution analysis</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Assessment -->
+                <div class="risk-assessment-section">
+                    <h3><i class="fas fa-shield-alt"></i> Risk Assessment & Mitigation</h3>
+                    <div class="risk-grid">
+                        <div class="risk-item low-risk">
+                            <div class="risk-level">Low Risk</div>
+                            <div class="risk-content">
+                                <h4>Platform Algorithm Changes</h4>
+                                <p>Diversified allocation reduces dependency risk. Contingency: 15% emergency reallocation buffer.</p>
+                            </div>
+                        </div>
+                        <div class="risk-item medium-risk">
+                            <div class="risk-level">Medium Risk</div>
+                            <div class="risk-content">
+                                <h4>Seasonal Performance Variation</h4>
+                                <p>Historical data shows ±12% seasonal variance. Mitigation: Dynamic budget caps and automated rules.</p>
+                            </div>
+                        </div>
+                        <div class="risk-item low-risk">
+                            <div class="risk-level">Low Risk</div>
+                            <div class="risk-content">
+                                <h4>Creative Fatigue</h4>
+                                <p>Proactive creative refresh schedule every 3 weeks. Automated A/B testing maintains performance.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
