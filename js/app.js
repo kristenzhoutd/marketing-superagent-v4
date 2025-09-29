@@ -215,6 +215,7 @@ class MarketingSuperAgentV4 {
             }
             if (e.target.closest('#create-task-btn')) {
                 console.log('Create task button clicked via event delegation');
+                alert('Create task button clicked! Check console for more details.');
                 e.preventDefault();
                 e.stopPropagation();
                 this.showAutopilotTaskCreation();
@@ -10344,22 +10345,34 @@ class MarketingSuperAgentV4 {
 
     showAutopilotTaskCreation() {
         console.log('=== showAutopilotTaskCreation called ===');
+        alert('showAutopilotTaskCreation method called!');
 
-        // Set context for autopilot task creation
-        this.currentTask = 'autopilot-task-creation';
-        this.currentTaskAgents = ['Research Agent', 'Creative Agent', 'Performance Agent', 'Audience Agent'];
-        this.currentSuiteTitle = 'Autopilot Task Creation';
+        try {
+            // Set context for autopilot task creation
+            this.currentTask = 'autopilot-task-creation';
+            this.currentTaskAgents = ['Research Agent', 'Creative Agent', 'Performance Agent', 'Audience Agent'];
+            this.currentSuiteTitle = 'Autopilot Task Creation';
+            console.log('Context set successfully');
 
-        // Transition to working interface
-        this.showWorkingInterface();
+            // Transition to working interface
+            console.log('About to call showWorkingInterface()');
+            this.showWorkingInterface();
+            console.log('showWorkingInterface() completed');
 
-        // Add initial message to chat
-        this.addMessage('I\'d like to create a new autopilot task. What would you like me to help you build?', 'user');
+            // Add initial message to chat
+            console.log('About to add initial message');
+            this.addMessage('I\'d like to create a new autopilot task. What would you like me to help you build?', 'user');
+            console.log('Initial message added');
 
-        // Show the 6 AI action suggestions in the chat
-        setTimeout(() => {
-            this.showAutopilotSuggestions();
-        }, 500);
+            // Show the 6 AI action suggestions in the chat
+            setTimeout(() => {
+                console.log('About to show autopilot suggestions');
+                this.showAutopilotSuggestions();
+            }, 500);
+        } catch (error) {
+            console.error('Error in showAutopilotTaskCreation:', error);
+            alert('Error in showAutopilotTaskCreation: ' + error.message);
+        }
     }
 
     showAutopilotSuggestions() {
