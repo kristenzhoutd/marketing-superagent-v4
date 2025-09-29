@@ -269,6 +269,17 @@ class MarketingSuperAgentV4 {
     getExamplePromptConfig(prompt) {
         const lowerPrompt = prompt.toLowerCase();
 
+        // Budget Allocation prompts (highest priority to avoid conflicts)
+        if (lowerPrompt.includes('budget allocation') ||
+            (lowerPrompt.includes('optimize') && lowerPrompt.includes('budget') && (lowerPrompt.includes('google') || lowerPrompt.includes('meta') || lowerPrompt.includes('linkedin')))) {
+            return {
+                task: 'budget-allocation',
+                agents: ['Deep Research Agent', 'Historical Performance Agent', 'Budget Optimization Agent'],
+                suiteTitle: 'Paid Media AI Suite',
+                messageType: 'paid-media'
+            };
+        }
+
         // Creative & Asset Generation prompts
         if (lowerPrompt.includes('creative assets') || lowerPrompt.includes('instagram ads') ||
             lowerPrompt.includes('video ad scripts') || lowerPrompt.includes('creative')) {
@@ -303,10 +314,9 @@ class MarketingSuperAgentV4 {
             };
         }
 
-        // Performance & Optimization prompts
+        // Performance & Optimization prompts (excluding budget allocation which is handled above)
         if (lowerPrompt.includes('optimize') || lowerPrompt.includes('performance') ||
-            lowerPrompt.includes('budget allocation') || lowerPrompt.includes('landing pages') ||
-            lowerPrompt.includes('conversion')) {
+            lowerPrompt.includes('landing pages') || lowerPrompt.includes('conversion')) {
             return {
                 task: 'optimize-campaign',
                 agents: ['Performance Agent', 'Analytics Agent', 'Research Agent'],
@@ -338,13 +348,12 @@ class MarketingSuperAgentV4 {
             };
         }
 
-        // Paid Media prompts
+        // Paid Media prompts (excluding budget allocation which is handled above)
         if (lowerPrompt.includes('google') || lowerPrompt.includes('meta') || lowerPrompt.includes('linkedin') ||
-            lowerPrompt.includes('shopping campaigns') || lowerPrompt.includes('retargeting') ||
-            lowerPrompt.includes('budget allocation')) {
+            lowerPrompt.includes('shopping campaigns') || lowerPrompt.includes('retargeting')) {
             return {
                 task: 'budget-allocation',
-                agents: ['Paid Media Agent', 'Performance Agent', 'Analytics Agent'],
+                agents: ['Deep Research Agent', 'Historical Performance Agent', 'Budget Optimization Agent'],
                 suiteTitle: 'Paid Media AI Suite',
                 messageType: 'paid-media'
             };
