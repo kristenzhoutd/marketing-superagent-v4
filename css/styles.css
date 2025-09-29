@@ -4539,6 +4539,22 @@ body {
     color: #a855f7;
 }
 
+/* Key Insights section - journey insights grid colors */
+.journey-insights .insights-grid .insight-card:nth-child(1) .insight-icon {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.journey-insights .insights-grid .insight-card:nth-child(2) .insight-icon {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.journey-insights .insights-grid .insight-card:nth-child(3) .insight-icon {
+    background: rgba(249, 115, 22, 0.1);
+    color: #f97316;
+}
+
 .insight-content {
     flex: 1;
     line-height: 1.6;
