@@ -6890,13 +6890,19 @@ class MarketingSuperAgentV4 {
     }
 
     hideAllPages() {
-        const homeScreen = document.getElementById('home-screen');
-        const workingInterface = document.getElementById('working-interface');
-        const kbPage = document.getElementById('knowledge-base-page');
+        const pages = [
+            'home-screen',
+            'working-interface',
+            'knowledge-base-page',
+            'autopilot-page'
+        ];
 
-        if (homeScreen) homeScreen.style.display = 'none';
-        if (workingInterface) workingInterface.style.display = 'none';
-        if (kbPage) kbPage.style.display = 'none';
+        pages.forEach(pageId => {
+            const page = document.getElementById(pageId);
+            if (page) {
+                page.style.display = 'none';
+            }
+        });
     }
 
     showHomePage() {
@@ -10444,22 +10450,6 @@ class MarketingSuperAgentV4 {
         setTimeout(() => {
             notification.remove();
         }, 3000);
-    }
-
-    hideAllPages() {
-        const pages = [
-            'home-screen',
-            'working-interface',
-            'knowledge-base-page',
-            'autopilot-page'
-        ];
-
-        pages.forEach(pageId => {
-            const page = document.getElementById(pageId);
-            if (page) {
-                page.style.display = 'none';
-            }
-        });
     }
 }
 
