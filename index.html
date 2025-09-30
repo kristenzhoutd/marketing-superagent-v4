@@ -10,30 +10,50 @@
 </head>
 <body>
     <div class="app">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <div class="logo-section">
-                    <div class="logo-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="logo-content">
-                        <h1 class="app-title">Marketing SuperAgent</h1>
-                        <p class="app-tagline">One SuperAgent. Every Task. Marketing Made AI-Native.</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="header-btn" id="settings-btn">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                </div>
-            </div>
-        </header>
 
         <!-- Main Content -->
         <main class="main-content home-mode">
             <!-- Home Screen (Initial State) -->
             <div class="home-screen" id="home-screen">
+                <!-- Role Selector -->
+                <div class="page-role-selector">
+                    <div class="role-selector">
+                        <button class="role-btn avatar-only" id="role-selector-btn">
+                            <div class="role-avatar" data-role="laura">
+                                <div class="avatar-illustration laura-avatar"></div>
+                            </div>
+                        </button>
+                        <div class="role-dropdown" id="role-dropdown">
+                            <div class="role-option" data-role="laura">
+                                <div class="role-avatar">
+                                    <div class="avatar-illustration laura-avatar"></div>
+                                </div>
+                                <div class="role-details">
+                                    <span class="role-name">Laura</span>
+                                    <span class="role-title">Lifecycle Marketer</span>
+                                </div>
+                            </div>
+                            <div class="role-option" data-role="josh">
+                                <div class="role-avatar">
+                                    <div class="avatar-illustration josh-avatar"></div>
+                                </div>
+                                <div class="role-details">
+                                    <span class="role-name">Josh</span>
+                                    <span class="role-title">Growth Marketer</span>
+                                </div>
+                            </div>
+                            <div class="role-option" data-role="emily">
+                                <div class="role-avatar">
+                                    <div class="avatar-illustration emily-avatar"></div>
+                                </div>
+                                <div class="role-details">
+                                    <span class="role-name">Emily</span>
+                                    <span class="role-title">Creative Marketer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- Left Sidebar Navigation for Home -->
                 <div class="sidebar-nav">
                     <div class="nav-section">
@@ -105,23 +125,63 @@
                 <div class="home-container">
                     <!-- Central Chat Entry -->
                     <div class="chat-entry-section">
-                        <div class="chat-entry-header">
-                            <h1>Marketing SuperAgent</h1>
-                            <p class="tagline">One SuperAgent. Every Task. Marketing Made AI-Native.</p>
+                        <div class="chat-entry-header" id="chat-entry-header">
+                            <!-- Default Header -->
+                            <div class="header-content default-header">
+                                <h1>Marketing SuperAgent</h1>
+                                <p class="tagline">One SuperAgent. Every Task. Marketing Made AI-Native.</p>
+                            </div>
+
+                            <!-- Laura's Header -->
+                            <div class="header-content role-header laura-header" style="display: none;">
+                                <h1>Hey Laura! Let's nurture some customers ❤️</h1>
+                                <p class="tagline">Time to create meaningful journeys that turn prospects into loyal advocates.</p>
+                            </div>
+
+                            <!-- Josh's Header -->
+                            <div class="header-content role-header josh-header" style="display: none;">
+                                <h1>Hey Josh! Ready to grow? 🚀</h1>
+                                <p class="tagline">Time to scale acquisition, optimize funnels, and drive explosive growth.</p>
+                            </div>
+
+                            <!-- Emily's Header -->
+                            <div class="header-content role-header emily-header" style="display: none;">
+                                <h1>Hi Emily! Let's create magic ✨</h1>
+                                <p class="tagline">Transform ideas into captivating campaigns that connect and convert.</p>
+                            </div>
                         </div>
 
                         <div class="main-chat-input">
-                            <div class="input-container">
-                                <input type="text" id="main-input" placeholder="Tell me what you'd like to create or optimize…" autocomplete="off">
-                                <button class="send-button" id="main-send">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
+                            <div class="chatgpt-input-container">
+                                <div class="input-content">
+                                    <button class="attach-btn" id="attach-files" title="Attach files">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                                        </svg>
+                                    </button>
+                                    <div class="input-wrapper">
+                                        <textarea
+                                            id="main-input"
+                                            placeholder="Message Marketing SuperAgent..."
+                                            rows="1"
+                                            autocomplete="off"
+                                        ></textarea>
+                                    </div>
+                                    <button class="send-btn" id="main-send" disabled>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                            <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.txt,.csv,.xlsx,.jpg,.jpeg,.png,.gif" style="display: none;">
                             </div>
                         </div>
 
                         <!-- Example Suggestions -->
                         <div class="example-suggestions" id="example-suggestions">
-                            <div class="examples-grid">
+                            <!-- Default Examples Grid -->
+                            <div class="examples-grid default-examples">
+                                <!-- Default suggestions shown when no role is selected -->
                                 <!-- First Row - Scrolling Left -->
                                 <div class="examples-row">
                                     <div class="example-card" data-prompt="Create a campaign brief for our holiday promotion targeting millennials">
@@ -392,6 +452,174 @@
                                     <div class="example-card" data-prompt="Build affiliate marketing program and partner network">
                                         <div class="example-icon">🤝</div>
                                         <div class="example-text">Build affiliate marketing program and partner network</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Laura's Lifecycle Marketing Examples -->
+                            <div class="examples-grid role-examples laura-examples" style="display: none;">
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Design a welcome email sequence for new subscribers">
+                                        <div class="example-icon">💌</div>
+                                        <div class="example-text">Design a welcome email sequence for new subscribers</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create a customer win-back campaign for churned users">
+                                        <div class="example-icon">🔄</div>
+                                        <div class="example-text">Create a customer win-back campaign for churned users</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build a loyalty program with personalized rewards">
+                                        <div class="example-icon">⭐</div>
+                                        <div class="example-text">Build a loyalty program with personalized rewards</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Analyze customer lifetime value and retention strategies">
+                                        <div class="example-icon">💎</div>
+                                        <div class="example-text">Analyze customer lifetime value and retention strategies</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Set up cart abandonment email automation">
+                                        <div class="example-icon">🛒</div>
+                                        <div class="example-text">Set up cart abandonment email automation</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create customer onboarding journey flows">
+                                        <div class="example-icon">🚀</div>
+                                        <div class="example-text">Create customer onboarding journey flows</div>
+                                    </div>
+                                </div>
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Design post-purchase follow-up email sequences">
+                                        <div class="example-icon">📦</div>
+                                        <div class="example-text">Design post-purchase follow-up email sequences</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create subscriber segmentation based on engagement levels">
+                                        <div class="example-icon">📊</div>
+                                        <div class="example-text">Create subscriber segmentation based on engagement levels</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build anniversary and milestone celebration campaigns">
+                                        <div class="example-icon">🎉</div>
+                                        <div class="example-text">Build anniversary and milestone celebration campaigns</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Set up re-engagement drip campaigns">
+                                        <div class="example-icon">💫</div>
+                                        <div class="example-text">Set up re-engagement drip campaigns</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design VIP customer exclusive experience programs">
+                                        <div class="example-icon">👑</div>
+                                        <div class="example-text">Design VIP customer exclusive experience programs</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create feedback collection and response workflows">
+                                        <div class="example-icon">📝</div>
+                                        <div class="example-text">Create feedback collection and response workflows</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Josh's Growth Marketing Examples -->
+                            <div class="examples-grid role-examples josh-examples" style="display: none;">
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Optimize conversion funnel and reduce drop-off rates">
+                                        <div class="example-icon">📊</div>
+                                        <div class="example-text">Optimize conversion funnel and reduce drop-off rates</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create A/B test plan for landing page optimization">
+                                        <div class="example-icon">🧪</div>
+                                        <div class="example-text">Create A/B test plan for landing page optimization</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build user acquisition strategy across channels">
+                                        <div class="example-icon">📈</div>
+                                        <div class="example-text">Build user acquisition strategy across channels</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Analyze product-market fit and growth metrics">
+                                        <div class="example-icon">🎯</div>
+                                        <div class="example-text">Analyze product-market fit and growth metrics</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design viral referral program mechanics">
+                                        <div class="example-icon">🚀</div>
+                                        <div class="example-text">Design viral referral program mechanics</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Optimize budget allocation across paid channels">
+                                        <div class="example-icon">💰</div>
+                                        <div class="example-text">Optimize budget allocation across paid channels</div>
+                                    </div>
+                                </div>
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Build growth hacking experimentation framework">
+                                        <div class="example-icon">⚡</div>
+                                        <div class="example-text">Build growth hacking experimentation framework</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create cohort analysis for user retention">
+                                        <div class="example-icon">📋</div>
+                                        <div class="example-text">Create cohort analysis for user retention</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design freemium to premium conversion flows">
+                                        <div class="example-icon">⬆️</div>
+                                        <div class="example-text">Design freemium to premium conversion flows</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Analyze competitor growth strategies and tactics">
+                                        <div class="example-icon">🔍</div>
+                                        <div class="example-text">Analyze competitor growth strategies and tactics</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build performance marketing attribution models">
+                                        <div class="example-icon">🎲</div>
+                                        <div class="example-text">Build performance marketing attribution models</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create North Star metric tracking dashboard">
+                                        <div class="example-icon">⭐</div>
+                                        <div class="example-text">Create North Star metric tracking dashboard</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Emily's Creative Marketing Examples -->
+                            <div class="examples-grid role-examples emily-examples" style="display: none;">
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Generate creative concepts for Instagram ad campaigns">
+                                        <div class="example-icon">🎨</div>
+                                        <div class="example-text">Generate creative concepts for Instagram ad campaigns</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create brand storytelling framework and messaging">
+                                        <div class="example-icon">📖</div>
+                                        <div class="example-text">Create brand storytelling framework and messaging</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design video ad scripts for TikTok and YouTube">
+                                        <div class="example-icon">🎬</div>
+                                        <div class="example-text">Design video ad scripts for TikTok and YouTube</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build creative testing strategy and frameworks">
+                                        <div class="example-icon">🔍</div>
+                                        <div class="example-text">Build creative testing strategy and frameworks</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create seasonal campaign creative concepts">
+                                        <div class="example-icon">🌟</div>
+                                        <div class="example-text">Create seasonal campaign creative concepts</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design user-generated content campaign strategy">
+                                        <div class="example-icon">📱</div>
+                                        <div class="example-text">Design user-generated content campaign strategy</div>
+                                    </div>
+                                </div>
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Create visual brand identity and design system">
+                                        <div class="example-icon">🎭</div>
+                                        <div class="example-text">Create visual brand identity and design system</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design influencer collaboration creative briefs">
+                                        <div class="example-icon">✨</div>
+                                        <div class="example-text">Design influencer collaboration creative briefs</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Build interactive content and gamification strategies">
+                                        <div class="example-icon">🎮</div>
+                                        <div class="example-text">Build interactive content and gamification strategies</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create emotional trigger-based ad copy variations">
+                                        <div class="example-icon">💝</div>
+                                        <div class="example-text">Create emotional trigger-based ad copy variations</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Design omnichannel brand experience concepts">
+                                        <div class="example-icon">🌈</div>
+                                        <div class="example-text">Design omnichannel brand experience concepts</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create viral content ideas and social media hooks">
+                                        <div class="example-icon">🔥</div>
+                                        <div class="example-text">Create viral content ideas and social media hooks</div>
                                     </div>
                                 </div>
                             </div>

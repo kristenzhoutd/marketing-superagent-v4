@@ -32,24 +32,60 @@ class MarketingSuperAgentV4 {
         const chatInput = document.getElementById('chat-input');
         const chatSend = document.getElementById('chat-send');
 
-        // Main chat input
+        // Main chat input (ChatGPT style)
         if (mainInput && mainSend) {
             const sendMainMessage = () => {
                 const message = mainInput.value.trim();
                 if (message) {
                     this.handleMainInput(message);
                     mainInput.value = '';
+                    this.updateSendButtonState();
+                    this.autoResizeTextarea();
                 }
             };
 
-            mainSend.addEventListener('click', sendMainMessage);
-            mainInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
+            // Auto-resize textarea
+            this.autoResizeTextarea = () => {
+                mainInput.style.height = 'auto';
+                mainInput.style.height = Math.min(mainInput.scrollHeight, 200) + 'px';
+            };
+
+            // Update send button state
+            this.updateSendButtonState = () => {
+                const hasContent = mainInput.value.trim().length > 0;
+                mainSend.disabled = !hasContent;
+            };
+
+            mainSend.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!mainSend.disabled) {
                     sendMainMessage();
                 }
             });
+
+            mainInput.addEventListener('input', () => {
+                this.updateSendButtonState();
+                this.autoResizeTextarea();
+            });
+
+            mainInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (!mainSend.disabled) {
+                        sendMainMessage();
+                    }
+                }
+            });
+
+            // Initial state
+            this.updateSendButtonState();
         }
+
+        // Input action buttons handling
+        this.setupInputActionButtons();
+
+        // Role selector handling
+        this.setupRoleSelector();
 
         // Working interface chat input
         if (chatInput && chatSend) {
@@ -487,6 +523,188 @@ class MarketingSuperAgentV4 {
         setTimeout(() => {
             this.clearTaskContext();
         }, 8000); // Clear after all processing is done (increased to ensure completion)
+    }
+
+    handleFileAttachment(files) {
+        console.log('Files attached:', files);
+
+        // Create file attachment display
+        const fileNames = files.map(file => file.name).join(', ');
+        const message = `📎 Attached files: ${fileNames}`;
+
+        // Show in chat interface
+        this.showWorkingInterface();
+        this.addMessage(message, 'user');
+
+        // Show processing indicator
+        this.showProcessingIndicator();
+
+        // Generate response about the attached files
+        setTimeout(() => {
+            this.addMessage('I can see you\'ve attached files. I\'ll analyze them and provide insights based on their content. This feature is currently being enhanced to provide deeper file analysis capabilities.', 'assistant');
+            this.hideProcessingIndicator();
+        }, 2000);
+
+        // Reset file input
+        const fileInput = document.getElementById('file-input');
+        if (fileInput) {
+            fileInput.value = '';
+        }
+    }
+
+    setupInputActionButtons() {
+        // File attachment button
+        const attachButton = document.getElementById('attach-files');
+        const fileInput = document.getElementById('file-input');
+
+        if (attachButton && fileInput) {
+            attachButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                if (files.length > 0) {
+                    this.handleFileAttachment(files);
+                }
+            });
+        }
+    }
+
+    setupRoleSelector() {
+        const roleBtn = document.getElementById('role-selector-btn');
+        const roleDropdown = document.getElementById('role-dropdown');
+        const roleOptions = document.querySelectorAll('.role-option');
+
+        if (!roleBtn || !roleDropdown) return;
+
+        // Toggle dropdown
+        roleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = roleDropdown.classList.contains('show');
+
+            if (isOpen) {
+                this.closeRoleDropdown();
+            } else {
+                this.openRoleDropdown();
+            }
+        });
+
+        // Handle role selection
+        roleOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.selectRole(option.dataset.role);
+                this.closeRoleDropdown();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!roleBtn.contains(e.target) && !roleDropdown.contains(e.target)) {
+                this.closeRoleDropdown();
+            }
+        });
+
+        // Set initial selected state
+        this.selectRole('laura');
+    }
+
+    openRoleDropdown() {
+        const roleBtn = document.getElementById('role-selector-btn');
+        const roleDropdown = document.getElementById('role-dropdown');
+
+        roleBtn.classList.add('active');
+        roleDropdown.classList.add('show');
+    }
+
+    closeRoleDropdown() {
+        const roleBtn = document.getElementById('role-selector-btn');
+        const roleDropdown = document.getElementById('role-dropdown');
+
+        roleBtn.classList.remove('active');
+        roleDropdown.classList.remove('show');
+    }
+
+    selectRole(roleId) {
+        const roles = {
+            'laura': { name: 'Laura', title: 'Lifecycle Marketer', avatarClass: 'laura-avatar' },
+            'josh': { name: 'Josh', title: 'Growth Marketer', avatarClass: 'josh-avatar' },
+            'emily': { name: 'Emily', title: 'Creative Marketer', avatarClass: 'emily-avatar' }
+        };
+
+        const role = roles[roleId];
+        if (!role) return;
+
+        // Update main button avatar
+        const mainAvatar = document.querySelector('.role-btn .role-avatar');
+        const mainAvatarIllustration = document.querySelector('.role-btn .avatar-illustration');
+
+        if (mainAvatar) mainAvatar.setAttribute('data-role', roleId);
+        if (mainAvatarIllustration) {
+            // Remove all avatar classes
+            mainAvatarIllustration.classList.remove('laura-avatar', 'josh-avatar', 'emily-avatar');
+            // Add the correct avatar class
+            mainAvatarIllustration.classList.add(role.avatarClass);
+        }
+
+        // Update text elements (if they exist - they won't in avatar-only mode)
+        const roleNameEl = document.querySelector('.role-btn .role-name');
+        const roleTitleEl = document.querySelector('.role-btn .role-title');
+
+        if (roleNameEl) roleNameEl.textContent = role.name;
+        if (roleTitleEl) roleTitleEl.textContent = role.title;
+
+        // Update selected state in dropdown
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+
+        const selectedOption = document.querySelector(`[data-role="${roleId}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('selected');
+        }
+
+        // Update personalized content
+        this.updatePersonalizedContent(roleId);
+
+        // Store current role
+        this.currentRole = roleId;
+
+        console.log(`Selected role: ${role.name} - ${role.title}`);
+    }
+
+    updatePersonalizedContent(roleId) {
+        // Update header content
+        const defaultHeader = document.querySelector('.default-header');
+        const roleHeaders = document.querySelectorAll('.role-header');
+
+        if (defaultHeader) defaultHeader.style.display = 'none';
+        roleHeaders.forEach(header => header.style.display = 'none');
+
+        const selectedHeader = document.querySelector(`.${roleId}-header`);
+        if (selectedHeader) selectedHeader.style.display = 'block';
+
+        // Update example suggestions
+        const defaultExamples = document.querySelector('.default-examples');
+        const roleExamples = document.querySelectorAll('.role-examples');
+
+        if (defaultExamples) defaultExamples.style.display = 'none';
+        roleExamples.forEach(examples => examples.style.display = 'none');
+
+        const selectedExamples = document.querySelector(`.${roleId}-examples`);
+        if (selectedExamples) selectedExamples.style.display = 'block';
+
+        // Update chat input placeholder
+        const chatInput = document.getElementById('main-input');
+        if (chatInput) {
+            const placeholders = {
+                'laura': 'Ask about lifecycle campaigns, customer retention, or email automation...',
+                'josh': 'Ask about growth strategies, conversion optimization, or acquisition funnels...',
+                'emily': 'Ask about creative concepts, brand storytelling, or visual campaigns...'
+            };
+            chatInput.placeholder = placeholders[roleId] || 'Message Marketing SuperAgent...';
+        }
     }
 
     handleChatInput(message) {
