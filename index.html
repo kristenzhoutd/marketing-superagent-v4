@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketing SuperAgent - AI-Native Marketing Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=44">
+    <link rel="stylesheet" href="css/styles.css?v=55">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -49,6 +49,15 @@
                                 <div class="role-details">
                                     <span class="role-name">Emily</span>
                                     <span class="role-title">Creative Marketer</span>
+                                </div>
+                            </div>
+                            <div class="role-option" data-role="kate">
+                                <div class="role-avatar">
+                                    <div class="avatar-illustration kate-avatar"></div>
+                                </div>
+                                <div class="role-details">
+                                    <span class="role-name">Kate</span>
+                                    <span class="role-title">Campaign Manager</span>
                                 </div>
                             </div>
                         </div>
@@ -148,6 +157,12 @@
                             <div class="header-content role-header emily-header" style="display: none;">
                                 <h1>Hi Emily! Let's create magic ✨</h1>
                                 <p class="tagline">Transform ideas into captivating campaigns that connect and convert.</p>
+                            </div>
+
+                            <!-- Kate's Header -->
+                            <div class="header-content role-header kate-header" style="display: none;">
+                                <h1>Hey Kate! Let's launch something amazing 🎯</h1>
+                                <p class="tagline">Time to orchestrate campaigns that deliver results and drive engagement.</p>
                             </div>
                         </div>
 
@@ -623,12 +638,72 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Kate's Campaign Management Examples -->
+                            <div class="examples-grid role-examples kate-examples" style="display: none;">
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Design a multi-channel campaign for a fall apparel launch">
+                                        <div class="example-icon">🍂</div>
+                                        <div class="example-text">Design a multi-channel campaign for a fall apparel launch</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Turn this brief into a campaign plan with channels, audiences, and timeline">
+                                        <div class="example-icon">📋</div>
+                                        <div class="example-text">Turn this brief into a campaign plan with channels, audiences, and timeline</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Summarize target personas for premium athleisure in the U.S.">
+                                        <div class="example-icon">👥</div>
+                                        <div class="example-text">Summarize target personas for premium athleisure in the U.S.</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Competitive snapshot for top brands and key messaging hooks">
+                                        <div class="example-icon">🔍</div>
+                                        <div class="example-text">Competitive snapshot for top brands and key messaging hooks</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Recommend the best channel mix with rationale and budget split">
+                                        <div class="example-icon">📊</div>
+                                        <div class="example-text">Recommend the best channel mix with rationale and budget split</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="I have $50K and 3 weeks — prioritize reach vs. conversion">
+                                        <div class="example-icon">⚡</div>
+                                        <div class="example-text">I have $50K and 3 weeks — prioritize reach vs. conversion</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create a creative brief with tone, mood, and hooks">
+                                        <div class="example-icon">🎨</div>
+                                        <div class="example-text">Create a creative brief with tone, mood, and hooks</div>
+                                    </div>
+                                </div>
+                                <div class="examples-row">
+                                    <div class="example-card" data-prompt="Generate ad concepts for Instagram Stories and display ads">
+                                        <div class="example-icon">📱</div>
+                                        <div class="example-text">Generate ad concepts for Instagram Stories and display ads</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Draft 5 headline and body variants for Meta ads">
+                                        <div class="example-icon">✍️</div>
+                                        <div class="example-text">Draft 5 headline and body variants for Meta ads</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create display banners for 300×250, 300×600, and 728×90">
+                                        <div class="example-icon">🖼️</div>
+                                        <div class="example-text">Create display banners for 300×250, 300×600, and 728×90</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Suggest target segments and proxy audiences without first-party data">
+                                        <div class="example-icon">🎯</div>
+                                        <div class="example-text">Suggest target segments and proxy audiences without first-party data</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Create lookalike audience instructions for my seed idea">
+                                        <div class="example-icon">🔄</div>
+                                        <div class="example-text">Create lookalike audience instructions for my seed idea</div>
+                                    </div>
+                                    <div class="example-card" data-prompt="Help me upload my brand voice, product catalog, and past assets">
+                                        <div class="example-icon">📂</div>
+                                        <div class="example-text">Help me upload my brand voice, product catalog, and past assets</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Entry Shortcuts -->
                     <div class="entry-shortcuts">
-                        <div class="shortcuts-section">
+                        <div class="shortcuts-section ai-suites-section">
                             <h3>AI Suites</h3>
                             <div class="product-areas">
                                 <div class="area-card" data-area="engage">
@@ -681,7 +756,7 @@
 
                         <div class="shortcuts-section">
                             <h3>Quick Start by Task</h3>
-                            <div class="task-shortcuts">
+                            <div class="task-shortcuts default-tasks">
                                 <button class="task-btn" data-task="campaign-brief">
                                     <i class="fas fa-file-alt"></i>
                                     <span>Create a new campaign brief</span>
@@ -721,6 +796,42 @@
                                 <button class="task-btn" data-task="content-calendar">
                                     <i class="fas fa-calendar-alt"></i>
                                     <span>Create content calendar</span>
+                                </button>
+                            </div>
+
+                            <!-- Kate's Campaign Manager Tasks -->
+                            <div class="task-shortcuts kate-tasks" style="display: none;">
+                                <button class="task-btn" data-task="design-campaign-program">
+                                    <i class="fas fa-rocket"></i>
+                                    <span>Design a Campaign Program</span>
+                                </button>
+                                <button class="task-btn" data-task="research-personas">
+                                    <i class="fas fa-users"></i>
+                                    <span>Research My Personas</span>
+                                </button>
+                                <button class="task-btn" data-task="pick-channel-mix">
+                                    <i class="fas fa-bullhorn"></i>
+                                    <span>Pick My Channel Mix</span>
+                                </button>
+                                <button class="task-btn" data-task="create-creative-brief">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Create a Creative Brief</span>
+                                </button>
+                                <button class="task-btn" data-task="generate-ad-copy">
+                                    <i class="fas fa-pen-alt"></i>
+                                    <span>Generate Ad Copy</span>
+                                </button>
+                                <button class="task-btn" data-task="social-ad-concepts">
+                                    <i class="fas fa-share-alt"></i>
+                                    <span>Social Ad Concepts</span>
+                                </button>
+                                <button class="task-btn" data-task="display-banner-concepts">
+                                    <i class="fas fa-image"></i>
+                                    <span>Display Banner Concepts</span>
+                                </button>
+                                <button class="task-btn" data-task="audience-targets">
+                                    <i class="fas fa-crosshairs"></i>
+                                    <span>Audience Targets</span>
                                 </button>
                             </div>
                         </div>
@@ -1888,6 +1999,6 @@
         </div>
     </div>
 
-    <script src="js/app.js?v=39"></script>
+    <script src="js/app.js?v=41"></script>
 </body>
 </html><!-- Deployment trigger Mon Sep 29 03:28:46 PDT 2025 -->

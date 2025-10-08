@@ -637,7 +637,8 @@ class MarketingSuperAgentV4 {
         const roles = {
             'laura': { name: 'Laura', title: 'Lifecycle Marketer', avatarClass: 'laura-avatar' },
             'josh': { name: 'Josh', title: 'Growth Marketer', avatarClass: 'josh-avatar' },
-            'emily': { name: 'Emily', title: 'Creative Marketer', avatarClass: 'emily-avatar' }
+            'emily': { name: 'Emily', title: 'Creative Marketer', avatarClass: 'emily-avatar' },
+            'kate': { name: 'Kate', title: 'Campaign Manager', avatarClass: 'kate-avatar' }
         };
 
         const role = roles[roleId];
@@ -650,7 +651,7 @@ class MarketingSuperAgentV4 {
         if (mainAvatar) mainAvatar.setAttribute('data-role', roleId);
         if (mainAvatarIllustration) {
             // Remove all avatar classes
-            mainAvatarIllustration.classList.remove('laura-avatar', 'josh-avatar', 'emily-avatar');
+            mainAvatarIllustration.classList.remove('laura-avatar', 'josh-avatar', 'emily-avatar', 'kate-avatar');
             // Add the correct avatar class
             mainAvatarIllustration.classList.add(role.avatarClass);
         }
@@ -708,10 +709,41 @@ class MarketingSuperAgentV4 {
             const placeholders = {
                 'laura': 'Ask about lifecycle campaigns, customer retention, or email automation...',
                 'josh': 'Ask about growth strategies, conversion optimization, or acquisition funnels...',
-                'emily': 'Ask about creative concepts, brand storytelling, or visual campaigns...'
+                'emily': 'Ask about creative concepts, brand storytelling, or visual campaigns...',
+                'kate': 'Ask about campaign management, execution strategies, or performance optimization...'
             };
             chatInput.placeholder = placeholders[roleId] || 'Message Marketing SuperAgent...';
         }
+
+        // Hide/show AI Suites section based on role
+        const aiSuitesSection = document.querySelector('.ai-suites-section');
+        if (aiSuitesSection) {
+            if (roleId === 'kate') {
+                aiSuitesSection.style.display = 'none';
+            } else {
+                aiSuitesSection.style.display = 'block';
+            }
+        }
+
+        // Update quick start tasks based on role
+        const defaultTasks = document.querySelector('.default-tasks');
+        const kateTasks = document.querySelector('.kate-tasks');
+
+        if (defaultTasks && kateTasks) {
+            if (roleId === 'kate') {
+                defaultTasks.style.display = 'none';
+                kateTasks.style.display = 'flex';
+                kateTasks.style.flexWrap = 'wrap';
+                kateTasks.style.gap = 'var(--space-md)';
+                kateTasks.style.justifyContent = 'center';
+                kateTasks.style.maxWidth = '1000px';
+                kateTasks.style.margin = '0 auto';
+            } else {
+                defaultTasks.style.display = 'flex';
+                kateTasks.style.display = 'none';
+            }
+        }
+
     }
 
     handleChatInput(message) {
@@ -1148,6 +1180,8 @@ class MarketingSuperAgentV4 {
             return;
         }
 
+        // Special handling for campaign strategy flow
+
         const taskPrompts = {
             'campaign-brief': 'Create a comprehensive campaign brief with objectives, target audience, and strategy',
             'optimize-campaign': 'Analyze my current campaign performance and provide optimization recommendations',
@@ -1357,97 +1391,6 @@ class MarketingSuperAgentV4 {
 
         // Add event listeners for example cards
         this.setupCampaignExampleListeners();
-    }
-
-    setupCampaignExampleListeners() {
-        // Remove existing listeners first to prevent duplicates
-        if (this.campaignExampleHandler) {
-            document.removeEventListener('click', this.campaignExampleHandler);
-        }
-        if (this.campaignCustomHandler) {
-            document.removeEventListener('click', this.campaignCustomHandler);
-        }
-        if (this.campaignKeyHandler) {
-            document.removeEventListener('keypress', this.campaignKeyHandler);
-        }
-
-        // Create new handlers and store references
-        this.campaignExampleHandler = (e) => {
-            const card = e.target.closest('.creative-prompt-option');
-            if (card) {
-                const campaignType = card.getAttribute('data-campaign-type');
-                this.generateCampaignBrief(campaignType);
-            }
-        };
-
-        this.campaignCustomHandler = (e) => {
-            if (e.target.closest('#create-custom-brief')) {
-                const input = document.getElementById('custom-brief-input');
-                if (input && input.value.trim()) {
-                    this.generateCustomCampaignBrief(input.value.trim());
-                    input.value = '';
-                }
-            }
-        };
-
-        this.campaignKeyHandler = (e) => {
-            if (e.target.id === 'custom-brief-input' && e.key === 'Enter') {
-                const input = e.target;
-                if (input.value.trim()) {
-                    this.generateCustomCampaignBrief(input.value.trim());
-                    input.value = '';
-                }
-            }
-        };
-
-        // Add the new listeners
-        document.addEventListener('click', this.campaignExampleHandler);
-        document.addEventListener('click', this.campaignCustomHandler);
-        document.addEventListener('keypress', this.campaignKeyHandler);
-    }
-
-    generateCampaignBrief(campaignType) {
-        // Add user selection message
-        const campaignMessages = {
-            'product-launch-tech': 'Create a comprehensive campaign brief for launching a new SaaS platform targeting B2B customers',
-            'product-launch-consumer': 'Create a comprehensive campaign brief for launching an eco-friendly skincare line targeting millennials and Gen Z',
-            'holiday-sale': 'Create a comprehensive campaign brief for Black Friday/Cyber Monday campaign for e-commerce retailer',
-            'back-to-school': 'Create a comprehensive campaign brief for back-to-school campaign targeting students and parents with education technology',
-            'user-acquisition': 'Create a comprehensive campaign brief for scaling mobile app downloads and registrations for fintech startup',
-            'retention-campaign': 'Create a comprehensive campaign brief for re-engaging inactive subscribers with personalized win-back campaign',
-            'brand-awareness': 'Create a comprehensive campaign brief for building brand recognition for sustainable fashion startup targeting Gen Z',
-            'brand-repositioning': 'Create a comprehensive campaign brief for modernizing established brand perception for younger demographics'
-        };
-
-        const userMessage = campaignMessages[campaignType] || 'Create a comprehensive campaign brief';
-        this.addMessage(userMessage, 'user');
-
-        // Show relevant agents for this campaign type
-        const campaignAgents = {
-            'product-launch-tech': ['Research Agent', 'Audience Agent', 'Performance Agent'],
-            'product-launch-consumer': ['Research Agent', 'Creative Agent', 'Audience Agent'],
-            'holiday-sale': ['Performance Agent', 'Historical Agent', 'Creative Agent'],
-            'back-to-school': ['Audience Agent', 'Journey Agent', 'Creative Agent'],
-            'user-acquisition': ['Audience Agent', 'Performance Agent', 'Analytics Agent'],
-            'retention-campaign': ['Journey Agent', 'Personalization Agent', 'Analytics Agent'],
-            'brand-awareness': ['Research Agent', 'Creative Agent', 'Audience Agent'],
-            'brand-repositioning': ['Research Agent', 'Historical Agent', 'Creative Agent']
-        };
-
-        const agents = campaignAgents[campaignType] || ['Research Agent', 'Audience Agent', 'Performance Agent'];
-
-        // Show processing indicator
-        this.showProcessingIndicator();
-
-        // Show agent progress
-        setTimeout(() => {
-            this.showCampaignBriefAgentProgress(agents, campaignType);
-        }, 1000);
-
-        // Generate comprehensive brief
-        setTimeout(() => {
-            this.displayComprehensiveCampaignBrief(campaignType);
-        }, 4000);
     }
 
     generateCustomCampaignBrief(description) {
@@ -2329,6 +2272,7 @@ class MarketingSuperAgentV4 {
 
     analyzeMessage(message) {
         const lowerMessage = message.toLowerCase();
+
 
         // Campaign brief and strategy
         if (lowerMessage.includes('brief') || lowerMessage.includes('campaign plan') || lowerMessage.includes('strategy') ||
@@ -6575,6 +6519,7 @@ class MarketingSuperAgentV4 {
         const messageType = this.analyzeMessage(message);
         const context = this.extractContextFromMessage(message);
 
+
         // Show initial processing message
         this.addMessage('🧠 **Analyzing your request...**', 'agent');
 
@@ -6922,16 +6867,8 @@ class MarketingSuperAgentV4 {
                     progressIcon.style.color = 'var(--accent-green)';
                     progressText.textContent = `${allAgentItems.length} specialist agents completed`;
 
-                    // If this is a positioned progress indicator, hide it after a delay
-                    if (display.classList.contains('kb-positioned')) {
-                        setTimeout(() => {
-                            display.classList.add('all-complete');
-                            // Remove from DOM after animation completes
-                            setTimeout(() => {
-                                display.remove();
-                            }, 400);
-                        }, 2000); // Show completion for 2 seconds before hiding
-                    }
+                    // Keep progress indicator visible after completion
+                    // Removed auto-hide behavior to preserve agent completion status
                 }
             }
         });
@@ -7344,6 +7281,20 @@ class MarketingSuperAgentV4 {
         // Add the click handler
         document.addEventListener('click', this.kbClickHandler);
 
+        // Direct event listener for Enhance Knowledge Base button
+        const enhanceKBBtn = document.getElementById('btn-kb-onboarding');
+        if (enhanceKBBtn) {
+            console.log('Found Enhance KB button, adding direct listener');
+            enhanceKBBtn.addEventListener('click', (e) => {
+                console.log('Direct KB onboarding button clicked');
+                e.preventDefault();
+                e.stopPropagation();
+                this.openKBOnboarding();
+            });
+        } else {
+            console.log('Enhance KB button not found');
+        }
+
         // Knowledge Base search
         const kbSearch = document.getElementById('kb-search');
         if (kbSearch) {
@@ -7364,9 +7315,14 @@ class MarketingSuperAgentV4 {
 
         // Action buttons
         document.addEventListener('click', (e) => {
+            console.log('Click detected:', e.target);
             if (e.target.closest('.kb-action-btn')) {
+                console.log('KB action button detected');
                 const btn = e.target.closest('.kb-action-btn');
-                const actionText = btn.querySelector('span').textContent;
+                const spanElement = btn.querySelector('span');
+                console.log('Button span element:', spanElement);
+                const actionText = spanElement ? spanElement.textContent : '';
+                console.log('Action text:', actionText);
 
                 switch(actionText) {
                     case 'Enhance Knowledge Base':
@@ -11812,7 +11768,7 @@ class MarketingSuperAgentV4 {
     }
 
     openKBOnboarding() {
-        console.log('openKBOnboarding called');
+        console.log('🚀 openKBOnboarding called - starting KB onboarding process');
         this.kbOnboardingState.isActive = true;
         this.kbOnboardingState.currentStep = 'welcome';
 
