@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketing SuperAgent - AI-Native Marketing Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=34">
+    <link rel="stylesheet" href="css/styles.css?v=44">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -1032,9 +1032,9 @@
                                 <!-- Quick Actions -->
                                 <div class="kb-actions-section">
                                     <div class="action-buttons">
-                                        <button class="kb-action-btn primary">
-                                            <i class="fas fa-upload"></i>
-                                            <span>Upload</span>
+                                        <button class="kb-action-btn primary" id="btn-kb-onboarding" title="Guided setup: add only the knowledge your agent needs.">
+                                            <i class="fas fa-magic"></i>
+                                            <span>Enhance Knowledge Base</span>
                                         </button>
                                         <button class="kb-action-btn">
                                             <i class="fas fa-link"></i>
@@ -1246,6 +1246,104 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KB Onboarding Mode (Hidden by default) -->
+                <div class="kb-onboarding-mode" id="kb-onboarding-mode" style="display: none;">
+                    <!-- Left Panel: Chat Dock (1/3 width) -->
+                    <div class="kb-onboarding-chat">
+                        <div class="chat-header">
+                            <div class="chat-title">
+                                <i class="fas fa-robot"></i>
+                                <span>Knowledge Base Assistant</span>
+                            </div>
+                            <button class="chat-close" id="kb-onboarding-close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div class="chat-messages" id="kb-chat-messages">
+                            <!-- Initial system message -->
+                            <div class="chat-message system">
+                                <div class="message-content">
+                                    <p>Let's power up your SuperAgent. What do you want to do first?</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-section">
+                            <!-- Quick action chips -->
+                            <div class="task-chips" id="kb-task-chips">
+                                <button class="task-chip" data-task="campaign_launch">
+                                    <i class="fas fa-bullhorn"></i>
+                                    <span>Launch a multi-channel campaign</span>
+                                </button>
+                                <button class="task-chip" data-task="paid_media">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>Optimize paid media</span>
+                                </button>
+                                <button class="task-chip" data-task="creative">
+                                    <i class="fas fa-palette"></i>
+                                    <span>Create a creative brief + assets</span>
+                                </button>
+                                <button class="task-chip" data-task="personalization">
+                                    <i class="fas fa-user-cog"></i>
+                                    <span>Design a web/personalization plan</span>
+                                </button>
+                                <button class="task-chip" data-task="lifecycle">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>Set up a lifecycle/journey</span>
+                                </button>
+                                <button class="task-chip" data-task="analytics">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Analyze performance & ROI</span>
+                                </button>
+                            </div>
+
+                            <!-- Chat input -->
+                            <div class="chat-input-container">
+                                <input type="text" class="chat-input" id="kb-chat-input" placeholder="Or describe what you'd like help with...">
+                                <button class="chat-send" id="kb-chat-send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Knowledge Cards Grid (2/3 width) -->
+                    <div class="kb-onboarding-cards">
+                        <div class="cards-header">
+                            <div class="cards-title">
+                                <h3 id="kb-cards-title">Knowledge Needed for: <span id="selected-task-name">Select a task to begin</span></h3>
+                            </div>
+                            <div class="cards-controls">
+                                <div class="progress-indicator">
+                                    <span id="kb-progress-text">0 of 0 required items complete</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="kb-progress-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="cards-filters">
+                                    <button class="filter-btn active" data-filter="all">All</button>
+                                    <button class="filter-btn" data-filter="required">Required</button>
+                                    <button class="filter-btn" data-filter="optional">Optional</button>
+                                </div>
+                                <button class="btn-secondary" id="kb-save-exit">Save & Exit</button>
+                            </div>
+                        </div>
+
+                        <!-- Knowledge Cards Grid -->
+                        <div class="knowledge-cards-grid" id="kb-cards-grid">
+                            <!-- Cards will be dynamically populated based on selected task -->
+                            <div class="empty-state" id="kb-cards-empty">
+                                <div class="empty-icon">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
+                                <h4>Select a task to see required knowledge</h4>
+                                <p>Choose one of the task options above to see what knowledge your SuperAgent needs.</p>
                             </div>
                         </div>
                     </div>

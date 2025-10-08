@@ -438,6 +438,7 @@ body {
     transform: translateX(-50%);
 }
 
+
 .role-info {
     display: flex;
     flex-direction: column;
@@ -1282,6 +1283,7 @@ body {
     top: 0;
     height: 100vh;
     z-index: 10;
+    box-shadow: var(--shadow-md);
 }
 
 .sidebar-nav:hover {
@@ -1601,7 +1603,7 @@ body {
     flex: 1;
     display: grid;
     grid-template-columns: 400px 1fr;
-    gap: var(--space-xl);
+    gap: 0;
     padding: 0 var(--space-xl) 0 0;
     overflow: hidden;
 }
@@ -1613,6 +1615,10 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border-right: 1px solid #e5e7eb;
+    position: relative;
+    z-index: 2;
 }
 
 .thread-header {
@@ -1651,7 +1657,7 @@ body {
 
 .chat-messages {
     flex: 1;
-    padding: var(--space-lg);
+    padding: var(--space-md) var(--space-sm);
     padding-top: var(--space-xl);
     overflow-y: auto;
     display: flex;
@@ -1661,7 +1667,7 @@ body {
 }
 
 .chat-input-area {
-    padding: var(--space-lg);
+    padding: var(--space-md) var(--space-sm);
     border-top: none;
     background: var(--card-bg);
 }
@@ -2860,7 +2866,7 @@ body {
 .message {
     display: flex;
     gap: var(--space-sm);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-xs);
     align-items: flex-end;
 }
 
@@ -2882,14 +2888,14 @@ body {
 }
 
 .message-text {
-    background: var(--card-bg);
-    border: var(--border);
+    background: transparent;
+    border: none;
     border-radius: var(--radius-lg);
     padding: var(--space-sm) var(--space-md);
     font-size: var(--font-base);
     line-height: var(--lh-base);
     color: var(--text-primary);
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
     position: relative;
     display: inline-block;
     max-width: fit-content;
@@ -3015,6 +3021,75 @@ body {
     padding: var(--space-lg);
     margin: var(--space-sm) 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+/* Stylish top-right positioned progress when knowledge base is present */
+.enhanced-output .agent-progress-display.kb-positioned {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    width: 320px;
+    margin: 0;
+    z-index: 1000;
+    background: linear-gradient(135deg, var(--card-bg), rgba(255, 255, 255, 0.95));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(220, 224, 232, 0.8);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+    animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.agent-progress-display.kb-positioned .progress-header {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    margin: calc(-1 * var(--space-lg)) calc(-1 * var(--space-lg)) var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    color: white;
+    font-weight: 700;
+    font-size: var(--font-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.agent-progress-display.kb-positioned .progress-header i {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Mobile responsiveness for positioned progress */
+@media (max-width: 768px) {
+    .enhanced-output .agent-progress-display.kb-positioned {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        margin: var(--space-sm) 0;
+    }
+}
+
+/* Hide progress when all agents complete and it's positioned */
+.agent-progress-display.kb-positioned.all-complete {
+    animation: slideOutRight 0.4s ease-out forwards;
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
 
 .progress-header {
@@ -8086,7 +8161,7 @@ body {
 }
 
 .autopilot-chat-interface .chat-header {
-    background: #f8fafc;
+    background: transparent;
     border-bottom: 1px solid #e2e8f0;
     padding: 20px 24px;
     display: flex;
@@ -8138,7 +8213,7 @@ body {
 }
 
 .chat-suggestion-card {
-    background: #f8fafc;
+    background: white;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     padding: 16px;
@@ -8150,9 +8225,10 @@ body {
 }
 
 .chat-suggestion-card:hover {
-    background: #f1f5f9;
+    background: white;
     border-color: #3b82f6;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .suggestion-icon {
@@ -8188,7 +8264,7 @@ body {
 
 .chat-input-section {
     border-top: 1px solid #e2e8f0;
-    padding: 20px 24px;
+    padding: 16px 12px;
     background: white;
 }
 
@@ -8204,7 +8280,7 @@ body {
     border-radius: 8px;
     padding: 12px 16px;
     font-size: 14px;
-    background: #f8fafc;
+    background: white;
     transition: all 0.2s ease;
 }
 
@@ -8242,7 +8318,7 @@ body {
     align-items: flex-start;
     gap: 12px;
     padding: 16px;
-    background: #f8fafc;
+    background: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     text-align: left;
@@ -8252,8 +8328,9 @@ body {
 }
 
 .autopilot-suggestion-btn:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
+    background: white;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -10109,5 +10186,609 @@ body {
     .campaign-metrics {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
+    }
+}
+
+/* KB Onboarding Mode Styles */
+.kb-onboarding-mode {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--primary-bg);
+    z-index: 1000;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Left Panel: Chat Dock (1/3 width) */
+.kb-onboarding-chat {
+    width: 33.333%;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.chat-header {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+}
+
+.chat-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--h3);
+    font-weight: var(--h3-weight);
+    color: var(--text-primary);
+}
+
+.chat-title i {
+    color: var(--accent-primary);
+}
+
+.chat-close {
+    background: none;
+    border: none;
+    padding: var(--space-xs);
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+}
+
+.chat-close:hover {
+    background: var(--border-light);
+    color: var(--text-secondary);
+}
+
+.chat-messages {
+    flex: 1;
+    padding: var(--space-md) var(--space-sm);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.chat-message {
+    max-width: 90%;
+}
+
+.chat-message.system {
+    align-self: flex-start;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+}
+
+.message-content {
+    background: transparent;
+    padding: var(--space-md);
+    border-radius: 12px;
+    font-size: var(--font-base);
+    line-height: var(--lh-base);
+    color: var(--text-primary);
+}
+
+.chat-message.user .message-content {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.chat-input-section {
+    padding: var(--space-md) var(--space-sm);
+    border-top: 1px solid var(--border-color);
+    background: var(--card-bg);
+}
+
+.task-chips {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+}
+
+.task-chip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--font-base);
+    color: var(--text-primary);
+    text-align: left;
+}
+
+.task-chip:hover {
+    background: var(--border-light);
+    border-color: var(--accent-primary);
+}
+
+.task-chip.selected {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.task-chip i {
+    color: var(--accent-primary);
+    flex-shrink: 0;
+}
+
+.task-chip.selected i {
+    color: white;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: var(--font-base);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.chat-send {
+    padding: var(--space-sm);
+    background: var(--accent-primary);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chat-send:hover {
+    background: var(--accent-secondary);
+}
+
+/* Right Panel: Knowledge Cards Grid (2/3 width) */
+.kb-onboarding-cards {
+    width: 66.667%;
+    background: var(--primary-bg);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.cards-header {
+    padding: var(--space-xl);
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.cards-title h3 {
+    font-size: var(--h2);
+    font-weight: var(--h2-weight);
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.cards-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.progress-indicator {
+    display: flex; /* Show by default for now - will hide via JS */
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+    max-width: 300px;
+}
+
+/* Hide progress indicator when no tasks selected */
+.kb-onboarding-cards:not(.has-visible-cards) .progress-indicator {
+    display: none;
+}
+
+/* Show progress indicator when knowledge cards are visible */
+.kb-onboarding-cards.has-visible-cards .progress-indicator {
+    display: flex !important;
+    background: red !important; /* Temporary debug color */
+    border: 3px solid blue !important; /* Temporary debug border */
+}
+
+.progress-bar {
+    height: 6px;
+    background: var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent-green);
+    transition: width 0.3s ease;
+}
+
+/* Stylish top-right positioned progress for knowledge base when cards are visible */
+.kb-onboarding-cards:has(.knowledge-card) .progress-indicator,
+.kb-onboarding-cards.has-visible-cards .progress-indicator {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1000;
+    background: linear-gradient(135deg, var(--card-bg), rgba(255, 255, 255, 0.95));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(220, 224, 232, 0.8);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+    width: 280px;
+    max-width: 280px;
+    flex: none;
+    animation: slideInFromRight 0.4s ease-out;
+}
+
+/* Enhanced styling for positioned progress indicator */
+.kb-onboarding-cards:has(.knowledge-card) .progress-indicator span,
+.kb-onboarding-cards.has-visible-cards .progress-indicator span {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: var(--font-sm);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.kb-onboarding-cards:has(.knowledge-card) .progress-bar,
+.kb-onboarding-cards.has-visible-cards .progress-bar {
+    height: 8px;
+    background: rgba(220, 224, 232, 0.6);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: var(--space-sm);
+}
+
+.kb-onboarding-cards:has(.knowledge-card) .progress-fill,
+.kb-onboarding-cards.has-visible-cards .progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .kb-onboarding-cards:has(.knowledge-card) .progress-indicator,
+    .kb-onboarding-cards.has-visible-cards .progress-indicator {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: var(--space-md);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.cards-filters {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.filter-btn {
+    padding: var(--space-xs) var(--space-md);
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    border-radius: 6px;
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.knowledge-cards-grid {
+    flex: 1;
+    padding: var(--space-xl);
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-lg);
+    align-content: start;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-xxl);
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: var(--space-lg);
+    opacity: 0.6;
+}
+
+.empty-state h4 {
+    font-size: var(--h3);
+    font-weight: var(--h3-weight);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+/* Knowledge Card Styles */
+.knowledge-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--space-lg);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.knowledge-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.card-title-section {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex: 1;
+}
+
+.card-icon {
+    font-size: 20px;
+    color: var(--accent-primary);
+}
+
+.card-title {
+    font-size: var(--h3);
+    font-weight: var(--h3-weight);
+    color: var(--text-primary);
+}
+
+.card-status {
+    padding: var(--space-xxs) var(--space-xs);
+    border-radius: 4px;
+    font-size: var(--label);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.card-status.required {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--accent-red);
+}
+
+.card-status.optional {
+    background: rgba(52, 152, 219, 0.1);
+    color: var(--accent-primary);
+}
+
+.card-status.complete {
+    background: rgba(45, 157, 120, 0.1);
+    color: var(--accent-green);
+}
+
+.card-description {
+    color: var(--text-secondary);
+    font-size: var(--font-base);
+    line-height: var(--lh-base);
+    margin-bottom: var(--space-lg);
+}
+
+.card-input-section {
+    margin-bottom: var(--space-lg);
+}
+
+.input-mode-selector {
+    display: flex;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.mode-btn {
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    border-radius: 6px;
+    font-size: var(--label);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-btn.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.input-fields {
+    margin-top: var(--space-md);
+}
+
+.field-group {
+    margin-bottom: var(--space-md);
+}
+
+.field-label {
+    display: block;
+    font-size: var(--label);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.field-input {
+    width: 100%;
+    padding: var(--space-sm);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: var(--font-base);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.field-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.upload-zone {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: var(--space-xl);
+    text-align: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-zone:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.upload-zone.dragover {
+    border-color: var(--accent-primary);
+    background: rgba(25, 87, 219, 0.05);
+}
+
+.card-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.test-btn {
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--accent-primary);
+    background: var(--card-bg);
+    color: var(--accent-primary);
+    border-radius: 6px;
+    font-size: var(--label);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.test-btn:hover {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.save-btn {
+    padding: var(--space-xs) var(--space-md);
+    background: var(--accent-green);
+    border: none;
+    color: white;
+    border-radius: 6px;
+    font-size: var(--font-base);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.save-btn:hover {
+    background: #238b68;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .kb-onboarding-chat {
+        width: 40%;
+    }
+
+    .kb-onboarding-cards {
+        width: 60%;
+    }
+
+    .knowledge-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .kb-onboarding-mode {
+        flex-direction: column;
+    }
+
+    .kb-onboarding-chat {
+        width: 100%;
+        height: 40vh;
+    }
+
+    .kb-onboarding-cards {
+        width: 100%;
+        height: 60vh;
+    }
+
+    .task-chips {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .task-chip {
+        flex: 1;
+        min-width: 140px;
+    }
+
+    .cards-controls {
+        flex-direction: column;
+        gap: var(--space-md);
+        align-items: stretch;
+    }
+
+    .knowledge-cards-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-lg);
     }
 }

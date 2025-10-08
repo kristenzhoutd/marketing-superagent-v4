@@ -25,6 +25,13 @@ class MarketingSuperAgentV4 {
         this.initializeInterface();
     }
 
+    // Utility function to check if knowledge base sections will be shown
+    willShowKnowledgeBase() {
+        // Check if we're in a context where knowledge base sections are typically shown
+        // This includes most AI-generated outputs and responses
+        return true; // For now, always position progress in top-right when present
+    }
+
     setupEventListeners() {
         // Main input handling
         const mainInput = document.getElementById('main-input');
@@ -1566,8 +1573,13 @@ class MarketingSuperAgentV4 {
             }
         };
 
+        // Check if knowledge base sections will be shown
+        const hasKnowledgeBase = this.willShowKnowledgeBase();
+        const progressClass = hasKnowledgeBase ? 'agent-progress-display kb-positioned' : 'agent-progress-display';
+        console.log('Progress positioning:', { hasKnowledgeBase, progressClass });
+
         let progressContent = `
-            <div class="agent-progress-display">
+            <div class="${progressClass}">
                 <div class="progress-header">
                     <i class="fas fa-cogs"></i>
                     Campaign Brief Generation in Progress
@@ -2415,8 +2427,13 @@ class MarketingSuperAgentV4 {
         // Generate a unique timestamp for this progress session
         const timestamp = Date.now();
 
+        // Check if knowledge base sections will be shown
+        const hasKnowledgeBase = this.willShowKnowledgeBase();
+        const progressClass = hasKnowledgeBase ? 'agent-progress-display kb-positioned' : 'agent-progress-display';
+        console.log('Progress positioning:', { hasKnowledgeBase, progressClass });
+
         const progressHTML = `
-            <div class="agent-progress-display">
+            <div class="${progressClass}">
                 <div class="progress-header" id="progress-header-${timestamp}">
                     <i class="fas fa-cog fa-spin" id="progress-icon-${timestamp}"></i>
                     <span id="progress-text-${timestamp}">Activating ${activeAgents.length} specialist agents</span>
@@ -6904,6 +6921,17 @@ class MarketingSuperAgentV4 {
                     progressIcon.className = 'fas fa-check-circle';
                     progressIcon.style.color = 'var(--accent-green)';
                     progressText.textContent = `${allAgentItems.length} specialist agents completed`;
+
+                    // If this is a positioned progress indicator, hide it after a delay
+                    if (display.classList.contains('kb-positioned')) {
+                        setTimeout(() => {
+                            display.classList.add('all-complete');
+                            // Remove from DOM after animation completes
+                            setTimeout(() => {
+                                display.remove();
+                            }, 400);
+                        }, 2000); // Show completion for 2 seconds before hiding
+                    }
                 }
             }
         });
@@ -7038,6 +7066,12 @@ class MarketingSuperAgentV4 {
 
             // Re-initialize knowledge base interactions to ensure toggles work
             this.setupKnowledgeBaseInteractions();
+
+            // Initialize progress indicator visibility (hidden by default)
+            const kbCardsContainer = kbPage.querySelector('.kb-onboarding-cards');
+            if (kbCardsContainer) {
+                kbCardsContainer.classList.remove('has-visible-cards');
+            }
 
             // Check if sidebar is visible within the knowledge base page
             const kbSidebar = kbPage.querySelector('.sidebar-nav');
@@ -7335,6 +7369,13 @@ class MarketingSuperAgentV4 {
                 const actionText = btn.querySelector('span').textContent;
 
                 switch(actionText) {
+                    case 'Enhance Knowledge Base':
+                        console.log('Enhance Knowledge Base clicked via global handler');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.openKBOnboarding();
+                        return false;
+                        break;
                     case 'Upload Documents':
                         this.uploadDocuments();
                         break;
@@ -11673,6 +11714,1292 @@ class MarketingSuperAgentV4 {
     hideSparklineTooltip(e) {
         // Hide sparkline tooltip
     }
+
+    // KB Onboarding System
+    initKBOnboarding() {
+        this.kbOnboardingState = {
+            isActive: false,
+            selectedTasks: [],
+            currentStep: 'welcome',
+            completedCards: [],
+            taskProgress: {}
+        };
+
+        this.taskToKnowledgeMapping = {
+            'campaign_launch': ['brand-guidelines', 'product-catalog', 'creative-assets', 'customer-personas'],
+            'paid_media': ['media-guidelines', 'audience-segments', 'conversion-tracking', 'budget-parameters'],
+            'creative': ['brand-guidelines', 'creative-assets', 'tone-voice', 'visual-standards'],
+            'personalization': ['customer-personas', 'behavioral-data', 'content-library', 'segmentation-rules'],
+            'lifecycle': ['customer-journey', 'email-templates', 'automation-rules', 'retention-metrics'],
+            'analytics': ['tracking-setup', 'kpi-definitions', 'dashboard-config', 'reporting-templates']
+        };
+
+        this.knowledgeCards = [
+            { id: 'brand-guidelines', title: 'Brand Guidelines', description: 'Core brand identity, logo usage, color palette', category: 'Brand', priority: 'high' },
+            { id: 'product-catalog', title: 'Product Catalog', description: 'Product details, pricing, availability', category: 'Product', priority: 'high' },
+            { id: 'creative-assets', title: 'Creative Assets', description: 'Images, videos, design templates', category: 'Creative', priority: 'medium' },
+            { id: 'customer-personas', title: 'Customer Personas', description: 'Target audience profiles and behaviors', category: 'Audience', priority: 'high' },
+            { id: 'media-guidelines', title: 'Media Guidelines', description: 'Ad policies, creative specs, platform rules', category: 'Media', priority: 'medium' },
+            { id: 'audience-segments', title: 'Audience Segments', description: 'Custom audiences and targeting criteria', category: 'Audience', priority: 'medium' },
+            { id: 'conversion-tracking', title: 'Conversion Tracking', description: 'Pixel setup, event tracking, attribution', category: 'Analytics', priority: 'high' },
+            { id: 'budget-parameters', title: 'Budget Parameters', description: 'Spend limits, bid strategies, pacing', category: 'Strategy', priority: 'medium' },
+            { id: 'tone-voice', title: 'Tone & Voice', description: 'Brand communication style and messaging', category: 'Brand', priority: 'medium' },
+            { id: 'visual-standards', title: 'Visual Standards', description: 'Design principles, layout guidelines', category: 'Creative', priority: 'low' },
+            { id: 'behavioral-data', title: 'Behavioral Data', description: 'User interaction patterns and preferences', category: 'Analytics', priority: 'medium' },
+            { id: 'content-library', title: 'Content Library', description: 'Existing content assets and templates', category: 'Creative', priority: 'low' },
+            { id: 'segmentation-rules', title: 'Segmentation Rules', description: 'Customer classification criteria', category: 'Strategy', priority: 'medium' },
+            { id: 'customer-journey', title: 'Customer Journey', description: 'Touchpoint mapping and flow', category: 'Strategy', priority: 'high' },
+            { id: 'email-templates', title: 'Email Templates', description: 'Lifecycle email designs and copy', category: 'Creative', priority: 'medium' },
+            { id: 'automation-rules', title: 'Automation Rules', description: 'Trigger conditions and workflows', category: 'Strategy', priority: 'medium' },
+            { id: 'retention-metrics', title: 'Retention Metrics', description: 'Lifecycle KPIs and benchmarks', category: 'Analytics', priority: 'low' },
+            { id: 'tracking-setup', title: 'Tracking Setup', description: 'Analytics configuration and tags', category: 'Analytics', priority: 'high' },
+            { id: 'kpi-definitions', title: 'KPI Definitions', description: 'Success metrics and calculations', category: 'Analytics', priority: 'medium' },
+            { id: 'dashboard-config', title: 'Dashboard Config', description: 'Reporting layout and data sources', category: 'Analytics', priority: 'low' },
+            { id: 'reporting-templates', title: 'Reporting Templates', description: 'Standard report formats and schedules', category: 'Analytics', priority: 'low' }
+        ];
+
+        // Note: KB Onboarding button click is handled by the global .kb-action-btn handler
+
+        // Set up close button listener
+        const closeBtn = document.getElementById('kb-onboarding-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeKBOnboarding());
+        }
+
+        // Set up task chip listeners
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('task-chip')) {
+                this.handleTaskSelection(e.target.dataset.task);
+            }
+        });
+
+        // Set up knowledge card listeners
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.knowledge-card')) {
+                const card = e.target.closest('.knowledge-card');
+                this.handleKnowledgeCardClick(card.dataset.cardId);
+            }
+        });
+
+        // Set up filter listeners
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                this.handleFilterChange(e.target.dataset.filter);
+            }
+        });
+
+        // Set up onboarding chat input
+        const onboardingChatInput = document.getElementById('kb-chat-input');
+        const onboardingChatSend = document.getElementById('kb-chat-send');
+
+        if (onboardingChatInput && onboardingChatSend) {
+            const sendOnboardingMessage = () => {
+                const message = onboardingChatInput.value.trim();
+                if (message) {
+                    this.handleOnboardingChatMessage(message);
+                    onboardingChatInput.value = '';
+                }
+            };
+
+            onboardingChatSend.addEventListener('click', sendOnboardingMessage);
+            onboardingChatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendOnboardingMessage();
+                }
+            });
+        }
+    }
+
+    openKBOnboarding() {
+        console.log('openKBOnboarding called');
+        this.kbOnboardingState.isActive = true;
+        this.kbOnboardingState.currentStep = 'welcome';
+
+        const onboardingMode = document.getElementById('kb-onboarding-mode');
+        const kbView = document.getElementById('knowledge-base-page');
+
+        console.log('onboardingMode element:', onboardingMode);
+        console.log('kbView element:', kbView);
+
+        // Create KB onboarding interface dynamically since the HTML element won't display
+        const kbOnboardingOverlay = document.createElement('div');
+        kbOnboardingOverlay.id = 'dynamic-kb-onboarding';
+        kbOnboardingOverlay.innerHTML = `
+            <!-- Left Sidebar (same as main KB page) -->
+            <div class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-item" id="kb-onboarding-back-to-home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="nav-item" id="kb-onboarding-campaigns-btn">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>Campaigns</span>
+                    </div>
+                    <div class="nav-item" id="kb-onboarding-autopilot-btn">
+                        <i class="fas fa-robot"></i>
+                        <span>Autopilot</span>
+                    </div>
+                    <div class="nav-item active">
+                        <i class="fas fa-book"></i>
+                        <span>Knowledge Base</span>
+                    </div>
+                    <div class="nav-item" id="kb-onboarding-history-btn">
+                        <i class="fas fa-history"></i>
+                        <span>History</span>
+                    </div>
+                </div>
+
+                <div class="agent-status-sidebar">
+                    <div class="status-header">
+                        <i class="fas fa-robot"></i>
+                        <span>KB Setup Assistant</span>
+                    </div>
+                    <div class="agent-indicators">
+                        <div class="agent-indicator">
+                            <div class="status-indicator active"></div>
+                            <span>Knowledge Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Research Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Creative Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Performance Agent</span>
+                        </div>
+                        <div class="agent-indicator">
+                            <div class="status-indicator idle"></div>
+                            <span>Audience Agent</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KB Onboarding Chat (middle) -->
+            <div class="kb-onboarding-chat" style="position: absolute; top: 0; left: 60px; width: 400px; height: 100vh; background: var(--card-bg, #fff); border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; z-index: 2; box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1)); border-radius: var(--radius-lg, 8px); overflow: hidden;">
+                <div class="chat-header" style="padding: var(--space-lg, 24px); border-bottom: var(--border, 1px solid #e5e7eb); display: flex; justify-content: space-between; align-items: center;">
+                    <div class="chat-title" style="display: flex; align-items: center; gap: var(--space-sm, 8px); font-size: var(--h3, 16px); font-weight: var(--h3-weight, 600); color: var(--text-primary, #2c2c2c); font-family: var(--font-family, 'Figtree', sans-serif);">
+                        <i class="fas fa-robot" style="color: var(--accent-primary, #1957db);"></i>
+                        <span>Knowledge Base Assistant</span>
+                    </div>
+                    <button class="chat-close" id="dynamic-kb-close" style="background: none; border: none; padding: var(--space-xs, 8px); border-radius: var(--radius-sm, 4px); cursor: pointer; color: var(--text-muted, #9e9e9e); transition: all var(--transition-fast, 130ms ease-out);" onmouseover="this.style.background='var(--border-light, #f0f0f0)'; this.style.color='var(--text-secondary, #6e6e6e)'" onmouseout="this.style.background='none'; this.style.color='var(--text-muted, #9e9e9e)'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="chat-messages" id="dynamic-chat-messages" style="flex: 1; padding: var(--space-md, 16px) var(--space-sm, 12px); padding-top: var(--space-xl, 32px); overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-lg, 24px); background: white; font-family: var(--font-family, 'Figtree', sans-serif);">
+                    <!-- Initial messages will be added via JavaScript -->
+                </div>
+
+                <div class="chat-input-section" style="padding: var(--space-md, 16px) var(--space-sm, 12px); border-top: none; background: var(--card-bg, #fff);">
+                    <div class="input-container" style="display: flex; align-items: center; gap: var(--space-sm, 12px); background: var(--primary-bg, #fafafa); border: var(--border, 1px solid #e5e7eb); border-radius: var(--radius-lg, 8px); padding: var(--space-sm, 12px) var(--space-md, 16px); transition: all var(--transition-fast, 130ms ease-out);">
+                        <input type="text" id="dynamic-chat-input" placeholder="Or describe what you'd like help with..." style="flex: 1; border: none; outline: none; padding: var(--space-xs, 8px) 0; font-size: var(--font-base, 14px); background: transparent; color: var(--text-primary, #2c2c2c); font-family: var(--font-family, 'Figtree', sans-serif);">
+                        <button id="dynamic-chat-send" style="padding: var(--space-sm, 12px); background: var(--accent-primary, #1957db); border: none; border-radius: 8px; color: white; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='var(--accent-secondary, #4475e6)'" onmouseout="this.style.background='var(--accent-primary, #1957db)'">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Knowledge Cards (right - remaining space) -->
+            <div class="kb-onboarding-cards" style="position: absolute; top: 0; left: 460px; right: 0; height: 100vh; background: white; display: flex; flex-direction: column; font-family: var(--font-family, 'Figtree', sans-serif);">
+                <div class="cards-header" style="padding: var(--space-lg, 24px); border-bottom: var(--border, 1px solid #e5e7eb); background: var(--card-bg, white);">
+                    <div class="cards-title" style="margin-bottom: var(--space-md, 16px);">
+                        <h3 style="margin: 0 0 var(--space-sm, 12px) 0; font-size: var(--h2, 20px); font-weight: var(--h2-weight, 400); color: var(--text-primary, #2c2c2c);">Knowledge Required</h3>
+                        <div id="dynamic-selected-tasks-pills" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 32px; align-items: center;">
+                            <span id="dynamic-no-tasks-message" style="color: var(--text-secondary, #6e6e6e); font-size: var(--font-base, 14px); font-style: italic;">Select tasks to see requirements</span>
+                        </div>
+                    </div>
+                    <div class="progress-indicator" style="background: transparent; padding: 12px 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <span id="dynamic-progress-text" style="font-size: 14px; color: #475569;">Select tasks to see recommended knowledge</span>
+                        <div style="background: #e2e8f0; height: 4px; border-radius: 2px; margin-top: 8px;">
+                            <div id="dynamic-progress-fill" style="background: var(--primary-color, #3b82f6); height: 100%; border-radius: 2px; width: 0%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="knowledge-cards-grid" id="dynamic-cards-grid" style="flex: 1; padding: 20px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h4 style="margin: 0 0 8px 0; font-size: 18px;">Select a task to see required knowledge</h4>
+                        <p style="margin: 0; font-size: 14px;">Choose one of the task options above to see what knowledge your SuperAgent needs.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        kbOnboardingOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        `;
+
+        document.body.appendChild(kbOnboardingOverlay);
+        console.log('Created dynamic KB onboarding interface');
+
+        // Set up event listeners for the dynamic interface
+        this.setupDynamicKBListeners();
+
+        // Initialize the chat flow
+        this.initializeDynamicKBChat();
+
+        // Initialize agent status
+        this.updateKBOnboardingAgentStatus('active');
+
+        // Hide the knowledge base page
+        if (kbView) {
+            kbView.style.display = 'none';
+        }
+    }
+
+    setupDynamicKBListeners() {
+        // Close button
+        const closeBtn = document.getElementById('dynamic-kb-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeDynamicKBOnboarding());
+        }
+
+        // Sidebar navigation buttons
+        const homeBtn = document.getElementById('kb-onboarding-back-to-home');
+        const campaignBtn = document.getElementById('kb-onboarding-campaigns-btn');
+        const autopilotBtn = document.getElementById('kb-onboarding-autopilot-btn');
+        const historyBtn = document.getElementById('kb-onboarding-history-btn');
+
+        if (homeBtn) {
+            homeBtn.addEventListener('click', () => {
+                this.closeDynamicKBOnboarding();
+                this.showHomeScreen();
+            });
+        }
+
+        if (campaignBtn) {
+            campaignBtn.addEventListener('click', () => {
+                this.closeDynamicKBOnboarding();
+                this.openCampaigns();
+            });
+        }
+
+        if (autopilotBtn) {
+            autopilotBtn.addEventListener('click', () => {
+                this.closeDynamicKBOnboarding();
+                this.openAutopilot();
+            });
+        }
+
+        if (historyBtn) {
+            historyBtn.addEventListener('click', () => {
+                this.closeDynamicKBOnboarding();
+                // Add history functionality if needed
+            });
+        }
+
+        // Task option buttons (in chat)
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.dynamic-task-option') && e.target.closest('#dynamic-kb-onboarding')) {
+                const taskOption = e.target.closest('.dynamic-task-option');
+                this.handleDynamicTaskSelection(taskOption.dataset.task);
+            }
+        });
+
+        // Continue button
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'dynamic-continue-btn') {
+                this.handleDynamicTaskConfirmation();
+            }
+        });
+
+        // Chat input
+        const chatInput = document.getElementById('dynamic-chat-input');
+        const chatSend = document.getElementById('dynamic-chat-send');
+        const inputContainer = chatInput?.closest('.input-container');
+
+        if (chatInput && chatSend) {
+            const sendMessage = () => {
+                const message = chatInput.value.trim();
+                if (message) {
+                    this.handleDynamicChatMessage(message);
+                    chatInput.value = '';
+                }
+            };
+
+            // Add focus styling like SuperAgent
+            if (inputContainer) {
+                chatInput.addEventListener('focus', () => {
+                    inputContainer.style.borderColor = 'var(--accent-primary, #1957db)';
+                    inputContainer.style.boxShadow = '0 0 0 2px rgba(25, 87, 219, 0.2)';
+                });
+
+                chatInput.addEventListener('blur', () => {
+                    inputContainer.style.borderColor = 'var(--border-color, #e5e7eb)';
+                    inputContainer.style.boxShadow = 'none';
+                });
+            }
+
+            chatSend.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+    }
+
+    closeDynamicKBOnboarding() {
+        this.kbOnboardingState.isActive = false;
+
+        const dynamicOverlay = document.getElementById('dynamic-kb-onboarding');
+        const kbView = document.getElementById('knowledge-base-page');
+
+        if (dynamicOverlay) {
+            dynamicOverlay.remove();
+        }
+
+        if (kbView) {
+            kbView.style.display = 'grid';
+            console.log('KB page restored with display: grid');
+        } else {
+            console.error('Knowledge base page element not found');
+        }
+    }
+
+    handleDynamicTaskSelection(taskId) {
+        const taskOption = document.querySelector(`#dynamic-kb-onboarding [data-task="${taskId}"]`);
+        if (!taskOption) return;
+
+        const taskNames = {
+            'campaign_launch': 'Campaign Launch',
+            'paid_media': 'Paid Media',
+            'creative': 'Creative Brief',
+            'personalization': 'Personalization',
+            'lifecycle': 'Lifecycle Setup',
+            'analytics': 'Performance Analysis'
+        };
+
+        if (this.kbOnboardingState.selectedTasks.includes(taskId)) {
+            // Deselect task
+            this.kbOnboardingState.selectedTasks = this.kbOnboardingState.selectedTasks.filter(id => id !== taskId);
+            taskOption.style.borderColor = 'var(--border-color, #e5e7eb)';
+            taskOption.style.background = 'white';
+            taskOption.style.boxShadow = 'none';
+            taskOption.style.transform = 'none';
+
+            // Remove checkmark if it exists
+            const existingCheck = taskOption.querySelector('.task-selected-indicator');
+            if (existingCheck) {
+                existingCheck.remove();
+            }
+
+            // Removed immediate chat message - will handle in confirmation
+        } else {
+            // Select task
+            this.kbOnboardingState.selectedTasks.push(taskId);
+
+            // Get the color from the task options data
+            const taskColors = {
+                'campaign_launch': '#3b82f6',
+                'paid_media': '#059669',
+                'creative': '#dc2626',
+                'personalization': '#7c3aed',
+                'lifecycle': '#ea580c',
+                'analytics': '#0891b2'
+            };
+
+            taskOption.style.borderColor = taskColors[taskId];
+            taskOption.style.background = `${taskColors[taskId]}08`;
+            taskOption.style.boxShadow = `0 4px 12px ${taskColors[taskId]}20`;
+            taskOption.style.transform = 'none';
+
+            // Add checkmark indicator
+            if (!taskOption.querySelector('.task-selected-indicator')) {
+                const checkmark = document.createElement('div');
+                checkmark.className = 'task-selected-indicator';
+                checkmark.style.cssText = `
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    width: 20px;
+                    height: 20px;
+                    background: ${taskColors[taskId]};
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 12px;
+                    font-weight: bold;
+                `;
+                checkmark.innerHTML = '✓';
+                taskOption.style.position = 'relative';
+                taskOption.appendChild(checkmark);
+            }
+
+            // Removed immediate chat message - will handle in confirmation
+        }
+
+        // Update the continue button visibility and text
+        this.updateDynamicContinueButton();
+
+        // Update pills display in real-time (but don't trigger knowledge cards until confirmation)
+        this.updateDynamicSelectedTasksPills();
+
+        // No immediate chat responses - wait for confirmation button
+    }
+
+    updateDynamicContinueButton() {
+        const continueBtn = document.getElementById('dynamic-continue-btn');
+        if (!continueBtn) return;
+
+        if (this.kbOnboardingState.selectedTasks.length > 0) {
+            // Enable button
+            continueBtn.style.opacity = '1';
+            continueBtn.style.pointerEvents = 'auto';
+            continueBtn.style.background = 'var(--accent-primary, #3b82f6)';
+
+            // Update button text based on selection count
+            const count = this.kbOnboardingState.selectedTasks.length;
+            continueBtn.textContent = count === 1
+                ? 'Continue with Selected Task'
+                : `Continue with ${count} Selected Tasks`;
+        } else {
+            // Disable button
+            continueBtn.style.opacity = '0.5';
+            continueBtn.style.pointerEvents = 'none';
+            continueBtn.style.background = '#9ca3af';
+            continueBtn.textContent = 'Continue with Selected Tasks';
+        }
+    }
+
+    handleDynamicTaskConfirmation() {
+        if (this.kbOnboardingState.selectedTasks.length === 0) return;
+
+        // Now trigger the original actions that were happening immediately
+        this.updateDynamicKnowledgeCardsDisplay();
+        this.updateDynamicProgressIndicator();
+
+        // Provide confirmation message
+        const taskNames = {
+            'campaign_launch': 'Campaign Launch',
+            'paid_media': 'Paid Media',
+            'creative': 'Creative Brief',
+            'personalization': 'Personalization',
+            'lifecycle': 'Lifecycle Setup',
+            'analytics': 'Performance Analysis'
+        };
+
+        const selectedTaskNames = this.kbOnboardingState.selectedTasks.map(id => taskNames[id]);
+
+        // Add user confirmation message showing what was selected
+        this.addDynamicChatMessage(`Selected tasks: ${selectedTaskNames.join(', ')}`, 'user');
+
+        setTimeout(() => {
+            if (this.kbOnboardingState.selectedTasks.length === 1) {
+                this.addDynamicChatMessage(`Perfect! I've updated the knowledge cards to show what you need for ${selectedTaskNames[0]}. You can start adding knowledge or select additional tasks by going back.`, 'agent');
+            } else {
+                this.addDynamicChatMessage(`Excellent! I'm now showing knowledge for: ${selectedTaskNames.join(', ')}. The cards are sorted by priority and relevance across all your selected tasks.`, 'agent');
+            }
+        }, 800);
+    }
+
+    updateDynamicSelectedTasksPills() {
+        const pillsContainer = document.getElementById('dynamic-selected-tasks-pills');
+        const noTasksMessage = document.getElementById('dynamic-no-tasks-message');
+
+        if (!pillsContainer) return;
+
+        if (this.kbOnboardingState.selectedTasks.length > 0) {
+            // Hide the "no tasks" message
+            if (noTasksMessage) {
+                noTasksMessage.style.display = 'none';
+            }
+
+            // Clear existing pills
+            const existingPills = pillsContainer.querySelectorAll('.task-pill');
+            existingPills.forEach(pill => pill.remove());
+
+            // Create pills for selected tasks
+            const taskNames = {
+                'campaign_launch': 'Campaign Launch',
+                'paid_media': 'Paid Media',
+                'creative': 'Creative Brief',
+                'personalization': 'Personalization',
+                'lifecycle': 'Lifecycle Setup',
+                'analytics': 'Performance Analysis'
+            };
+
+            const taskColors = {
+                'campaign_launch': '#3b82f6',
+                'paid_media': '#059669',
+                'creative': '#dc2626',
+                'personalization': '#7c3aed',
+                'lifecycle': '#ea580c',
+                'analytics': '#0891b2'
+            };
+
+            this.kbOnboardingState.selectedTasks.forEach(taskId => {
+                const pill = document.createElement('span');
+                pill.className = 'task-pill';
+                pill.style.cssText = `
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 6px 12px;
+                    background: ${taskColors[taskId]}15;
+                    border: 1px solid ${taskColors[taskId]}40;
+                    border-radius: 20px;
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: ${taskColors[taskId]};
+                    white-space: nowrap;
+                `;
+                pill.textContent = taskNames[taskId] || taskId;
+                pillsContainer.appendChild(pill);
+            });
+        } else {
+            // Show the "no tasks" message and clear pills
+            if (noTasksMessage) {
+                noTasksMessage.style.display = 'inline';
+            }
+            const existingPills = pillsContainer.querySelectorAll('.task-pill');
+            existingPills.forEach(pill => pill.remove());
+        }
+    }
+
+    updateDynamicKnowledgeCardsDisplay() {
+        const cardsGrid = document.getElementById('dynamic-cards-grid');
+        if (!cardsGrid) return;
+
+        // Get relevant knowledge cards based on selected tasks
+        const relevantCardIds = new Set();
+        this.kbOnboardingState.selectedTasks.forEach(taskId => {
+            const cards = this.taskToKnowledgeMapping[taskId] || [];
+            cards.forEach(cardId => relevantCardIds.add(cardId));
+        });
+
+        if (relevantCardIds.size === 0) {
+            cardsGrid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h4 style="margin: 0 0 8px 0; font-size: 18px;">Select a task to see required knowledge</h4>
+                    <p style="margin: 0; font-size: 14px;">Choose one of the task options above to see what knowledge your SuperAgent needs.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Sort cards by relevance and priority
+        const sortedCards = this.knowledgeCards.sort((a, b) => {
+            const aRelevant = relevantCardIds.has(a.id);
+            const bRelevant = relevantCardIds.has(b.id);
+
+            if (aRelevant && !bRelevant) return -1;
+            if (!aRelevant && bRelevant) return 1;
+
+            const priorityOrder = { high: 0, medium: 1, low: 2 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+
+        cardsGrid.innerHTML = sortedCards.map(card => {
+            const isRelevant = relevantCardIds.has(card.id);
+            const isCompleted = this.kbOnboardingState.completedCards.includes(card.id);
+
+            if (!isRelevant) return ''; // Only show relevant cards
+
+            return `
+                <div class="knowledge-card" data-card-id="${card.id}" style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.2s; ${isCompleted ? 'border-color: #22c55e; background: #f0fdf4;' : ''}"
+                     onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'"
+                     onclick="app.handleDynamicKnowledgeCardClick('${card.id}')">
+                    <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 8px;">
+                        <h4 style="margin: 0; font-size: 16px; font-weight: 600; flex: 1;">${card.title}</h4>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="background: ${card.priority === 'high' ? 'rgba(227, 72, 80, 0.1)' : card.priority === 'medium' ? 'rgba(230, 134, 25, 0.1)' : 'rgba(45, 157, 120, 0.1)'}; color: ${card.priority === 'high' ? '#e34850' : card.priority === 'medium' ? '#e68619' : '#2d9d78'}; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid ${card.priority === 'high' ? 'rgba(227, 72, 80, 0.2)' : card.priority === 'medium' ? 'rgba(230, 134, 25, 0.2)' : 'rgba(45, 157, 120, 0.2)'};">${card.priority}</span>
+                            ${isCompleted ? '<i class="fas fa-check-circle" style="color: #22c55e;"></i>' : ''}
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 12px 0; font-size: 14px; color: #64748b; line-height: 1.4;">${card.description}</p>
+                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">${card.category}</div>
+                    <div style="display: flex; gap: 8px;">
+                        <button style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                        <button style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            <i class="fas fa-link"></i> Link
+                        </button>
+                        <button style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            <i class="fas fa-edit"></i> Form
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    updateDynamicProgressIndicator() {
+        const progressText = document.getElementById('dynamic-progress-text');
+        const progressBar = document.getElementById('dynamic-progress-fill');
+        const selectedTask = document.getElementById('dynamic-selected-task');
+
+        if (!progressText || !progressBar) return;
+
+        const totalRelevantCards = new Set();
+        this.kbOnboardingState.selectedTasks.forEach(taskId => {
+            const cards = this.taskToKnowledgeMapping[taskId] || [];
+            cards.forEach(cardId => totalRelevantCards.add(cardId));
+        });
+
+        const total = totalRelevantCards.size;
+        const completed = this.kbOnboardingState.completedCards.filter(cardId =>
+            totalRelevantCards.has(cardId)
+        ).length;
+
+        // Update selected tasks pills display
+        this.updateDynamicSelectedTasksPills();
+
+        if (total > 0) {
+            const percentage = Math.round((completed / total) * 100);
+            progressText.textContent = `${completed} of ${total} recommended knowledge added`;
+            progressBar.style.width = `${percentage}%`;
+
+            // Style progress indicator for top-right positioning when cards are visible
+            const allCards = document.querySelectorAll('.knowledge-card');
+            const progressContainer = progressText.closest('.progress-indicator') || progressText.parentElement;
+            if (progressContainer && allCards.length > 0) {
+                console.log('Styling modal progress indicator for top-right position');
+                progressContainer.style.position = 'fixed';
+                progressContainer.style.top = '24px';
+                progressContainer.style.right = '24px';
+                progressContainer.style.zIndex = '1001'; // Above modal
+                progressContainer.style.background = 'linear-gradient(135deg, var(--card-bg), rgba(255, 255, 255, 0.95))';
+                progressContainer.style.backdropFilter = 'blur(10px)';
+                progressContainer.style.border = '1px solid rgba(220, 224, 232, 0.8)';
+                progressContainer.style.borderRadius = '12px';
+                progressContainer.style.padding = '16px';
+                progressContainer.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04)';
+                progressContainer.style.width = '280px';
+                progressContainer.style.animation = 'slideInFromRight 0.4s ease-out';
+
+                // Style the text
+                progressText.style.fontWeight = '600';
+                progressText.style.fontSize = '14px';
+                progressText.style.textAlign = 'center';
+                progressText.style.color = 'var(--text-primary)';
+                progressText.style.textTransform = 'uppercase';
+                progressText.style.letterSpacing = '0.5px';
+            }
+        } else {
+            progressText.textContent = 'Select tasks to see recommended knowledge';
+            progressBar.style.width = '0%';
+
+            // Reset positioning when no progress
+            const progressContainer = progressText.closest('.progress-indicator') || progressText.parentElement;
+            if (progressContainer) {
+                progressContainer.style.position = '';
+                progressContainer.style.top = '';
+                progressContainer.style.right = '';
+                progressContainer.style.zIndex = '';
+                progressContainer.style.background = '';
+                progressContainer.style.backdropFilter = '';
+                progressContainer.style.border = '';
+                progressContainer.style.borderRadius = '';
+                progressContainer.style.padding = '';
+                progressContainer.style.boxShadow = '';
+                progressContainer.style.width = '';
+                progressContainer.style.animation = '';
+            }
+        }
+
+        // Manage visibility class for stylish progress positioning
+        const kbCardsContainer = document.querySelector('.kb-onboarding-cards');
+        if (kbCardsContainer) {
+            const allCards = document.querySelectorAll('.knowledge-card');
+            console.log('Progress debug:', { total, allCardsCount: allCards.length, hasVisibleClass: kbCardsContainer.classList.contains('has-visible-cards') });
+
+            if (allCards.length > 0 && total > 0) {
+                kbCardsContainer.classList.add('has-visible-cards');
+                console.log('Added has-visible-cards class - cards visible');
+
+                // Force test the progress indicator
+                const progressIndicator = document.querySelector('.progress-indicator');
+                const allProgressElements = document.querySelectorAll('*[class*="progress"]');
+                const kbProgressText = document.getElementById('kb-progress-text');
+                const kbProgressFill = document.getElementById('kb-progress-fill');
+
+                console.log('Searching for progress elements:', {
+                    progressIndicator: !!progressIndicator,
+                    allProgressElements: allProgressElements.length,
+                    kbProgressText: !!kbProgressText,
+                    kbProgressFill: !!kbProgressFill,
+                    currentPage: document.body.className,
+                    kbCardsContainer: !!kbCardsContainer
+                });
+
+                if (progressIndicator) {
+                    console.log('Progress indicator found, forcing visibility');
+                    progressIndicator.style.display = 'flex';
+                    progressIndicator.style.background = 'red';
+                    progressIndicator.style.border = '3px solid blue';
+                    progressIndicator.style.position = 'fixed';
+                    progressIndicator.style.top = '50px';
+                    progressIndicator.style.right = '50px';
+                    progressIndicator.style.zIndex = '9999';
+                } else if (kbProgressText) {
+                    console.log('Found kb-progress-text, using parent element');
+                    const parent = kbProgressText.closest('.progress-indicator') || kbProgressText.parentElement;
+                    if (parent) {
+                        parent.style.display = 'flex';
+                        parent.style.background = 'red';
+                        parent.style.border = '3px solid blue';
+                        parent.style.position = 'fixed';
+                        parent.style.top = '50px';
+                        parent.style.right = '50px';
+                        parent.style.zIndex = '9999';
+                    }
+                } else {
+                    console.error('No progress elements found at all!');
+                }
+            } else {
+                kbCardsContainer.classList.remove('has-visible-cards');
+                console.log('Removed has-visible-cards class - no cards');
+            }
+        }
+    }
+
+    initializeDynamicKBChat() {
+        // Add welcome message
+        setTimeout(() => {
+            this.addDynamicChatMessage('Hi! I\'ll help you set up your knowledge base with exactly what your marketing agent needs.', 'agent');
+        }, 500);
+
+        // Add task selection message with options after a delay
+        setTimeout(() => {
+            this.addDynamicChatMessage('What type of marketing work are you planning? Choose one or more:', 'agent');
+            this.showDynamicTaskOptions();
+        }, 1500);
+    }
+
+    addDynamicChatMessage(content, sender = 'agent', agentName = 'KB Assistant') {
+        const chatMessages = document.getElementById('dynamic-chat-messages');
+        if (!chatMessages) return;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.style.opacity = '0';
+        messageDiv.style.transform = 'translateY(20px)';
+        messageDiv.style.transition = 'all 0.3s ease-out';
+
+        if (sender === 'user') {
+            messageDiv.innerHTML = `
+                <div class="message-avatar" style="display: none;">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="message-content" style="flex: 1;">
+                    <div class="message-text" style="background: var(--accent-primary, #3b82f6); border: 1px solid var(--accent-primary, #3b82f6); color: white; border-radius: var(--radius-lg, 12px) var(--radius-lg, 12px) var(--radius-sm, 4px) var(--radius-lg, 12px); padding: 12px 16px; box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1)); max-width: 80%; margin-left: auto;">${content}</div>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="message-avatar" style="display: none;">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content" style="flex: 1;">
+                    <div class="message-text" style="background: transparent; border: none; color: var(--text-primary, #1e293b); border-radius: none; box-shadow: none; padding: 0;">${content}</div>
+                </div>
+            `;
+        }
+
+        chatMessages.appendChild(messageDiv);
+
+        // Trigger animation
+        setTimeout(() => {
+            messageDiv.style.opacity = '1';
+            messageDiv.style.transform = 'translateY(0)';
+        }, 50);
+
+        // Scroll behavior: For agent messages, scroll to show the beginning of the message
+        if (sender === 'agent') {
+            setTimeout(() => {
+                messageDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        } else {
+            // For user messages, scroll to bottom
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 100);
+        }
+    }
+
+    showDynamicTaskOptions() {
+        const chatMessages = document.getElementById('dynamic-chat-messages');
+        if (!chatMessages) return;
+
+        const taskOptionsDiv = document.createElement('div');
+        taskOptionsDiv.className = 'message agent-message';
+        taskOptionsDiv.style.opacity = '0';
+        taskOptionsDiv.style.transform = 'translateY(20px)';
+        taskOptionsDiv.style.transition = 'all 0.3s ease-out';
+
+        const taskOptions = [
+            { id: 'campaign_launch', name: 'Campaign Launch', icon: 'bullhorn', color: '#3b82f6', desc: 'Multi-channel campaign planning' },
+            { id: 'paid_media', name: 'Paid Media', icon: 'dollar-sign', color: '#059669', desc: 'Ad optimization & budget management' },
+            { id: 'creative', name: 'Creative Brief', icon: 'palette', color: '#dc2626', desc: 'Asset creation & brand guidelines' },
+            { id: 'personalization', name: 'Personalization', icon: 'user-cog', color: '#7c3aed', desc: 'Targeted experiences & segmentation' },
+            { id: 'lifecycle', name: 'Lifecycle Setup', icon: 'sync-alt', color: '#ea580c', desc: 'Customer journey automation' },
+            { id: 'analytics', name: 'Performance Analysis', icon: 'chart-line', color: '#0891b2', desc: 'Reporting & ROI tracking' }
+        ];
+
+        const optionsHTML = taskOptions.map(task => `
+            <button class="dynamic-task-option" data-task="${task.id}"
+                    style="background: white; border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; padding: 1rem; cursor: pointer;
+                           transition: all var(--transition-fast, 0.15s ease); display: flex; align-items: center; gap: 1rem; text-align: left; width: 100%;"
+                    onmouseover="this.style.borderColor='${task.color}'; this.style.boxShadow='0 4px 12px rgba(25, 87, 219, 0.15)'; this.style.transform='translateY(-2px)'"
+                    onmouseout="this.style.borderColor='var(--border-color, #e5e7eb)'; this.style.boxShadow='none'; this.style.transform='translateY(0)'">
+                <div style="background: linear-gradient(135deg, ${task.color}, ${task.color}aa); color: white; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-${task.icon}"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: var(--text-primary, #1e293b); margin-bottom: 0.25rem;">${task.name}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary, #64748b);">${task.desc}</div>
+                </div>
+            </button>
+        `).join('');
+
+        taskOptionsDiv.innerHTML = `
+            <div class="message-content" style="flex: 1;">
+                <div class="message-text" style="background: transparent; border: none; color: var(--text-primary, #1e293b); padding: 0;">
+                    <div style="margin-top: 1rem; padding: 1.5rem; background: var(--card-bg, #ffffff); border: var(--border, 1px solid #e5e7eb); border-radius: 12px;">
+                        <h4 style="margin: 0 0 1rem 0; font-size: 1rem; color: var(--text-primary, #1e293b); font-weight: 600;">Quick entries</h4>
+                        <div style="display: grid; gap: 1rem;">
+                            ${optionsHTML}
+                        </div>
+                        <div style="margin-top: 1rem; padding: 12px; background: var(--bg-muted, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: 8px; font-size: 14px; color: var(--text-secondary, #64748b);">
+                            💡 <strong>Multi-select:</strong> Click multiple tasks to see combined knowledge requirements. Click again to deselect.
+                        </div>
+                        <div style="margin-top: 1rem; text-align: center;">
+                            <button id="dynamic-continue-btn" style="
+                                background: var(--accent-primary, #3b82f6);
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                padding: 12px 24px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                opacity: 0.5;
+                                pointer-events: none;
+                                transition: all 0.2s ease;
+                            ">
+                                Continue with Selected Tasks
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        chatMessages.appendChild(taskOptionsDiv);
+
+        // Trigger animation
+        setTimeout(() => {
+            taskOptionsDiv.style.opacity = '1';
+            taskOptionsDiv.style.transform = 'translateY(0)';
+        }, 500);
+
+        // Scroll to show the task options
+        setTimeout(() => {
+            taskOptionsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 600);
+    }
+
+    handleDynamicKnowledgeCardClick(cardId) {
+        if (!this.kbOnboardingState.completedCards.includes(cardId)) {
+            this.kbOnboardingState.completedCards.push(cardId);
+            this.updateDynamicKnowledgeCardsDisplay();
+            this.updateDynamicProgressIndicator();
+
+            const card = this.knowledgeCards.find(c => c.id === cardId);
+            this.addDynamicChatMessage(`Added: ${card.title}`, 'user');
+
+            setTimeout(() => {
+                this.addDynamicChatMessage(`Perfect! Your agent now understands ${card.title.toLowerCase()}. This will help with ${card.description.toLowerCase()}.`, 'agent');
+
+                // Check progress and provide encouragement
+                const totalRelevant = new Set();
+                this.kbOnboardingState.selectedTasks.forEach(taskId => {
+                    const cards = this.taskToKnowledgeMapping[taskId] || [];
+                    cards.forEach(cardId => totalRelevant.add(cardId));
+                });
+
+                const completed = this.kbOnboardingState.completedCards.filter(cardId => totalRelevant.has(cardId)).length;
+                const total = totalRelevant.size;
+
+                if (completed === total && total > 0) {
+                    setTimeout(() => {
+                        this.addDynamicChatMessage('🎉 Excellent! You\'ve added all the recommended knowledge. Your SuperAgent is now fully equipped for your selected tasks!', 'agent');
+                    }, 1200);
+                } else if (completed > 0 && completed % 3 === 0) {
+                    setTimeout(() => {
+                        this.addDynamicChatMessage(`You're making great progress! ${completed} of ${total} knowledge areas completed.`, 'agent');
+                    }, 1200);
+                }
+            }, 600);
+        }
+    }
+
+    handleDynamicChatMessage(message) {
+        // Add user message
+        this.addDynamicChatMessage(message, 'user');
+
+        // Simple response logic
+        setTimeout(() => {
+            let response = 'I understand. Let me know if you need help with any specific knowledge areas.';
+
+            if (message.toLowerCase().includes('done') || message.toLowerCase().includes('finished')) {
+                response = 'Perfect! Your knowledge base is now set up. Click the X to return to your Knowledge Base.';
+            } else if (message.toLowerCase().includes('help')) {
+                response = 'I can help you understand what each knowledge area covers. Just click on any card to learn more, or select tasks to see my recommendations.';
+            } else if (message.toLowerCase().includes('what') && message.toLowerCase().includes('next')) {
+                response = 'Great question! You can either select more marketing tasks above, or click on the knowledge cards on the right to add them to your agent.';
+            }
+
+            this.addDynamicChatMessage(response, 'agent');
+        }, 1000);
+    }
+
+    updateKBOnboardingAgentStatus(status) {
+        // Update agent status indicators in the KB onboarding sidebar
+        const knowledgeAgent = document.querySelector('#dynamic-kb-onboarding .agent-indicator:first-child .status-indicator');
+        if (knowledgeAgent) {
+            knowledgeAgent.className = `status-indicator ${status}`;
+        }
+    }
+
+    closeKBOnboarding() {
+        // Legacy method - kept for compatibility
+        this.closeDynamicKBOnboarding();
+    }
+
+    initializeOnboardingChat() {
+        const chatMessages = document.getElementById('kb-chat-messages');
+        if (!chatMessages) {
+            console.error('kb-chat-messages element not found');
+            return;
+        }
+        console.log('Found kb-chat-messages element');
+
+        const welcomeMessage = {
+            type: 'agent',
+            content: 'Hi! I\'ll help you set up your knowledge base with exactly what your marketing agent needs. First, let me know what you\'re planning to work on.',
+            timestamp: new Date()
+        };
+
+        this.addOnboardingChatMessage(welcomeMessage);
+
+        // Show task selection after a brief delay
+        setTimeout(() => {
+            this.showTaskSelection();
+        }, 1000);
+    }
+
+    showTaskSelection() {
+        const tasksContainer = document.getElementById('kb-task-chips');
+        if (tasksContainer) {
+            tasksContainer.style.display = 'block';
+        }
+
+        const message = {
+            type: 'agent',
+            content: 'Select the marketing tasks you\'re planning to work on. I\'ll show you the most relevant knowledge for each:',
+            timestamp: new Date()
+        };
+        this.addOnboardingChatMessage(message);
+    }
+
+    addOnboardingChatMessage(message) {
+        const chatMessages = document.getElementById('kb-chat-messages');
+        if (!chatMessages) return;
+
+        const messageElement = document.createElement('div');
+        messageElement.className = `chat-message ${message.type}`;
+
+        const timeStr = message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        messageElement.innerHTML = `
+            <div class="message-content">${message.content}</div>
+            <div class="message-time">${timeStr}</div>
+        `;
+
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    handleTaskSelection(taskId) {
+        const taskChip = document.querySelector(`[data-task="${taskId}"]`);
+        if (!taskChip) return;
+
+        if (this.kbOnboardingState.selectedTasks.includes(taskId)) {
+            // Deselect task
+            this.kbOnboardingState.selectedTasks = this.kbOnboardingState.selectedTasks.filter(id => id !== taskId);
+            taskChip.classList.remove('selected');
+        } else {
+            // Select task
+            this.kbOnboardingState.selectedTasks.push(taskId);
+            taskChip.classList.add('selected');
+        }
+
+        console.log('Task selection changed:', { taskId, selectedTasks: this.kbOnboardingState.selectedTasks });
+        this.updateKnowledgeCardsDisplay();
+        this.updateProgressIndicator();
+
+        // Add chat message about task selection
+        const taskNames = {
+            'campaign_launch': 'Campaign Launch',
+            'paid_media': 'Paid Media Optimization',
+            'creative': 'Creative Brief Creation',
+            'personalization': 'Personalization Planning',
+            'lifecycle': 'Lifecycle Setup',
+            'analytics': 'Performance Analysis'
+        };
+
+        const message = {
+            type: 'user',
+            content: `Selected: ${taskNames[taskId]}`,
+            timestamp: new Date()
+        };
+        this.addOnboardingChatMessage(message);
+
+        if (this.kbOnboardingState.selectedTasks.length === 1) {
+            const agentMessage = {
+                type: 'agent',
+                content: 'Great! I\'ve highlighted the knowledge cards most relevant to your selected tasks. You can add more tasks or start adding knowledge.',
+                timestamp: new Date()
+            };
+            this.addOnboardingChatMessage(agentMessage);
+        }
+    }
+
+    updateKnowledgeCardsDisplay() {
+        console.log('=== updateKnowledgeCardsDisplay called ===');
+        const cardsGrid = document.getElementById('kb-cards-grid');
+        if (!cardsGrid) {
+            console.error('kb-cards-grid element not found');
+            return;
+        }
+        console.log('Found kb-cards-grid element');
+
+        // Get relevant knowledge cards based on selected tasks
+        const relevantCardIds = new Set();
+        this.kbOnboardingState.selectedTasks.forEach(taskId => {
+            const cards = this.taskToKnowledgeMapping[taskId] || [];
+            cards.forEach(cardId => relevantCardIds.add(cardId));
+        });
+
+        // Sort cards by relevance and priority
+        const sortedCards = this.knowledgeCards.sort((a, b) => {
+            const aRelevant = relevantCardIds.has(a.id);
+            const bRelevant = relevantCardIds.has(b.id);
+
+            if (aRelevant && !bRelevant) return -1;
+            if (!aRelevant && bRelevant) return 1;
+
+            // If both relevant or both not relevant, sort by priority
+            const priorityOrder = { high: 0, medium: 1, low: 2 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+
+        cardsGrid.innerHTML = sortedCards.map(card => {
+            const isRelevant = relevantCardIds.has(card.id);
+            const isCompleted = this.kbOnboardingState.completedCards.includes(card.id);
+
+            return `
+                <div class="knowledge-card ${isRelevant ? 'relevant' : ''} ${isCompleted ? 'completed' : ''}"
+                     data-card-id="${card.id}" data-category="${card.category}">
+                    <div class="card-header">
+                        <h4>${card.title}</h4>
+                        <div class="card-badges">
+                            ${isRelevant ? '<span class="relevance-badge">Recommended</span>' : ''}
+                            <span class="priority-badge ${card.priority}">${card.priority}</span>
+                            ${isCompleted ? '<i class="fas fa-check-circle completed-icon"></i>' : ''}
+                        </div>
+                    </div>
+                    <p class="card-description">${card.description}</p>
+                    <div class="card-category">${card.category}</div>
+                    <div class="card-actions">
+                        <button class="card-action-btn" data-action="upload">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                        <button class="card-action-btn" data-action="link">
+                            <i class="fas fa-link"></i> Link
+                        </button>
+                        <button class="card-action-btn" data-action="form">
+                            <i class="fas fa-edit"></i> Form
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    updateProgressIndicator() {
+        const progressText = document.getElementById('kb-progress-text');
+        const progressBar = document.getElementById('kb-progress-fill');
+
+        if (!progressText || !progressBar) return;
+
+        const totalRelevantCards = new Set();
+        this.kbOnboardingState.selectedTasks.forEach(taskId => {
+            const cards = this.taskToKnowledgeMapping[taskId] || [];
+            cards.forEach(cardId => totalRelevantCards.add(cardId));
+        });
+
+        const total = totalRelevantCards.size;
+        const completed = this.kbOnboardingState.completedCards.filter(cardId =>
+            totalRelevantCards.has(cardId)
+        ).length;
+
+        if (total > 0) {
+            const percentage = Math.round((completed / total) * 100);
+            progressText.textContent = `${completed} of ${total} recommended knowledge added`;
+            progressBar.style.width = `${percentage}%`;
+        } else {
+            progressText.textContent = 'Select tasks to see recommended knowledge';
+            progressBar.style.width = '0%';
+        }
+
+        // Manage visibility class for stylish progress positioning
+        const kbCardsContainer = document.querySelector('.kb-onboarding-cards');
+        if (kbCardsContainer) {
+            const allCards = document.querySelectorAll('.knowledge-card');
+            console.log('Progress debug:', { total, allCardsCount: allCards.length, hasVisibleClass: kbCardsContainer.classList.contains('has-visible-cards') });
+
+            if (allCards.length > 0 && total > 0) {
+                kbCardsContainer.classList.add('has-visible-cards');
+                console.log('Added has-visible-cards class - cards visible');
+
+                // Force test the progress indicator
+                const progressIndicator = document.querySelector('.progress-indicator');
+                const allProgressElements = document.querySelectorAll('*[class*="progress"]');
+                const kbProgressText = document.getElementById('kb-progress-text');
+                const kbProgressFill = document.getElementById('kb-progress-fill');
+
+                console.log('Searching for progress elements:', {
+                    progressIndicator: !!progressIndicator,
+                    allProgressElements: allProgressElements.length,
+                    kbProgressText: !!kbProgressText,
+                    kbProgressFill: !!kbProgressFill,
+                    currentPage: document.body.className,
+                    kbCardsContainer: !!kbCardsContainer
+                });
+
+                if (progressIndicator) {
+                    console.log('Progress indicator found, forcing visibility');
+                    progressIndicator.style.display = 'flex';
+                    progressIndicator.style.background = 'red';
+                    progressIndicator.style.border = '3px solid blue';
+                    progressIndicator.style.position = 'fixed';
+                    progressIndicator.style.top = '50px';
+                    progressIndicator.style.right = '50px';
+                    progressIndicator.style.zIndex = '9999';
+                } else if (kbProgressText) {
+                    console.log('Found kb-progress-text, using parent element');
+                    const parent = kbProgressText.closest('.progress-indicator') || kbProgressText.parentElement;
+                    if (parent) {
+                        parent.style.display = 'flex';
+                        parent.style.background = 'red';
+                        parent.style.border = '3px solid blue';
+                        parent.style.position = 'fixed';
+                        parent.style.top = '50px';
+                        parent.style.right = '50px';
+                        parent.style.zIndex = '9999';
+                    }
+                } else {
+                    console.error('No progress elements found at all!');
+                }
+            } else {
+                kbCardsContainer.classList.remove('has-visible-cards');
+                console.log('Removed has-visible-cards class - no cards');
+            }
+        }
+    }
+
+    handleKnowledgeCardClick(cardId) {
+        // This would open a modal or form for adding knowledge
+        // For now, we'll simulate adding the knowledge
+        if (!this.kbOnboardingState.completedCards.includes(cardId)) {
+            this.kbOnboardingState.completedCards.push(cardId);
+            this.updateKnowledgeCardsDisplay();
+            this.updateProgressIndicator();
+
+            const card = this.knowledgeCards.find(c => c.id === cardId);
+            const message = {
+                type: 'agent',
+                content: `Great! Added ${card.title} to your knowledge base. Your agent now understands this area better.`,
+                timestamp: new Date()
+            };
+            this.addOnboardingChatMessage(message);
+        }
+    }
+
+    handleFilterChange(filter) {
+        // Update active filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+
+        // Apply filter to cards
+        const cards = document.querySelectorAll('.knowledge-card');
+        cards.forEach(card => {
+            if (filter === 'all' || card.dataset.category.toLowerCase() === filter) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    handleOnboardingChatMessage(message) {
+        // Add user message
+        const userMessage = {
+            type: 'user',
+            content: message,
+            timestamp: new Date()
+        };
+        this.addOnboardingChatMessage(userMessage);
+
+        // Simple response logic
+        setTimeout(() => {
+            let response = 'I understand. Let me know if you need help with any specific knowledge areas.';
+
+            if (message.toLowerCase().includes('done') || message.toLowerCase().includes('finished')) {
+                response = 'Perfect! Your knowledge base is now set up. Click "Finish Setup" to return to your Knowledge Base.';
+            } else if (message.toLowerCase().includes('help')) {
+                response = 'I can help you understand what each knowledge area covers. Just click on any card to learn more, or select tasks to see my recommendations.';
+            }
+
+            const agentMessage = {
+                type: 'agent',
+                content: response,
+                timestamp: new Date()
+            };
+            this.addOnboardingChatMessage(agentMessage);
+        }, 1000);
+    }
 }
 
 // Initialize the app when DOM is loaded
@@ -11684,5 +13011,6 @@ document.addEventListener('DOMContentLoaded', () => {
     app.handlePersonalizationActions();
     app.initializeKnowledgeBaseSearch();
     app.setupAutopilotEnhancements();
+    app.initKBOnboarding();
     console.log('Marketing SuperAgent v4 loaded successfully');
 });
