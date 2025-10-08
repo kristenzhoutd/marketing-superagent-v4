@@ -495,21 +495,37 @@ class MarketingSuperAgentV4 {
             this.currentTask = null;
         }
 
-        // Detect relevant AI suite based on the input
-        const relevantSuite = this.detectRelevantAISuite(message);
-        if (relevantSuite) {
-            const areaTitles = {
-                'engage': 'Engage AI Suite',
-                'paid-media': 'Paid Media AI Suite',
-                'personalization': 'Personalization AI Suite',
-                'service': 'Service AI Suite',
-                'creative': 'Creative AI Suite'
+        // Set output title based on context
+        if (this.currentTask && this.taskToSuite && this.taskToSuite[this.currentTask] === null) {
+            // For Kate's campaign manager tasks, use the task name as title
+            const taskTitles = {
+                'design-campaign-program': 'Campaign Strategy Output',
+                'research-personas': 'Persona Research Output',
+                'pick-channel-mix': 'Channel Strategy Output',
+                'create-creative-brief': 'Creative Brief Output',
+                'build-campaign-brief': 'Campaign Brief Output',
+                'analyze-competitors': 'Competitive Analysis Output',
+                'define-kpis': 'KPI Definition Output',
+                'set-campaign-budget': 'Budget Planning Output'
             };
-            this.currentSuiteTitle = areaTitles[relevantSuite];
+            this.currentSuiteTitle = taskTitles[this.currentTask] || 'Campaign Output';
         } else {
-            // Fallback: map message type to appropriate AI suite
-            const messageType = this.analyzeMessage(message);
-            this.currentSuiteTitle = this.getAISuiteFromMessageType(messageType);
+            // Detect relevant AI suite based on the input for other tasks
+            const relevantSuite = this.detectRelevantAISuite(message);
+            if (relevantSuite) {
+                const areaTitles = {
+                    'engage': 'Engage AI Suite',
+                    'paid-media': 'Paid Media AI Suite',
+                    'personalization': 'Personalization AI Suite',
+                    'service': 'Service AI Suite',
+                    'creative': 'Creative AI Suite'
+                };
+                this.currentSuiteTitle = areaTitles[relevantSuite];
+            } else {
+                // Fallback: map message type to appropriate AI suite
+                const messageType = this.analyzeMessage(message);
+                this.currentSuiteTitle = this.getAISuiteFromMessageType(messageType);
+            }
         }
 
         // Transition to working interface
@@ -614,7 +630,7 @@ class MarketingSuperAgentV4 {
         });
 
         // Set initial selected state
-        this.selectRole('laura');
+        this.selectRole('kate');
     }
 
     openRoleDropdown() {
@@ -1192,7 +1208,16 @@ class MarketingSuperAgentV4 {
             'budget-allocation': 'Optimize my marketing budget allocation across channels for maximum ROI',
             'ab-test': 'Set up A/B testing framework for campaigns with statistical significance tracking',
             'competitor-analysis': 'Analyze competitor marketing strategies, positioning, and performance benchmarks',
-            'content-calendar': 'Create a strategic content calendar with scheduling and theme planning'
+            'content-calendar': 'Create a strategic content calendar with scheduling and theme planning',
+            // Kate's campaign manager tasks
+            'design-campaign-program': 'Design a comprehensive campaign program with strategic direction, messaging, audience targeting, and competitive analysis',
+            'research-personas': 'Research and develop detailed target audience personas for campaign planning',
+            'pick-channel-mix': 'Recommend the optimal channel mix and budget allocation for campaign success',
+            'create-creative-brief': 'Create a detailed creative brief with messaging, visual direction, and brand guidelines',
+            'build-campaign-brief': 'Build a comprehensive campaign brief with objectives, strategy, and execution plan',
+            'analyze-competitors': 'Analyze competitor campaigns, positioning, and market opportunities',
+            'define-kpis': 'Define key performance indicators and measurement framework for campaign success',
+            'set-campaign-budget': 'Set and optimize campaign budget allocation across channels and tactics'
         };
 
         // Task-to-agents mapping - specify which agents are most relevant for each task
@@ -1206,11 +1231,20 @@ class MarketingSuperAgentV4 {
             'budget-allocation': ['Deep Research Agent', 'Historical Performance Agent', 'Budget Optimization Agent'],
             'ab-test': ['Creative Agent', 'Performance Agent', 'Analytics Agent'],
             'competitor-analysis': ['Research Agent', 'Performance Agent', 'Historical Agent'],
-            'content-calendar': ['Creative Agent', 'Research Agent', 'Journey Agent']
+            'content-calendar': ['Creative Agent', 'Research Agent', 'Journey Agent'],
+            // Kate's campaign manager tasks with specialized agents
+            'design-campaign-program': ['Campaign Architect Agent', 'Persona Research Agent', 'Competitive Intelligence Agent'],
+            'research-personas': ['Persona Research Agent', 'Research Agent', 'Analytics Agent'],
+            'pick-channel-mix': ['Campaign Architect Agent', 'Performance Agent', 'Budget Optimization Agent'],
+            'create-creative-brief': ['Creative Agent', 'Campaign Architect Agent', 'Research Agent'],
+            'build-campaign-brief': ['Campaign Architect Agent', 'Research Agent', 'Performance Agent'],
+            'analyze-competitors': ['Competitive Intelligence Agent', 'Research Agent', 'Performance Agent'],
+            'define-kpis': ['Performance Agent', 'Analytics Agent', 'Campaign Architect Agent'],
+            'set-campaign-budget': ['Budget Optimization Agent', 'Performance Agent', 'Campaign Architect Agent']
         };
 
         // Direct task-to-suite mapping for higher accuracy
-        const taskToSuite = {
+        this.taskToSuite = {
             'campaign-brief': 'paid-media',
             'optimize-campaign': 'paid-media',
             'campaign-insights': 'paid-media',
@@ -1220,11 +1254,20 @@ class MarketingSuperAgentV4 {
             'budget-allocation': 'paid-media',
             'ab-test': 'creative',
             'competitor-analysis': null, // Let AI detection handle this
-            'content-calendar': 'creative'
+            'content-calendar': 'creative',
+            // Kate's campaign manager tasks - no suite mapping
+            'design-campaign-program': null,
+            'research-personas': null,
+            'pick-channel-mix': null,
+            'create-creative-brief': null,
+            'build-campaign-brief': null,
+            'analyze-competitors': null,
+            'define-kpis': null,
+            'set-campaign-budget': null
         };
 
         // Set AI suite title if we have a direct mapping
-        const directSuite = taskToSuite[task];
+        const directSuite = this.taskToSuite[task];
         if (directSuite) {
             const areaTitles = {
                 'engage': 'Engage AI Suite',
@@ -1438,7 +1481,17 @@ class MarketingSuperAgentV4 {
             'Journey Agent': { color: '#e68619', icon: 'fas fa-sitemap' },
             'Analytics Agent': { color: '#1957db', icon: 'fas fa-chart-bar' },
             'Historical Agent': { color: '#6366f1', icon: 'fas fa-history' },
-            'Personalization Agent': { color: '#9256d9', icon: 'fas fa-user-cog' }
+            'Personalization Agent': { color: '#9256d9', icon: 'fas fa-user-cog' },
+            'Campaign Architect Agent': { color: '#e11d48', icon: 'fas fa-blueprint' },
+            'Persona Research Agent': { color: '#7c3aed', icon: 'fas fa-user-friends' },
+            'Channel Strategy Agent': { color: '#f59e0b', icon: 'fas fa-broadcast-tower' },
+            'Competitive Intelligence Agent': { color: '#dc2626', icon: 'fas fa-chess' },
+            'Creative Brief Agent': { color: '#8b5cf6', icon: 'fas fa-file-alt' },
+            'Ad Copy Agent': { color: '#ec4899', icon: 'fas fa-pen-nib' },
+            'Creative Ideation Agent': { color: '#f59e0b', icon: 'fas fa-lightbulb' },
+            'Social Creative Agent': { color: '#10b981', icon: 'fas fa-share-alt' },
+            'Display Creative Agent': { color: '#3b82f6', icon: 'fas fa-image' },
+            'Knowledge Base Onboarding Agent': { color: '#6366f1', icon: 'fas fa-graduation-cap' }
         };
 
         const agentDetails = {
@@ -1512,6 +1565,96 @@ class MarketingSuperAgentV4 {
                     'Defining dynamic content rules',
                     'Setting up behavioral triggers',
                     'Optimizing individual experiences'
+                ]
+            },
+            'Campaign Architect Agent': {
+                name: 'Campaign Architect Agent',
+                tasks: [
+                    'Designing comprehensive campaign structure',
+                    'Creating strategic framework and blueprint',
+                    'Mapping campaign architecture and flow',
+                    'Establishing campaign governance model'
+                ]
+            },
+            'Persona Research Agent': {
+                name: 'Persona Research Agent',
+                tasks: [
+                    'Conducting deep audience research',
+                    'Creating detailed persona profiles',
+                    'Analyzing behavioral patterns and motivations',
+                    'Validating persona assumptions with data'
+                ]
+            },
+            'Channel Strategy Agent': {
+                name: 'Channel Strategy Agent',
+                tasks: [
+                    'Optimizing channel mix and allocation',
+                    'Analyzing channel performance metrics',
+                    'Creating multi-channel distribution strategy',
+                    'Coordinating cross-channel integration'
+                ]
+            },
+            'Competitive Intelligence Agent': {
+                name: 'Competitive Intelligence Agent',
+                tasks: [
+                    'Monitoring competitive landscape',
+                    'Analyzing competitor strategies and tactics',
+                    'Identifying market positioning opportunities',
+                    'Providing strategic competitive insights'
+                ]
+            },
+            'Creative Brief Agent': {
+                name: 'Creative Brief Agent',
+                tasks: [
+                    'Developing comprehensive creative briefs',
+                    'Defining creative strategy and direction',
+                    'Establishing brand guidelines and standards',
+                    'Creating creative framework and requirements'
+                ]
+            },
+            'Ad Copy Agent': {
+                name: 'Ad Copy Agent',
+                tasks: [
+                    'Writing compelling ad headlines and copy',
+                    'Creating persuasive call-to-action messaging',
+                    'Optimizing copy for different platforms',
+                    'Testing and refining messaging variants'
+                ]
+            },
+            'Creative Ideation Agent': {
+                name: 'Creative Ideation Agent',
+                tasks: [
+                    'Generating innovative creative concepts',
+                    'Brainstorming unique campaign ideas',
+                    'Developing creative themes and narratives',
+                    'Exploring emerging creative trends'
+                ]
+            },
+            'Social Creative Agent': {
+                name: 'Social Creative Agent',
+                tasks: [
+                    'Designing social media creative assets',
+                    'Creating platform-specific content formats',
+                    'Developing social engagement strategies',
+                    'Optimizing content for social algorithms'
+                ]
+            },
+            'Display Creative Agent': {
+                name: 'Display Creative Agent',
+                tasks: [
+                    'Creating display advertising visuals',
+                    'Designing banner and rich media ads',
+                    'Optimizing creative for different placements',
+                    'Developing responsive ad layouts'
+                ]
+            },
+            'Knowledge Base Onboarding Agent': {
+                name: 'Knowledge Base Onboarding Agent',
+                tasks: [
+                    'Guiding knowledge base setup process',
+                    'Organizing information architecture',
+                    'Creating onboarding workflows',
+                    'Establishing knowledge management best practices'
                 ]
             }
         };
@@ -2365,7 +2508,17 @@ class MarketingSuperAgentV4 {
             'Analytics Agent': { icon: 'fas fa-chart-line', color: '#2563eb', task: 'Analyzing data and metrics' },
             'Personalization Agent': { icon: 'fas fa-user-edit', color: '#9256d9', task: 'Optimizing personalized experiences' },
             'Budget Optimization Agent': { icon: 'fas fa-calculator', color: '#059669', task: 'Optimizing budget allocation and ROI' },
-            'Historical Performance Agent': { icon: 'fas fa-chart-bar', color: '#7c3aed', task: 'Analyzing historical campaign performance' }
+            'Historical Performance Agent': { icon: 'fas fa-chart-bar', color: '#7c3aed', task: 'Analyzing historical campaign performance' },
+            'Campaign Architect Agent': { icon: 'fas fa-blueprint', color: '#e11d48', task: 'Designing comprehensive campaign structure and framework' },
+            'Persona Research Agent': { icon: 'fas fa-user-friends', color: '#7c3aed', task: 'Researching target audience personas and behaviors' },
+            'Channel Strategy Agent': { icon: 'fas fa-broadcast-tower', color: '#f59e0b', task: 'Optimizing channel mix and distribution strategy' },
+            'Competitive Intelligence Agent': { icon: 'fas fa-chess', color: '#dc2626', task: 'Analyzing competitive landscape and positioning opportunities' },
+            'Creative Brief Agent': { icon: 'fas fa-file-alt', color: '#8b5cf6', task: 'Developing creative briefs and strategic direction' },
+            'Ad Copy Agent': { icon: 'fas fa-pen-nib', color: '#ec4899', task: 'Creating compelling ad copy and messaging' },
+            'Creative Ideation Agent': { icon: 'fas fa-lightbulb', color: '#f59e0b', task: 'Generating innovative creative concepts and ideas' },
+            'Social Creative Agent': { icon: 'fas fa-share-alt', color: '#10b981', task: 'Designing social media creative assets and content' },
+            'Display Creative Agent': { icon: 'fas fa-image', color: '#3b82f6', task: 'Creating display advertising visuals and layouts' },
+            'Knowledge Base Onboarding Agent': { icon: 'fas fa-graduation-cap', color: '#6366f1', task: 'Guiding knowledge base setup and organization' }
         };
 
         // Generate a unique timestamp for this progress session
@@ -3713,7 +3866,8 @@ class MarketingSuperAgentV4 {
             'budget-allocation': () => this.generateBudgetAllocationOutput(context, userMessage),
             'ab-test': () => this.generateABTestOutput(context, userMessage),
             'competitor-analysis': () => this.generateCompetitorAnalysisOutput(context, userMessage),
-            'content-calendar': () => this.generateContentCalendarOutput(context, userMessage)
+            'content-calendar': () => this.generateContentCalendarOutput(context, userMessage),
+            'design-campaign-program': () => this.generateCampaignStrategyOutput(context, userMessage)
         };
 
         const generator = taskOutputGenerators[task];
@@ -4620,6 +4774,277 @@ class MarketingSuperAgentV4 {
                         </div>
                     </div>
                 </div>
+            </div>
+        `;
+    }
+
+    generateCampaignStrategyOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-rocket" style="color: var(--accent-green);"></i> Campaign Strategy Overview</h2>
+                        <p class="output-subtitle">Comprehensive campaign strategy with strategic direction, messaging, and competitive intelligence</p>
+                        <div class="output-stats">
+                            <div class="stat-pill strategy-areas">
+                                <i class="fas fa-layer-group"></i>
+                                <span>5 Strategy Areas</span>
+                            </div>
+                            <div class="stat-pill specialist-agents">
+                                <i class="fas fa-users-cog"></i>
+                                <span>3 Specialist Agents</span>
+                            </div>
+                            <div class="stat-pill strategic-insights">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>15+ Strategic Insights</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-cards-grid">
+                    <div class="agent-analysis-card strategy">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-compass"></i></div>
+                            <h4>Strategic Direction Overview</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('strategy')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Integrated multi-channel approach targeting key customer segments with compelling value propositions</span>
+                        </div>
+                        <div class="strategy-content">
+                            <h5>Primary Objective</h5>
+                            <p>Drive brand awareness and sales conversion through data-driven insights and personalized customer experiences across digital touchpoints.</p>
+
+                            <h5>Core Strategy</h5>
+                            <p>Leverage competitive differentiators and product benefits to create authentic connections with target audiences through strategic channel optimization.</p>
+
+                            <div class="success-metrics">
+                                <h5>Success Framework</h5>
+                                <div class="metric-tags">
+                                    <span class="metric-tag">Brand Awareness +25%</span>
+                                    <span class="metric-tag">Conversion Rate +15%</span>
+                                    <span class="metric-tag">Customer Acquisition</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card messaging">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-comment-dots"></i></div>
+                            <h4>Key Messaging Pillars</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('messaging')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Four core messaging pillars designed to resonate with target audience values and motivations</span>
+                        </div>
+                        <div class="messaging-framework">
+                            <div class="pillar-list">
+                                <div class="pillar-item">
+                                    <div class="pillar-number">1</div>
+                                    <div class="pillar-content">
+                                        <strong>Value Proposition:</strong> "Transform your experience with innovative solutions designed for modern needs"
+                                    </div>
+                                </div>
+                                <div class="pillar-item">
+                                    <div class="pillar-number">2</div>
+                                    <div class="pillar-content">
+                                        <strong>Trust & Credibility:</strong> "Trusted by thousands of customers with proven results and exceptional support"
+                                    </div>
+                                </div>
+                                <div class="pillar-item">
+                                    <div class="pillar-number">3</div>
+                                    <div class="pillar-content">
+                                        <strong>Innovation Leadership:</strong> "Leading the industry with cutting-edge technology and forward-thinking approach"
+                                    </div>
+                                </div>
+                                <div class="pillar-item">
+                                    <div class="pillar-number">4</div>
+                                    <div class="pillar-content">
+                                        <strong>Customer Success:</strong> "Your success is our priority - dedicated support every step of the way"
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card audience">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-users"></i></div>
+                            <h4>Target Audience & Persona Hypotheses</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('audience')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Two primary persona segments representing 100% of campaign targeting strategy</span>
+                        </div>
+                        <div class="audience-breakdown">
+                            <h5>Persona Distribution</h5>
+                            <div class="segment-bars">
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Growth-Oriented Professional</span>
+                                        <span class="segment-percentage">70%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 70%; background: var(--accent-primary);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Value-Conscious Consumer</span>
+                                        <span class="segment-percentage">30%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 30%; background: var(--accent-secondary);"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="persona-details">
+                                <div class="persona-section">
+                                    <h6>Primary Persona Attributes</h6>
+                                    <ul>
+                                        <li><strong>Demographics:</strong> 28-45 years, college-educated, $60K+ income</li>
+                                        <li><strong>Psychographics:</strong> Values efficiency, seeks innovation, data-driven decisions</li>
+                                        <li><strong>Behaviors:</strong> Research-oriented, social media active, mobile-first</li>
+                                        <li><strong>Pain Points:</strong> Time constraints, information overload, solution complexity</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card channels">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-broadcast-tower"></i></div>
+                            <h4>Channel Strategy Outline</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('channels')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Strategic budget allocation across 4 primary channels for maximum reach and conversion</span>
+                        </div>
+                        <div class="channel-breakdown">
+                            <h5>Budget Allocation</h5>
+                            <div class="segment-bars">
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Digital Advertising</span>
+                                        <span class="segment-percentage">40%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 40%; background: var(--accent-primary);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Content Marketing</span>
+                                        <span class="segment-percentage">25%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 25%; background: var(--accent-green);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Email Marketing</span>
+                                        <span class="segment-percentage">20%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 20%; background: var(--accent-orange);"></div>
+                                    </div>
+                                </div>
+                                <div class="segment-bar">
+                                    <div class="segment-info">
+                                        <span class="segment-name">Social & Influencer</span>
+                                        <span class="segment-percentage">15%</span>
+                                    </div>
+                                    <div class="segment-progress">
+                                        <div class="segment-fill" style="width: 15%; background: var(--accent-purple);"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="channel-tactics">
+                                <h5>Key Tactics</h5>
+                                <div class="tactic-grid">
+                                    <span class="tactic-tag">Search Campaigns</span>
+                                    <span class="tactic-tag">Display Retargeting</span>
+                                    <span class="tactic-tag">SEO Content</span>
+                                    <span class="tactic-tag">Welcome Series</span>
+                                    <span class="tactic-tag">Social Proof</span>
+                                    <span class="tactic-tag">Video Ads</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-analysis-card competitive">
+                        <div class="agent-card-header">
+                            <div class="agent-icon"><i class="fas fa-chess"></i></div>
+                            <h4>Competitive Snapshot</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('competitive')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-search"></i>
+                            <span>Market analysis reveals differentiation opportunities in messaging and channel optimization</span>
+                        </div>
+                        <div class="competitive-landscape">
+                            <h5>Market Leaders Analysis</h5>
+                            <div class="competitor-cards">
+                                <div class="competitor-card">
+                                    <div class="competitor-header">
+                                        <h6>Competitor A - Market Leader</h6>
+                                        <span class="market-share">35%</span>
+                                    </div>
+                                    <div class="competitor-insights">
+                                        <div class="insight-item strength">
+                                            <strong>Strengths:</strong> Brand recognition, extensive distribution, premium positioning
+                                        </div>
+                                        <div class="insight-item opportunity">
+                                            <strong>Opportunity:</strong> Limited personalization, higher price point, slower innovation
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="competitor-card">
+                                    <div class="competitor-header">
+                                        <h6>Competitor B - Fast Follower</h6>
+                                        <span class="market-share">22%</span>
+                                    </div>
+                                    <div class="competitor-insights">
+                                        <div class="insight-item strength">
+                                            <strong>Strengths:</strong> Competitive pricing, digital-first approach, rapid iteration
+                                        </div>
+                                        <div class="insight-item opportunity">
+                                            <strong>Opportunity:</strong> Limited customer support, brand trust gaps, narrow feature set
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="positioning-recommendation">
+                                <h5>Recommended Positioning</h5>
+                                <p><strong>"The perfect balance of innovation and reliability"</strong> - Premium features at competitive prices with exceptional support, emphasizing customer success stories and proven ROI.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${this.generateKnowledgeBaseSection()}
             </div>
         `;
     }
@@ -12956,6 +13381,42 @@ class MarketingSuperAgentV4 {
             this.addOnboardingChatMessage(agentMessage);
         }, 1000);
     }
+}
+
+// Global function for refining campaign strategy cards with AI
+function refineWithAI(cardType) {
+    console.log(`Refining ${cardType} with AI`);
+
+    const refinements = {
+        strategy: 'Refining strategic direction with enhanced market insights and competitive positioning...',
+        messaging: 'Optimizing messaging pillars with advanced sentiment analysis and audience psychology...',
+        audience: 'Enhancing audience segmentation with predictive analytics and behavioral modeling...',
+        channels: 'Optimizing channel strategy with real-time performance data and attribution modeling...',
+        competitive: 'Deepening competitive analysis with market intelligence and positioning opportunities...'
+    };
+
+    const message = refinements[cardType] || 'Refining analysis with AI-powered insights...';
+
+    // Show a toast notification or progress indicator
+    const toast = document.createElement('div');
+    toast.className = 'refine-toast';
+    toast.innerHTML = `
+        <div class="refine-toast-content">
+            <i class="fas fa-magic"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    document.body.appendChild(toast);
+
+    // Remove toast after 3 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 3000);
+
+    // Here you could add actual AI refinement logic
+    // For now, this serves as a placeholder for the functionality
 }
 
 // Initialize the app when DOM is loaded

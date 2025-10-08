@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketing SuperAgent - AI-Native Marketing Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=55">
+    <link rel="stylesheet" href="css/styles.css?v=65">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -19,11 +19,20 @@
                 <div class="page-role-selector">
                     <div class="role-selector">
                         <button class="role-btn avatar-only" id="role-selector-btn">
-                            <div class="role-avatar" data-role="laura">
-                                <div class="avatar-illustration laura-avatar"></div>
+                            <div class="role-avatar" data-role="kate">
+                                <div class="avatar-illustration kate-avatar"></div>
                             </div>
                         </button>
                         <div class="role-dropdown" id="role-dropdown">
+                            <div class="role-option" data-role="kate">
+                                <div class="role-avatar">
+                                    <div class="avatar-illustration kate-avatar"></div>
+                                </div>
+                                <div class="role-details">
+                                    <span class="role-name">Kate</span>
+                                    <span class="role-title">Campaign Manager</span>
+                                </div>
+                            </div>
                             <div class="role-option" data-role="laura">
                                 <div class="role-avatar">
                                     <div class="avatar-illustration laura-avatar"></div>
@@ -49,15 +58,6 @@
                                 <div class="role-details">
                                     <span class="role-name">Emily</span>
                                     <span class="role-title">Creative Marketer</span>
-                                </div>
-                            </div>
-                            <div class="role-option" data-role="kate">
-                                <div class="role-avatar">
-                                    <div class="avatar-illustration kate-avatar"></div>
-                                </div>
-                                <div class="role-details">
-                                    <span class="role-name">Kate</span>
-                                    <span class="role-title">Campaign Manager</span>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                     <div class="chat-entry-section">
                         <div class="chat-entry-header" id="chat-entry-header">
                             <!-- Default Header -->
-                            <div class="header-content default-header">
+                            <div class="header-content default-header" style="display: none;">
                                 <h1>Marketing SuperAgent</h1>
                                 <p class="tagline">One SuperAgent. Every Task. Marketing Made AI-Native.</p>
                             </div>
@@ -160,7 +160,7 @@
                             </div>
 
                             <!-- Kate's Header -->
-                            <div class="header-content role-header kate-header" style="display: none;">
+                            <div class="header-content role-header kate-header" style="display: block;">
                                 <h1>Hey Kate! Let's launch something amazing 🎯</h1>
                                 <p class="tagline">Time to orchestrate campaigns that deliver results and drive engagement.</p>
                             </div>
@@ -177,7 +177,7 @@
                                     <div class="input-wrapper">
                                         <textarea
                                             id="main-input"
-                                            placeholder="Message Marketing SuperAgent..."
+                                            placeholder="Ask about campaign management, execution strategies, or performance optimization..."
                                             rows="1"
                                             autocomplete="off"
                                         ></textarea>
@@ -195,7 +195,7 @@
                         <!-- Example Suggestions -->
                         <div class="example-suggestions" id="example-suggestions">
                             <!-- Default Examples Grid -->
-                            <div class="examples-grid default-examples">
+                            <div class="examples-grid default-examples" style="display: none;">
                                 <!-- Default suggestions shown when no role is selected -->
                                 <!-- First Row - Scrolling Left -->
                                 <div class="examples-row">
@@ -640,7 +640,7 @@
                             </div>
 
                             <!-- Kate's Campaign Management Examples -->
-                            <div class="examples-grid role-examples kate-examples" style="display: none;">
+                            <div class="examples-grid role-examples kate-examples" style="display: block;">
                                 <div class="examples-row">
                                     <div class="example-card" data-prompt="Design a multi-channel campaign for a fall apparel launch">
                                         <div class="example-icon">🍂</div>
@@ -703,7 +703,7 @@
 
                     <!-- Entry Shortcuts -->
                     <div class="entry-shortcuts">
-                        <div class="shortcuts-section ai-suites-section">
+                        <div class="shortcuts-section ai-suites-section" style="display: none;">
                             <h3>AI Suites</h3>
                             <div class="product-areas">
                                 <div class="area-card" data-area="engage">
@@ -756,7 +756,7 @@
 
                         <div class="shortcuts-section">
                             <h3>Quick Start by Task</h3>
-                            <div class="task-shortcuts default-tasks">
+                            <div class="task-shortcuts default-tasks" style="display: none;">
                                 <button class="task-btn" data-task="campaign-brief">
                                     <i class="fas fa-file-alt"></i>
                                     <span>Create a new campaign brief</span>
@@ -800,7 +800,7 @@
                             </div>
 
                             <!-- Kate's Campaign Manager Tasks -->
-                            <div class="task-shortcuts kate-tasks" style="display: none;">
+                            <div class="task-shortcuts kate-tasks" style="display: block;">
                                 <button class="task-btn" data-task="design-campaign-program">
                                     <i class="fas fa-rocket"></i>
                                     <span>Design a Campaign Program</span>
@@ -842,52 +842,44 @@
                         <h3>Available Specialist Agents</h3>
                         <div class="agents-grid">
                             <div class="agent-showcase-card">
-                                <div class="agent-icon audience"><i class="fas fa-users"></i></div>
-                                <span>Audience Agent</span>
+                                <div class="agent-icon campaign-architect"><i class="fas fa-drafting-compass"></i></div>
+                                <span>Campaign Architect Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon creative"><i class="fas fa-palette"></i></div>
-                                <span>Creative Agent</span>
+                                <div class="agent-icon persona-research"><i class="fas fa-user-friends"></i></div>
+                                <span>Persona Research Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon performance"><i class="fas fa-chart-bar"></i></div>
-                                <span>Performance Agent</span>
+                                <div class="agent-icon channel-strategy"><i class="fas fa-route"></i></div>
+                                <span>Channel Strategy Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon journey"><i class="fas fa-route"></i></div>
-                                <span>Journey Agent</span>
+                                <div class="agent-icon competitive-intelligence"><i class="fas fa-chess"></i></div>
+                                <span>Competitive Intelligence Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon research"><i class="fas fa-search"></i></div>
-                                <span>Deep Research Agent</span>
+                                <div class="agent-icon creative-brief"><i class="fas fa-file-alt"></i></div>
+                                <span>Creative Brief Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon historical"><i class="fas fa-history"></i></div>
-                                <span>Historical Agent</span>
+                                <div class="agent-icon ad-copy"><i class="fas fa-pen-nib"></i></div>
+                                <span>Ad Copy Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon personalization"><i class="fas fa-user-cog"></i></div>
-                                <span>Personalization Agent</span>
+                                <div class="agent-icon creative-ideation"><i class="fas fa-lightbulb"></i></div>
+                                <span>Creative Ideation Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon paid-media"><i class="fas fa-bullhorn"></i></div>
-                                <span>Paid Media Agent</span>
+                                <div class="agent-icon social-creative"><i class="fas fa-share-alt"></i></div>
+                                <span>Social Creative Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon service"><i class="fas fa-headset"></i></div>
-                                <span>Service Agent</span>
+                                <div class="agent-icon display-creative"><i class="fas fa-image"></i></div>
+                                <span>Display Creative Agent</span>
                             </div>
                             <div class="agent-showcase-card">
-                                <div class="agent-icon persona"><i class="fas fa-user-circle"></i></div>
-                                <span>Persona Agent</span>
-                            </div>
-                            <div class="agent-showcase-card">
-                                <div class="agent-icon migration"><i class="fas fa-exchange-alt"></i></div>
-                                <span>Migration Agent</span>
-                            </div>
-                            <div class="agent-showcase-card">
-                                <div class="agent-icon analytics"><i class="fas fa-chart-pie"></i></div>
-                                <span>Analytics Agent</span>
+                                <div class="agent-icon knowledge-base"><i class="fas fa-graduation-cap"></i></div>
+                                <span>Knowledge Base Onboarding Agent</span>
                             </div>
                         </div>
                     </div>
@@ -1999,6 +1991,6 @@
         </div>
     </div>
 
-    <script src="js/app.js?v=41"></script>
+    <script src="js/app.js?v=50"></script>
 </body>
 </html><!-- Deployment trigger Mon Sep 29 03:28:46 PDT 2025 -->

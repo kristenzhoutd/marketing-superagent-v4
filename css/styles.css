@@ -979,37 +979,37 @@ body {
 .examples-row:first-child .example-card:nth-child(24) { width: 250px; } /* Duplicate of card 9 */
 .examples-row:first-child .example-card:nth-child(25) { width: 290px; } /* Duplicate of card 10 */
 
-/* Kate's Campaign Management Example Cards - Custom widths for longer text */
-.kate-examples .examples-row:first-child .example-card:nth-child(1) { width: 320px; } /* "Design a multi-channel campaign for a fall apparel launch" */
-.kate-examples .examples-row:first-child .example-card:nth-child(2) { width: 380px; } /* "Turn this brief into a campaign plan with channels, audiences, and timeline" */
-.kate-examples .examples-row:first-child .example-card:nth-child(3) { width: 350px; } /* "Summarize target personas for premium athleisure in the U.S." */
-.kate-examples .examples-row:first-child .example-card:nth-child(4) { width: 360px; } /* "Competitive snapshot for top brands and key messaging hooks" */
-.kate-examples .examples-row:first-child .example-card:nth-child(5) { width: 380px; } /* "Recommend the best channel mix with rationale and budget split" */
-.kate-examples .examples-row:first-child .example-card:nth-child(6) { width: 340px; } /* "Plan a 3-month integrated campaign for customer acquisition" */
-.kate-examples .examples-row:first-child .example-card:nth-child(7) { width: 360px; } /* "Create messaging framework for a B2B SaaS product launch" */
+/* Kate's Campaign Management Example Cards - Reduced widths for more compact display */
+.kate-examples .examples-row:first-child .example-card:nth-child(1) { width: 260px; } /* "Design a multi-channel campaign for a fall apparel launch" */
+.kate-examples .examples-row:first-child .example-card:nth-child(2) { width: 300px; } /* "Turn this brief into a campaign plan with channels, audiences, and timeline" */
+.kate-examples .examples-row:first-child .example-card:nth-child(3) { width: 280px; } /* "Summarize target personas for premium athleisure in the U.S." */
+.kate-examples .examples-row:first-child .example-card:nth-child(4) { width: 290px; } /* "Competitive snapshot for top brands and key messaging hooks" */
+.kate-examples .examples-row:first-child .example-card:nth-child(5) { width: 300px; } /* "Recommend the best channel mix with rationale and budget split" */
+.kate-examples .examples-row:first-child .example-card:nth-child(6) { width: 270px; } /* "Plan a 3-month integrated campaign for customer acquisition" */
+.kate-examples .examples-row:first-child .example-card:nth-child(7) { width: 290px; } /* "Create messaging framework for a B2B SaaS product launch" */
 
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(1) { width: 380px; } /* "Build an omnichannel customer journey for luxury skincare brand" */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(2) { width: 360px; } /* "Optimize campaign performance across Facebook, Google, and TikTok" */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(3) { width: 350px; } /* "Design a content strategy that drives engagement and conversions" */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(4) { width: 370px; } /* "Launch a social proof campaign leveraging UGC and reviews" */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(5) { width: 390px; } /* "Develop a cohesive brand narrative across all marketing touchpoints" */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(6) { width: 360px; } /* "Create a data-driven attribution model for campaign measurement" */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(1) { width: 300px; } /* "Build an omnichannel customer journey for luxury skincare brand" */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(2) { width: 290px; } /* "Optimize campaign performance across Facebook, Google, and TikTok" */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(3) { width: 280px; } /* "Design a content strategy that drives engagement and conversions" */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(4) { width: 295px; } /* "Launch a social proof campaign leveraging UGC and reviews" */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(5) { width: 310px; } /* "Develop a cohesive brand narrative across all marketing touchpoints" */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(6) { width: 290px; } /* "Create a data-driven attribution model for campaign measurement" */
 
 /* Duplicate cards for Kate's examples */
-.kate-examples .examples-row:first-child .example-card:nth-child(8) { width: 320px; } /* Duplicate */
-.kate-examples .examples-row:first-child .example-card:nth-child(9) { width: 380px; } /* Duplicate */
-.kate-examples .examples-row:first-child .example-card:nth-child(10) { width: 350px; } /* Duplicate */
-.kate-examples .examples-row:first-child .example-card:nth-child(11) { width: 360px; } /* Duplicate */
-.kate-examples .examples-row:first-child .example-card:nth-child(12) { width: 380px; } /* Duplicate */
-.kate-examples .examples-row:first-child .example-card:nth-child(13) { width: 340px; } /* Duplicate */
-.kate-examples .examples-row:first-child .example-card:nth-child(14) { width: 360px; } /* Duplicate */
+.kate-examples .examples-row:first-child .example-card:nth-child(8) { width: 260px; } /* Duplicate */
+.kate-examples .examples-row:first-child .example-card:nth-child(9) { width: 300px; } /* Duplicate */
+.kate-examples .examples-row:first-child .example-card:nth-child(10) { width: 280px; } /* Duplicate */
+.kate-examples .examples-row:first-child .example-card:nth-child(11) { width: 290px; } /* Duplicate */
+.kate-examples .examples-row:first-child .example-card:nth-child(12) { width: 300px; } /* Duplicate */
+.kate-examples .examples-row:first-child .example-card:nth-child(13) { width: 270px; } /* Duplicate */
+.kate-examples .examples-row:first-child .example-card:nth-child(14) { width: 290px; } /* Duplicate */
 
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(7) { width: 380px; } /* Duplicate */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(8) { width: 360px; } /* Duplicate */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(9) { width: 350px; } /* Duplicate */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(10) { width: 370px; } /* Duplicate */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(11) { width: 390px; } /* Duplicate */
-.kate-examples .examples-row:nth-child(2) .example-card:nth-child(12) { width: 360px; } /* Duplicate */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(7) { width: 300px; } /* Duplicate */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(8) { width: 290px; } /* Duplicate */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(9) { width: 280px; } /* Duplicate */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(10) { width: 295px; } /* Duplicate */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(11) { width: 310px; } /* Duplicate */
+.kate-examples .examples-row:nth-child(2) .example-card:nth-child(12) { width: 290px; } /* Duplicate */
 .examples-row:first-child .example-card:nth-child(26) { width: 260px; } /* Duplicate of card 11 */
 .examples-row:first-child .example-card:nth-child(27) { width: 240px; } /* Duplicate of card 12 */
 .examples-row:first-child .example-card:nth-child(28) { width: 250px; } /* Duplicate of card 13 */
@@ -1288,8 +1288,8 @@ body {
 }
 
 .agent-showcase-card .agent-icon {
-    width: 24px;
-    height: 24px;
+    width: 24px !important;
+    height: 24px !important;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
@@ -1299,20 +1299,19 @@ body {
     position: relative;
     z-index: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0 !important;
 }
 
-.agent-icon.audience { background: linear-gradient(135deg, var(--accent-green), #059669); }
-.agent-icon.creative { background: linear-gradient(135deg, var(--accent-red), #dc2626); }
-.agent-icon.performance { background: linear-gradient(135deg, var(--accent-primary), #2563eb); }
-.agent-icon.journey { background: linear-gradient(135deg, var(--accent-orange), #d97706); }
-.agent-icon.research { background: linear-gradient(135deg, var(--accent-purple), #7c3aed); }
-.agent-icon.historical { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-.agent-icon.personalization { background: linear-gradient(135deg, var(--accent-purple), #7c3aed); }
-.agent-icon.paid-media { background: linear-gradient(135deg, var(--accent-primary), #2563eb); }
-.agent-icon.service { background: linear-gradient(135deg, var(--accent-orange), #d97706); }
-.agent-icon.persona { background: linear-gradient(135deg, var(--accent-green), #059669); }
-.agent-icon.migration { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-.agent-icon.analytics { background: linear-gradient(135deg, var(--accent-primary), #3b82f6); }
+.agent-icon.campaign-architect { background: linear-gradient(135deg, var(--accent-primary), #2563eb); }
+.agent-icon.persona-research { background: linear-gradient(135deg, var(--accent-green), #059669); }
+.agent-icon.channel-strategy { background: linear-gradient(135deg, var(--accent-orange), #d97706); }
+.agent-icon.competitive-intelligence { background: linear-gradient(135deg, var(--accent-purple), #7c3aed); }
+.agent-icon.creative-brief { background: linear-gradient(135deg, var(--accent-red), #dc2626); }
+.agent-icon.ad-copy { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+.agent-icon.creative-ideation { background: linear-gradient(135deg, var(--accent-red), #dc2626); }
+.agent-icon.social-creative { background: linear-gradient(135deg, var(--accent-purple), #7c3aed); }
+.agent-icon.display-creative { background: linear-gradient(135deg, var(--accent-orange), #d97706); }
+.agent-icon.knowledge-base { background: linear-gradient(135deg, var(--accent-green), #059669); }
 
 .agent-showcase-card span {
     font-size: var(--label);
@@ -3730,7 +3729,7 @@ body {
 
     .agent-analysis-grid {
         grid-template-columns: 1fr;
-        gap: var(--space-lg);
+        gap: var(--space-md);
     }
 
     .agent-analysis-card {
@@ -4863,7 +4862,7 @@ body {
 .enhanced-output {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
+    gap: var(--space-lg);
     font-family: var(--font-family);
 }
 
@@ -4896,38 +4895,64 @@ body {
 
 .output-stats {
     display: flex;
-    gap: var(--space-md);
+    gap: var(--space-sm);
     flex-wrap: wrap;
+    margin-top: var(--space-md);
 }
 
-.stat-card {
-    text-align: center;
-    padding: var(--space-md);
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    border: var(--border);
-    min-width: 120px;
-    box-shadow: var(--shadow-sm);
-}
-
-.stat-number {
-    display: block;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--accent-primary);
-    line-height: 1;
-}
-
-.stat-label {
+.stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 20px;
     font-size: var(--label);
-    color: var(--text-secondary);
-    margin-top: var(--space-xxs);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.stat-pill i {
+    font-size: 12px;
+}
+
+.stat-pill.strategy-areas {
+    background: rgba(16, 185, 129, 0.1);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.stat-pill.specialist-agents {
+    background: rgba(59, 130, 246, 0.1);
+    color: #1d4ed8;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.stat-pill.strategic-insights {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.stat-pill:hover {
+    transform: scale(1.05);
+}
+
+.stat-pill.strategy-areas:hover {
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.stat-pill.specialist-agents:hover {
+    background: rgba(59, 130, 246, 0.15);
+}
+
+.stat-pill.strategic-insights:hover {
+    background: rgba(245, 158, 11, 0.15);
 }
 
 .agent-analysis-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-xl);
+    gap: var(--space-lg);
     margin-bottom: var(--space-xl);
 }
 
@@ -4958,6 +4983,69 @@ body {
     padding-bottom: var(--space-md);
     border-bottom: var(--border);
     position: relative;
+    justify-content: space-between;
+}
+
+.refine-btn {
+    font-size: var(--font-sm);
+    padding: var(--space-xs) var(--space-sm);
+    min-width: auto;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.refine-btn i {
+    margin-right: var(--space-xs);
+    font-size: var(--font-xs);
+}
+
+/* Refine with AI Toast Notification */
+.refine-toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    background: var(--card-bg);
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideInToast 0.3s ease-out forwards, slideOutToast 0.3s ease-in 2.7s forwards;
+    max-width: 400px;
+}
+
+.refine-toast-content {
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.refine-toast-content i {
+    color: var(--accent-primary);
+    font-size: var(--font-lg);
+    flex-shrink: 0;
+}
+
+.refine-toast-content span {
+    font-size: var(--font-sm);
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+@keyframes slideInToast {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutToast {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }
 
 .agent-analysis-card .agent-icon {
@@ -4995,6 +5083,22 @@ body {
 
 .agent-analysis-card.analytics .agent-icon {
     background: linear-gradient(135deg, var(--accent-primary), #3b82f6);
+}
+
+.agent-analysis-card.strategy .agent-icon {
+    background: linear-gradient(135deg, var(--accent-green), #059669);
+}
+
+.agent-analysis-card.messaging .agent-icon {
+    background: linear-gradient(135deg, var(--accent-purple), #7c3aed);
+}
+
+.agent-analysis-card.competitive .agent-icon {
+    background: linear-gradient(135deg, var(--accent-orange), #d97706);
+}
+
+.agent-analysis-card.channels .agent-icon {
+    background: linear-gradient(135deg, var(--accent-primary), #2563eb);
 }
 
 /* Budget Allocation Specific Styles */
@@ -10905,4 +11009,675 @@ body {
 }
 
 /* Campaign Strategy Flow Styles */
+
+/* Strategy Cards Grid */
+.strategy-cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin: var(--space-xl) 0;
+}
+
+/* Override agent-analysis-grid for strategy cards to use single column */
+.strategy-cards-grid .agent-analysis-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Enhanced Campaign Strategy Card Content Styling */
+.strategy-cards-grid .agent-analysis-card {
+    margin-bottom: 0;
+}
+
+.strategy-cards-grid .agent-analysis-card h5 {
+    font-size: var(--body-large);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--space-lg) 0 var(--space-md) 0;
+    line-height: 1.3;
+}
+
+.strategy-cards-grid .agent-analysis-card h6 {
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--space-md) 0 var(--space-sm) 0;
+    line-height: 1.3;
+}
+
+.strategy-cards-grid .agent-analysis-card p {
+    font-size: var(--font-base);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-md) 0;
+}
+
+.strategy-cards-grid .agent-analysis-card ul {
+    margin: var(--space-sm) 0 var(--space-md) 0;
+    padding-left: var(--space-lg);
+}
+
+.strategy-cards-grid .agent-analysis-card li {
+    font-size: var(--font-base);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.strategy-cards-grid .agent-analysis-card li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Strategy Content Area */
+.strategy-content {
+    padding: var(--space-lg);
+}
+
+/* Success Metrics */
+.success-metrics {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-light);
+}
+
+.metric-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
+.metric-tag {
+    background: var(--accent-green-light);
+    color: var(--accent-green);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Messaging Framework */
+.messaging-framework {
+    padding: var(--space-lg);
+}
+
+.pillar-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin-top: var(--space-md);
+}
+
+.pillar-item {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+    padding: var(--space-md);
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent-primary);
+}
+
+.pillar-number {
+    width: 32px;
+    height: 32px;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--font-sm);
+    flex-shrink: 0;
+}
+
+.pillar-content {
+    flex: 1;
+    font-size: var(--font-base);
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.pillar-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Audience Breakdown */
+.audience-breakdown {
+    padding: var(--space-lg);
+}
+
+.persona-details {
+    margin-top: var(--space-lg);
+}
+
+.persona-section {
+    margin-bottom: var(--space-lg);
+}
+
+/* Channel Strategy */
+.channel-strategy {
+    padding: var(--space-lg);
+}
+
+.tactic-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
+.tactic-tag {
+    background: var(--accent-primary-light);
+    color: var(--accent-primary);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* Competitive Landscape */
+.competitive-landscape {
+    padding: var(--space-lg);
+}
+
+.competitor-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+}
+
+.competitor-card {
+    background: var(--bg-surface);
+    border: var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+}
+
+.competitor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.competitor-header h6 {
+    margin: 0;
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.market-share {
+    background: var(--accent-secondary);
+    color: white;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    font-weight: 600;
+}
+
+.competitor-insights {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.insight-item {
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-sm);
+    line-height: 1.5;
+}
+
+.insight-item.strength {
+    background: var(--accent-green-light);
+    border-left: 4px solid var(--accent-green);
+}
+
+.insight-item.opportunity {
+    background: var(--accent-orange-light);
+    border-left: 4px solid var(--accent-orange);
+}
+
+.insight-item strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Positioning Recommendation */
+.positioning-recommendation {
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
+    background: var(--accent-primary-light);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent-primary);
+}
+
+.positioning-recommendation h5 {
+    margin-top: 0;
+    color: var(--accent-primary);
+}
+
+.positioning-recommendation p {
+    margin-bottom: 0;
+    font-size: var(--font-base);
+    line-height: 1.6;
+}
+
+.strategy-card {
+    background: var(--card-bg);
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.strategy-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.strategy-card-header {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    padding: var(--space-lg);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.strategy-icon {
+    background: rgba(255, 255, 255, 0.2);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.strategy-card-header h3 {
+    margin: 0;
+    font-size: var(--h3);
+    font-weight: 600;
+}
+
+.strategy-card-content {
+    padding: var(--space-xl);
+}
+
+/* Strategic Framework Styles */
+.strategic-framework .framework-item {
+    margin-bottom: var(--space-lg);
+}
+
+.strategic-framework .framework-item h4 {
+    color: var(--accent-primary);
+    margin-bottom: var(--space-sm);
+    font-size: var(--font-lg);
+    font-weight: 600;
+}
+
+.strategic-framework .framework-item p {
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.success-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.metric-tag {
+    background: var(--accent-green-light);
+    color: var(--accent-green);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    font-weight: 500;
+}
+
+/* Messaging Pillars Styles */
+.messaging-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.pillar-item {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+}
+
+.pillar-number {
+    background: var(--accent-primary);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--font-sm);
+    flex-shrink: 0;
+}
+
+.pillar-content h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-base);
+    font-weight: 600;
+}
+
+.pillar-content p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Persona Profiles Styles */
+.persona-profiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.persona-profile {
+    border: var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    background: var(--gray-50);
+}
+
+.persona-profile.primary {
+    border-left: 4px solid var(--accent-primary);
+}
+
+.persona-profile.secondary {
+    border-left: 4px solid var(--accent-secondary);
+}
+
+.persona-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.persona-header h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--font-lg);
+}
+
+.persona-priority {
+    background: var(--accent-green-light);
+    color: var(--accent-green);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--font-xs);
+    font-weight: 600;
+}
+
+.persona-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.persona-attribute {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.persona-attribute strong {
+    color: var(--text-primary);
+}
+
+/* Channel Strategy Styles */
+.channel-allocation {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.channel-item {
+    border: var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+}
+
+.channel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.channel-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: var(--font-lg);
+}
+
+.channel-percentage {
+    background: var(--accent-primary);
+    color: white;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: var(--font-sm);
+}
+
+.channel-details p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+}
+
+.channel-tactics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}
+
+.tactic-tag {
+    background: var(--gray-100);
+    color: var(--text-secondary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-xs);
+    font-weight: 500;
+}
+
+/* Competitive Analysis Styles */
+.competitive-analysis {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.competitive-overview h4 {
+    color: var(--accent-primary);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+.competitive-overview p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.competitor-profiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.competitor-item {
+    border: var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+}
+
+.competitor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.competitor-header h5 {
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.market-share {
+    background: var(--accent-yellow);
+    color: var(--accent-yellow-dark);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--font-xs);
+    font-weight: 600;
+}
+
+.strength-weakness {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.strength, .weakness {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.positioning-strategy {
+    background: var(--gray-50);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent-green);
+}
+
+.positioning-strategy h4 {
+    color: var(--accent-green);
+    margin-bottom: var(--space-md);
+    font-weight: 600;
+}
+
+.positioning-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.positioning-pillar {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* Strategy Summary Styles */
+.strategy-summary {
+    background: var(--card-bg);
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin-top: var(--space-xl);
+}
+
+.strategy-summary h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.roadmap-phases {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.phase-item {
+    flex: 1;
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+}
+
+.phase-number {
+    background: var(--accent-primary);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--font-lg);
+    flex-shrink: 0;
+}
+
+.phase-content h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+.phase-content p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-size: var(--font-sm);
+    margin: 0;
+}
+
+/* Mobile responsiveness for strategy cards */
+@media (max-width: 768px) {
+    .strategy-cards-grid {
+        gap: var(--space-sm);
+    }
+
+    .roadmap-phases {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .channel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .persona-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .competitor-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+}
 
