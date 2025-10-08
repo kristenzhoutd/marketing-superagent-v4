@@ -545,7 +545,7 @@ class MarketingSuperAgentV4 {
         // Clear task context after processing completes
         setTimeout(() => {
             this.clearTaskContext();
-        }, 8000); // Clear after all processing is done (increased to ensure completion)
+        }, 12000); // Clear after all processing is done (increased to ensure completion)
     }
 
     handleFileAttachment(files) {
@@ -1282,6 +1282,11 @@ class MarketingSuperAgentV4 {
         // Set the specific agents for this task
         this.currentTaskAgents = taskToAgents[task] || [];
         this.currentTask = task;
+
+        console.log('🎯 Task context set:', {
+            task: this.currentTask,
+            agents: this.currentTaskAgents
+        });
 
         const prompt = taskPrompts[task] || `Help me ${task.replace(/-/g, ' ')}`;
         this.handleMainInput(prompt);
@@ -3570,7 +3575,12 @@ class MarketingSuperAgentV4 {
     }
 
     updateOutputPanel(messageType, userMessage = '') {
-        console.log('updateOutputPanel called with:', messageType, 'currentTask:', this.currentTask, 'currentTaskAgents:', this.currentTaskAgents);
+        // Preserve task context locally in case it gets cleared during processing
+        const preservedTask = this.currentTask;
+        const preservedTaskAgents = this.currentTaskAgents;
+
+        console.log('🔍 updateOutputPanel called with:', messageType, 'currentTask:', this.currentTask, 'currentTaskAgents:', this.currentTaskAgents);
+        console.log('🔍 Will use task-specific output:', !!(this.currentTask && this.currentTaskAgents));
 
         // Skip output panel update if we're already handling a creative prompt
         if (this.isHandlingCreativePrompt && messageType === 'creative') {
@@ -3630,7 +3640,17 @@ class MarketingSuperAgentV4 {
         }
 
         // Generate comprehensive collective output
+        // Temporarily restore task context for output generation
+        const originalTask = this.currentTask;
+        const originalTaskAgents = this.currentTaskAgents;
+        this.currentTask = preservedTask;
+        this.currentTaskAgents = preservedTaskAgents;
+
         const content = this.generateCollectiveAgentOutput(messageType, userMessage);
+
+        // Restore original context
+        this.currentTask = originalTask;
+        this.currentTaskAgents = originalTaskAgents;
 
         // Add export button to the output content
         outputContent.innerHTML = content;
@@ -3856,18 +3876,33 @@ class MarketingSuperAgentV4 {
 
     generateTaskSpecificOutput(task, context, userMessage) {
         console.log('generateTaskSpecificOutput called for task:', task);
-        const taskOutputGenerators = {
+        console.log('Available task generators:', Object.keys({
             'campaign-brief': () => this.generateCampaignBriefOutput(context, userMessage),
             'optimize-campaign': () => this.generateOptimizationOutput(context, userMessage),
             'campaign-insights': () => this.generateInsightsOutput(context, userMessage),
             'setup-journey': () => this.generateJourneySetupOutput(context, userMessage),
-            'generate-creative': () => this.generateCreativeOutput(context, userMessage),
+            'generate-creative': () => this.generateCreativeIdeationOutput(context, userMessage),
             'audience-segments': () => this.generateAudienceSegmentsOutput(context, userMessage),
             'budget-allocation': () => this.generateBudgetAllocationOutput(context, userMessage),
             'ab-test': () => this.generateABTestOutput(context, userMessage),
             'competitor-analysis': () => this.generateCompetitorAnalysisOutput(context, userMessage),
             'content-calendar': () => this.generateContentCalendarOutput(context, userMessage),
-            'design-campaign-program': () => this.generateCampaignStrategyOutput(context, userMessage)
+            'design-campaign-program': () => this.generateCampaignStrategyOutput(context, userMessage),
+            'create-creative-brief': () => this.generateCreativeBriefOutput(context, userMessage)
+        }));
+        const taskOutputGenerators = {
+            'campaign-brief': () => this.generateCampaignBriefOutput(context, userMessage),
+            'optimize-campaign': () => this.generateOptimizationOutput(context, userMessage),
+            'campaign-insights': () => this.generateInsightsOutput(context, userMessage),
+            'setup-journey': () => this.generateJourneySetupOutput(context, userMessage),
+            'generate-creative': () => this.generateCreativeIdeationOutput(context, userMessage),
+            'audience-segments': () => this.generateAudienceSegmentsOutput(context, userMessage),
+            'budget-allocation': () => this.generateBudgetAllocationOutput(context, userMessage),
+            'ab-test': () => this.generateABTestOutput(context, userMessage),
+            'competitor-analysis': () => this.generateCompetitorAnalysisOutput(context, userMessage),
+            'content-calendar': () => this.generateContentCalendarOutput(context, userMessage),
+            'design-campaign-program': () => this.generateCampaignStrategyOutput(context, userMessage),
+            'create-creative-brief': () => this.generateCreativeBriefOutput(context, userMessage)
         };
 
         const generator = taskOutputGenerators[task];
@@ -4239,28 +4274,26 @@ class MarketingSuperAgentV4 {
             <div class="enhanced-output">
                 <div class="output-header-section">
                     <div class="output-title-area">
-                        <h2><i class="fas fa-palette" style="color: var(--accent-red);"></i> Creative Asset Generation</h2>
-                        <p class="output-subtitle">AI-generated creative assets optimized for your brand and audience</p>
-                    </div>
-                    <div class="output-stats">
-                        <div class="stat-card">
-                            <div class="stat-number">12</div>
-                            <div class="stat-label">Assets Generated</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">4</div>
-                            <div class="stat-label">Formats</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">92%</div>
-                            <div class="stat-label">Brand Alignment</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">85%</div>
-                            <div class="stat-label">Predicted CTR</div>
+                        <h2><i class="fas fa-lightbulb" style="color: var(--accent-orange);"></i> Creative Ideation Workshop</h2>
+                        <p class="output-subtitle">Interactive brainstorming session based on your creative brief - explore concepts, generate ideas, and refine directions</p>
+                        <div class="output-stats">
+                            <div class="stat-pill creative-concepts">
+                                <i class="fas fa-brain"></i>
+                                <span>15 Concept Directions</span>
+                            </div>
+                            <div class="stat-pill inspiration-sources">
+                                <i class="fas fa-star"></i>
+                                <span>8 Inspiration Sources</span>
+                            </div>
+                            <div class="stat-pill collaboration-tools">
+                                <i class="fas fa-users"></i>
+                                <span>5 Ideation Tools</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="creative-brief-grid">
 
                 <div class="agent-analysis-grid">
                     <div class="agent-analysis-card creative">
@@ -4469,6 +4502,277 @@ class MarketingSuperAgentV4 {
                             <div class="rec-priority">Medium Priority</div>
                             <h5>Creative Refresh Strategy</h5>
                             <p>Plan 3-week creative rotation cycle to prevent ad fatigue. Monitor frequency caps and performance decay indicators.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    generateCreativeIdeationOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-lightbulb" style="color: var(--accent-orange);"></i> Creative Ideation Workshop</h2>
+                        <p class="output-subtitle">Interactive brainstorming session based on your creative brief - explore concepts, generate ideas, and refine directions</p>
+                        <div class="output-stats">
+                            <div class="stat-pill creative-concepts">
+                                <i class="fas fa-brain"></i>
+                                <span>15 Concept Directions</span>
+                            </div>
+                            <div class="stat-pill inspiration-sources">
+                                <i class="fas fa-star"></i>
+                                <span>8 Inspiration Sources</span>
+                            </div>
+                            <div class="stat-pill collaboration-tools">
+                                <i class="fas fa-users"></i>
+                                <span>5 Ideation Tools</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creative-brief-grid">
+                    <div class="creative-card ideation-tools">
+                        <div class="creative-card-header">
+                            <div class="creative-icon tools">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <h4>Brainstorming Tools & Methods</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('ideation-tools')">
+                                <i class="fas fa-magic"></i> Generate More
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-cogs"></i>
+                            <span>Interactive tools to spark creativity and expand your concept thinking</span>
+                        </div>
+                        <div class="tools-grid">
+                            <div class="tool-card" onclick="triggerIdeationTool('mindmap')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-project-diagram"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h6>Mind Mapping</h6>
+                                    <p>Visual concept exploration</p>
+                                </div>
+                            </div>
+                            <div class="tool-card" onclick="triggerIdeationTool('scamper')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h6>SCAMPER Method</h6>
+                                    <p>Systematic idea generation</p>
+                                </div>
+                            </div>
+                            <div class="tool-card" onclick="triggerIdeationTool('random')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-dice"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h6>Random Stimuli</h6>
+                                    <p>Unexpected inspiration</p>
+                                </div>
+                            </div>
+                            <div class="tool-card" onclick="triggerIdeationTool('competitor')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h6>Competitive Analysis</h6>
+                                    <p>Market gap identification</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card concept-directions">
+                        <div class="creative-card-header">
+                            <div class="creative-icon directions">
+                                <i class="fas fa-compass"></i>
+                            </div>
+                            <h4>Initial Concept Directions</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('concept-directions')">
+                                <i class="fas fa-magic"></i> Expand Ideas
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-star"></i>
+                            <span>AI-generated starting points based on your creative brief objectives</span>
+                        </div>
+                        <div class="directions-grid">
+                            <div class="direction-card emotional">
+                                <div class="direction-header">
+                                    <span class="direction-type">Emotional</span>
+                                    <h6>Transformation Story</h6>
+                                </div>
+                                <p>Focus on personal transformation and aspirational outcomes. Show the emotional journey from challenge to success.</p>
+                                <div class="direction-tags">
+                                    <span class="tag">Storytelling</span>
+                                    <span class="tag">Before/After</span>
+                                    <span class="tag">Inspiration</span>
+                                </div>
+                            </div>
+                            <div class="direction-card rational">
+                                <div class="direction-header">
+                                    <span class="direction-type">Rational</span>
+                                    <h6>Problem-Solution Focus</h6>
+                                </div>
+                                <p>Direct approach highlighting specific problems and clear solutions. Emphasize benefits and practical outcomes.</p>
+                                <div class="direction-tags">
+                                    <span class="tag">Benefits</span>
+                                    <span class="tag">Features</span>
+                                    <span class="tag">ROI</span>
+                                </div>
+                            </div>
+                            <div class="direction-card social">
+                                <div class="direction-header">
+                                    <span class="direction-type">Social</span>
+                                    <h6>Community & Belonging</h6>
+                                </div>
+                                <p>Emphasize community, social proof, and shared experiences. Show how others benefit and belong.</p>
+                                <div class="direction-tags">
+                                    <span class="tag">Testimonials</span>
+                                    <span class="tag">Community</span>
+                                    <span class="tag">FOMO</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card inspiration-sources">
+                        <div class="creative-card-header">
+                            <div class="creative-icon inspiration">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h4>Inspiration & References</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('inspiration-sources')">
+                                <i class="fas fa-magic"></i> Find More
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-palette"></i>
+                            <span>Curated inspiration sources to spark creative thinking across different mediums</span>
+                        </div>
+                        <div class="inspiration-categories">
+                            <div class="inspiration-category">
+                                <h6><i class="fas fa-trophy"></i> Award-Winning Campaigns</h6>
+                                <div class="inspiration-items">
+                                    <div class="inspiration-item">
+                                        <strong>"The Man Your Man Could Smell Like"</strong> - Old Spice
+                                        <p>Humor + Confidence + Memorable Characters</p>
+                                    </div>
+                                    <div class="inspiration-item">
+                                        <strong>"Share a Coke"</strong> - Coca-Cola
+                                        <p>Personalization + Social Sharing + Emotional Connection</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inspiration-category">
+                                <h6><i class="fas fa-trending-up"></i> Trending Formats</h6>
+                                <div class="inspiration-items">
+                                    <div class="inspiration-item">
+                                        <strong>Short-Form Video</strong> - TikTok/Reels Style
+                                        <p>Quick engagement + Authentic feel + Viral potential</p>
+                                    </div>
+                                    <div class="inspiration-item">
+                                        <strong>Interactive Stories</strong> - Choose Your Path
+                                        <p>Engagement + Personalization + Data collection</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card collaboration-space">
+                        <div class="creative-card-header">
+                            <div class="creative-icon collaboration">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4>Team Collaboration Space</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('collaboration-space')">
+                                <i class="fas fa-magic"></i> Facilitate Session
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-handshake"></i>
+                            <span>Tools and frameworks for productive team brainstorming sessions</span>
+                        </div>
+                        <div class="collaboration-tools">
+                            <div class="collab-section">
+                                <h6>Ideation Framework: "Yes, And..." Method</h6>
+                                <div class="framework-steps">
+                                    <div class="step">
+                                        <span class="step-number">1</span>
+                                        <p><strong>Present Initial Ideas:</strong> Share 3 core concepts from brief</p>
+                                    </div>
+                                    <div class="step">
+                                        <span class="step-number">2</span>
+                                        <p><strong>Build Upon Ideas:</strong> Each person adds "Yes, and..." to expand</p>
+                                    </div>
+                                    <div class="step">
+                                        <span class="step-number">3</span>
+                                        <p><strong>Capture Everything:</strong> No judgment, record all variations</p>
+                                    </div>
+                                    <div class="step">
+                                        <span class="step-number">4</span>
+                                        <p><strong>Prioritize & Refine:</strong> Evaluate against brief objectives</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="voting-system">
+                                <h6>Concept Voting System</h6>
+                                <p>Rate each concept on: <strong>Brand Alignment</strong> | <strong>Audience Resonance</strong> | <strong>Execution Feasibility</strong> | <strong>Innovation Factor</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card concept-development">
+                        <div class="creative-card-header">
+                            <div class="creative-icon development">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <h4>Concept Development Workshop</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('concept-development')">
+                                <i class="fas fa-magic"></i> Develop Further
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-rocket"></i>
+                            <span>Structured approach to evolve raw ideas into fully developed creative concepts</span>
+                        </div>
+                        <div class="development-framework">
+                            <div class="concept-canvas">
+                                <h6>Creative Concept Canvas</h6>
+                                <div class="canvas-grid">
+                                    <div class="canvas-section">
+                                        <h7>Core Message</h7>
+                                        <p>What's the single key idea?</p>
+                                    </div>
+                                    <div class="canvas-section">
+                                        <h7>Emotional Hook</h7>
+                                        <p>How will it make people feel?</p>
+                                    </div>
+                                    <div class="canvas-section">
+                                        <h7>Visual Direction</h7>
+                                        <p>What's the visual style/mood?</p>
+                                    </div>
+                                    <div class="canvas-section">
+                                        <h7>Call to Action</h7>
+                                        <p>What should people do next?</p>
+                                    </div>
+                                    <div class="canvas-section">
+                                        <h7>Success Metric</h7>
+                                        <p>How will you measure impact?</p>
+                                    </div>
+                                    <div class="canvas-section">
+                                        <h7>Unique Element</h7>
+                                        <p>What makes this stand out?</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -5279,6 +5583,328 @@ class MarketingSuperAgentV4 {
                         <li>Competitive landscape shifts and opportunities</li>
                         <li>Budget allocation efficiency improvements</li>
                     </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    generateCreativeBriefOutput(context, userMessage) {
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-palette" style="color: var(--accent-red);"></i> Creative Brief & Strategy</h2>
+                        <p class="output-subtitle">Comprehensive creative direction with visual concepts, messaging framework, and brand alignment</p>
+                        <div class="output-stats">
+                            <div class="stat-pill creative-concepts">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>8 Creative Concepts</span>
+                            </div>
+                            <div class="stat-pill brand-elements">
+                                <i class="fas fa-swatchbook"></i>
+                                <span>5 Brand Elements</span>
+                            </div>
+                            <div class="stat-pill content-variants">
+                                <i class="fas fa-layer-group"></i>
+                                <span>12+ Content Variants</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creative-brief-grid">
+                    <div class="creative-card brief-overview">
+                        <div class="creative-card-header">
+                            <div class="creative-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h4>Creative Objective & Direction</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('creative-objective')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-compass"></i>
+                            <span>Strategic creative direction designed to drive brand awareness and emotional connection</span>
+                        </div>
+                        <div class="brief-content">
+                            <h5>Primary Creative Goal</h5>
+                            <p>Create compelling visual and verbal narratives that resonate with target audiences while reinforcing brand values and driving specific business outcomes.</p>
+
+                            <h5>Creative Challenge</h5>
+                            <p>How might we create memorable, authentic content that stands out in a crowded marketplace while maintaining brand consistency across all touchpoints?</p>
+
+                            <div class="success-metrics">
+                                <h5>Creative Success Metrics</h5>
+                                <div class="metric-tags">
+                                    <span class="metric-tag">Brand Recall +35%</span>
+                                    <span class="metric-tag">Engagement Rate +45%</span>
+                                    <span class="metric-tag">Share Rate +25%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card brand-identity">
+                        <div class="creative-card-header">
+                            <div class="creative-icon brand">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <h4>Brand Identity & Visual Language</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('brand-identity')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-palette"></i>
+                            <span>Cohesive visual system establishing brand recognition and emotional impact</span>
+                        </div>
+                        <div class="brand-framework">
+                            <div class="brand-elements-grid">
+                                <div class="brand-element">
+                                    <div class="element-icon">
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                    <div class="element-content">
+                                        <h6>Visual Style</h6>
+                                        <p>Modern, clean aesthetic with bold typography and dynamic compositions that convey innovation and trust</p>
+                                    </div>
+                                </div>
+                                <div class="brand-element">
+                                    <div class="element-icon">
+                                        <i class="fas fa-paint-brush"></i>
+                                    </div>
+                                    <div class="element-content">
+                                        <h6>Color Palette</h6>
+                                        <p>Primary: Deep blue (#1e40af), Secondary: Vibrant orange (#f59e0b), Accent: Emerald green (#10b981)</p>
+                                    </div>
+                                </div>
+                                <div class="brand-element">
+                                    <div class="element-icon">
+                                        <i class="fas fa-font"></i>
+                                    </div>
+                                    <div class="element-content">
+                                        <h6>Typography</h6>
+                                        <p>Headlines: Bold sans-serif (Montserrat), Body: Clean, readable (Inter), Script: Elegant accent font</p>
+                                    </div>
+                                </div>
+                                <div class="brand-element">
+                                    <div class="element-icon">
+                                        <i class="fas fa-images"></i>
+                                    </div>
+                                    <div class="element-content">
+                                        <h6>Imagery Style</h6>
+                                        <p>Authentic lifestyle photography, diverse representation, bright natural lighting, aspirational settings</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card messaging-framework">
+                        <div class="creative-card-header">
+                            <div class="creative-icon messaging">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <h4>Messaging Framework & Tone</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('messaging-framework')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-volume-up"></i>
+                            <span>Distinct brand voice that builds trust and drives action across all content</span>
+                        </div>
+                        <div class="messaging-content">
+                            <div class="tone-attributes">
+                                <h5>Brand Voice Attributes</h5>
+                                <div class="attribute-grid">
+                                    <div class="attribute-item">
+                                        <span class="attribute-label">Confident</span>
+                                        <div class="attribute-bar">
+                                            <div class="attribute-fill" style="width: 90%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="attribute-item">
+                                        <span class="attribute-label">Approachable</span>
+                                        <div class="attribute-bar">
+                                            <div class="attribute-fill" style="width: 85%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="attribute-item">
+                                        <span class="attribute-label">Innovative</span>
+                                        <div class="attribute-bar">
+                                            <div class="attribute-fill" style="width: 95%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="attribute-item">
+                                        <span class="attribute-label">Authentic</span>
+                                        <div class="attribute-bar">
+                                            <div class="attribute-fill" style="width: 88%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="key-messages">
+                                <h5>Core Message Pillars</h5>
+                                <div class="message-pillars">
+                                    <div class="pillar-card">
+                                        <div class="pillar-number">1</div>
+                                        <div class="pillar-content">
+                                            <strong>Innovation Leadership</strong>
+                                            <p>"Leading the way with cutting-edge solutions that transform your experience"</p>
+                                        </div>
+                                    </div>
+                                    <div class="pillar-card">
+                                        <div class="pillar-number">2</div>
+                                        <div class="pillar-content">
+                                            <strong>Trusted Partnership</strong>
+                                            <p>"Your success is our mission - dedicated support every step of the journey"</p>
+                                        </div>
+                                    </div>
+                                    <div class="pillar-card">
+                                        <div class="pillar-number">3</div>
+                                        <div class="pillar-content">
+                                            <strong>Results Driven</strong>
+                                            <p>"Proven outcomes that matter - measurable impact on your business goals"</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card concept-gallery">
+                        <div class="creative-card-header">
+                            <div class="creative-icon concepts">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <h4>Creative Concepts & Ideas</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('creative-concepts')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Innovative creative directions spanning multiple formats and touchpoints</span>
+                        </div>
+                        <div class="concepts-grid">
+                            <div class="concept-card primary">
+                                <div class="concept-header">
+                                    <span class="concept-priority">Primary</span>
+                                    <h6>Transform Your Story</h6>
+                                </div>
+                                <p>Narrative-driven campaign focusing on customer transformation journeys with before/after storytelling</p>
+                                <div class="concept-formats">
+                                    <span class="format-tag">Video Series</span>
+                                    <span class="format-tag">Social Stories</span>
+                                    <span class="format-tag">Display Ads</span>
+                                </div>
+                            </div>
+                            <div class="concept-card secondary">
+                                <div class="concept-header">
+                                    <span class="concept-priority">Secondary</span>
+                                    <h6>Behind the Innovation</h6>
+                                </div>
+                                <p>Technology-focused content showcasing product development and innovation process</p>
+                                <div class="concept-formats">
+                                    <span class="format-tag">Tech Demos</span>
+                                    <span class="format-tag">Infographics</span>
+                                    <span class="format-tag">Interactive Content</span>
+                                </div>
+                            </div>
+                            <div class="concept-card supporting">
+                                <div class="concept-header">
+                                    <span class="concept-priority">Supporting</span>
+                                    <h6>Community Champions</h6>
+                                </div>
+                                <p>User-generated content campaign highlighting real customer success stories and community</p>
+                                <div class="concept-formats">
+                                    <span class="format-tag">UGC Campaign</span>
+                                    <span class="format-tag">Testimonials</span>
+                                    <span class="format-tag">Community Features</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card execution-guide">
+                        <div class="creative-card-header">
+                            <div class="creative-icon execution">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h4>Execution Guidelines & Next Steps</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('execution-guide')">
+                                <i class="fas fa-magic"></i> Refine with AI
+                            </button>
+                        </div>
+                        <div class="insight-highlight">
+                            <i class="fas fa-cogs"></i>
+                            <span>Comprehensive production roadmap with specifications and approval workflows</span>
+                        </div>
+                        <div class="execution-content">
+                            <div class="production-phases">
+                                <h5>Production Timeline</h5>
+                                <div class="phase-timeline">
+                                    <div class="phase-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h6>Creative Development</h6>
+                                            <span class="step-duration">Week 1-2</span>
+                                            <p>Concept refinement, design mockups, copy development</p>
+                                        </div>
+                                    </div>
+                                    <div class="phase-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h6>Asset Production</h6>
+                                            <span class="step-duration">Week 3-4</span>
+                                            <p>Photography, video production, graphic design, copywriting</p>
+                                        </div>
+                                    </div>
+                                    <div class="phase-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h6>Review & Optimization</h6>
+                                            <span class="step-duration">Week 5</span>
+                                            <p>Stakeholder review, revisions, final approvals, format optimization</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="deliverables-checklist">
+                                <h5>Key Deliverables</h5>
+                                <div class="checklist-grid">
+                                    <div class="checklist-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Brand style guide & asset library</span>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Campaign creative assets (all formats)</span>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Copy variations & messaging templates</span>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Social media content calendar</span>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Performance tracking framework</span>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Brand compliance guidelines</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -7152,6 +7778,10 @@ class MarketingSuperAgentV4 {
             'content-calendar': {
                 agent: 'Content Strategy Team',
                 content: `Fantastic! Our Creative, Research, and Journey agents are collaborating to create your strategic content calendar. They're planning themes, scheduling optimal posting times, and ensuring content aligns with your customer journey and business objectives.`
+            },
+            'create-creative-brief': {
+                agent: 'Creative Brief Team',
+                content: `Perfect! I've activated our Creative Brief, Creative Ideation, and Campaign Architect agents to create a comprehensive creative brief. They're developing strategic creative direction, visual concepts, messaging frameworks, and execution guidelines to bring your campaign vision to life.`
             }
         };
 
@@ -7223,6 +7853,12 @@ class MarketingSuperAgentV4 {
                 'Create content performance tracking',
                 'Plan cross-platform adaptations'
             ],
+            'create-creative-brief': [
+                { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' },
+                { text: 'Creative Ideation', task: 'generate-creative' },
+                { text: 'Generate creative assets and mockups', task: 'generate-creative' },
+                { text: 'Set up creative approval workflow', task: 'content-calendar' }
+            ],
             'design-campaign-program': [
                 { text: 'Develop creative strategy', task: 'create-creative-brief' },
                 { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' }
@@ -7237,7 +7873,7 @@ class MarketingSuperAgentV4 {
         ];
 
         // Handle both string and object suggestions
-        if (task === 'design-campaign-program') {
+        if (task === 'design-campaign-program' || task === 'create-creative-brief') {
             this.addTaskSuggestionButtons(suggestions);
         } else {
             this.addFollowUpSuggestions(suggestions);
@@ -7252,20 +7888,30 @@ class MarketingSuperAgentV4 {
                     <h4>Recommended Next Steps</h4>
                 </div>
                 <div class="suggestions-grid">
-                    ${suggestions.map(suggestion => `
+                    ${suggestions.map(suggestion => {
+                        const taskConfig = {
+                            'create-creative-brief': { icon: 'fa-palette', desc: 'Create detailed creative briefs and asset specifications based on your strategic foundation' },
+                            'pick-channel-mix': { icon: 'fa-share-alt-square', desc: 'Design comprehensive channel mix and customer journey mapping for optimal reach' },
+                            'generate-creative': { icon: 'fa-magic', desc: 'Generate innovative creative concepts and visual assets for your campaigns' },
+                            'content-calendar': { icon: 'fa-calendar-alt', desc: 'Set up structured workflow and approval processes for content creation' }
+                        };
+                        const config = taskConfig[suggestion.task] || { icon: 'fa-arrow-right', desc: 'Continue with next steps in your marketing workflow' };
+
+                        return `
                         <div class="suggestion-card" onclick="app.handleTaskSuggestion('${suggestion.task}')">
                             <div class="suggestion-icon">
-                                <i class="fas ${suggestion.task === 'create-creative-brief' ? 'fa-palette' : 'fa-share-alt-square'}"></i>
+                                <i class="fas ${config.icon}"></i>
                             </div>
                             <div class="suggestion-content">
                                 <h5>${suggestion.text}</h5>
-                                <p>${suggestion.task === 'create-creative-brief' ? 'Create detailed creative briefs and asset specifications based on your strategic foundation' : 'Design comprehensive channel mix and customer journey mapping for optimal reach'}</p>
+                                <p>${config.desc}</p>
                             </div>
                             <div class="suggestion-action">
                                 <i class="fas fa-arrow-right"></i>
                             </div>
                         </div>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;
@@ -7274,6 +7920,7 @@ class MarketingSuperAgentV4 {
     }
 
     handleTaskSuggestion(task) {
+        console.log('🎯 handleTaskSuggestion called with task:', task);
         this.handleTaskClick(task);
     }
 
@@ -7300,6 +7947,8 @@ class MarketingSuperAgentV4 {
 
     clearTaskContext() {
         // Reset task-specific context to allow normal processing for subsequent messages
+        console.log('🧹 Clearing task context. Previous task was:', this.currentTask);
+        console.log('🧹 Stack trace:', new Error().stack);
         this.currentTask = null;
         this.currentTaskAgents = null;
     }
@@ -13425,6 +14074,60 @@ class MarketingSuperAgentV4 {
     }
 }
 
+// Interactive ideation tool functions
+function triggerIdeationTool(toolType) {
+    console.log(`🛠️ Triggering ideation tool: ${toolType}`);
+
+    const toolMessages = {
+        'mindmap': 'Starting mind mapping session... Think of your core concept and branch out with related ideas, emotions, and associations.',
+        'scamper': 'Applying SCAMPER method... Substitute, Combine, Adapt, Modify, Put to other uses, Eliminate, Reverse your current concepts.',
+        'random': 'Generating random stimulus... Use these unexpected elements to spark new creative directions.',
+        'competitor': 'Analyzing competitive landscape... Identifying gaps and opportunities for differentiation.'
+    };
+
+    const message = toolMessages[toolType] || 'Launching ideation tool...';
+
+    // Show a toast notification
+    const toast = document.createElement('div');
+    toast.className = 'refine-toast';
+    toast.innerHTML = `
+        <div class="refine-toast-content">
+            <i class="fas fa-tools"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    document.body.appendChild(toast);
+
+    // Remove toast after 4 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 4000);
+}
+
+// Test function to directly trigger creative brief
+function testCreativeBrief() {
+    console.log('🧪 Testing creative brief directly...');
+    if (window.app) {
+        window.app.currentTask = 'create-creative-brief';
+        window.app.currentTaskAgents = ['Creative Brief Agent', 'Creative Ideation Agent', 'Campaign Architect Agent'];
+        const context = { industry: 'technology' };
+        const userMessage = 'Create a detailed creative brief with messaging, visual direction, and brand guidelines';
+        const output = window.app.generateCreativeBriefOutput(context, userMessage);
+
+        const outputContent = document.getElementById('output-content');
+        if (outputContent) {
+            outputContent.innerHTML = output;
+            console.log('✅ Creative brief output generated and displayed!');
+        } else {
+            console.log('❌ output-content element not found');
+        }
+    } else {
+        console.log('❌ App not found');
+    }
+}
+
 // Global function for refining campaign strategy cards with AI
 function refineWithAI(cardType) {
     console.log(`Refining ${cardType} with AI`);
@@ -13434,7 +14137,17 @@ function refineWithAI(cardType) {
         messaging: 'Optimizing messaging pillars with advanced sentiment analysis and audience psychology...',
         audience: 'Enhancing audience segmentation with predictive analytics and behavioral modeling...',
         channels: 'Optimizing channel strategy with real-time performance data and attribution modeling...',
-        competitive: 'Deepening competitive analysis with market intelligence and positioning opportunities...'
+        competitive: 'Deepening competitive analysis with market intelligence and positioning opportunities...',
+        'creative-objective': 'Refining creative objectives with strategic alignment and outcome optimization...',
+        'brand-identity': 'Enhancing brand identity framework with visual consistency and emotional impact analysis...',
+        'messaging-framework': 'Optimizing messaging framework with tone calibration and audience resonance testing...',
+        'creative-concepts': 'Expanding creative concepts with innovative approaches and format optimization...',
+        'execution-guide': 'Refining execution guidelines with production best practices and workflow optimization...',
+        'ideation-tools': 'Generating additional brainstorming methods and creative thinking techniques...',
+        'concept-directions': 'Expanding creative directions with new approaches and angles...',
+        'inspiration-sources': 'Finding more inspirational references and creative examples...',
+        'collaboration-space': 'Enhancing team collaboration tools and facilitation methods...',
+        'concept-development': 'Developing concepts further with detailed frameworks and canvases...'
     };
 
     const message = refinements[cardType] || 'Refining analysis with AI-powered insights...';
