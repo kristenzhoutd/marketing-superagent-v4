@@ -5,7 +5,7 @@ class MarketingSuperAgentV4 {
         this.messageHistory = [];
         this.currentAgents = [];
         this.outputHistory = [];
-        this.currentSuiteTitle = 'Creative AI Suite'; // Store current AI suite title - default to Creative
+        this.currentSuiteTitle = 'Creative Ideation'; // Store current AI suite title - default to Creative
         this.currentRoute = 'home';
 
         // Autopilot system
@@ -394,7 +394,7 @@ class MarketingSuperAgentV4 {
             return {
                 task: 'generate-creative',
                 agents: ['Creative Agent', 'Research Agent', 'Audience Agent'],
-                suiteTitle: 'Creative AI Suite',
+                suiteTitle: 'Creative Ideation',
                 messageType: 'creative'
             };
         }
@@ -518,7 +518,7 @@ class MarketingSuperAgentV4 {
                     'paid-media': 'Paid Media AI Suite',
                     'personalization': 'Personalization AI Suite',
                     'service': 'Service AI Suite',
-                    'creative': 'Creative AI Suite'
+                    'creative': 'Creative Ideation'
                 };
                 this.currentSuiteTitle = areaTitles[relevantSuite];
             } else {
@@ -775,15 +775,15 @@ class MarketingSuperAgentV4 {
         // Map message types to AI suites to ensure we never show "Task Output"
         const messageTypeToSuite = {
             'brief': 'Paid Media AI Suite',
-            'creative': 'Creative AI Suite',
+            'creative': 'Creative Ideation',
             'journey': 'Engage AI Suite',
             'performance': 'Paid Media AI Suite',
             'audience': 'Engage AI Suite',
             'paid-media': 'Paid Media AI Suite',
-            'general': 'Creative AI Suite' // Default to Creative for general tasks
+            'general': 'Creative Ideation' // Default to Creative for general tasks
         };
 
-        return messageTypeToSuite[messageType] || 'Creative AI Suite';
+        return messageTypeToSuite[messageType] || 'Creative Ideation';
     }
 
     detectRelevantAISuite(prompt) {
@@ -859,7 +859,7 @@ class MarketingSuperAgentV4 {
         };
 
         // Store and set the current suite title
-        this.currentSuiteTitle = areaTitles[area] || 'Creative AI Suite';
+        this.currentSuiteTitle = areaTitles[area] || 'Creative Ideation';
 
         // Special handling for Engage AI Suite
         if (area === 'engage') {
@@ -4517,15 +4517,15 @@ class MarketingSuperAgentV4 {
                         <h2><i class="fas fa-lightbulb" style="color: var(--accent-orange);"></i> Creative Ideation Workshop</h2>
                         <p class="output-subtitle">Interactive brainstorming session based on your creative brief - explore concepts, generate ideas, and refine directions</p>
                         <div class="output-stats">
-                            <div class="stat-pill creative-concepts">
+                            <div class="stat-pill strategic-insights">
                                 <i class="fas fa-brain"></i>
                                 <span>15 Concept Directions</span>
                             </div>
-                            <div class="stat-pill inspiration-sources">
+                            <div class="stat-pill strategy-areas">
                                 <i class="fas fa-star"></i>
                                 <span>8 Inspiration Sources</span>
                             </div>
-                            <div class="stat-pill collaboration-tools">
+                            <div class="stat-pill specialist-agents">
                                 <i class="fas fa-users"></i>
                                 <span>5 Ideation Tools</span>
                             </div>
