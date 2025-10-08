@@ -1235,8 +1235,8 @@ class MarketingSuperAgentV4 {
             // Kate's campaign manager tasks with specialized agents
             'design-campaign-program': ['Campaign Architect Agent', 'Persona Research Agent', 'Competitive Intelligence Agent'],
             'research-personas': ['Persona Research Agent', 'Research Agent', 'Analytics Agent'],
-            'pick-channel-mix': ['Campaign Architect Agent', 'Performance Agent', 'Budget Optimization Agent'],
-            'create-creative-brief': ['Creative Agent', 'Campaign Architect Agent', 'Research Agent'],
+            'pick-channel-mix': ['Campaign Architect Agent', 'Channel Strategy Agent', 'Persona Research Agent'],
+            'create-creative-brief': ['Creative Brief Agent', 'Creative Ideation Agent', 'Campaign Architect Agent'],
             'build-campaign-brief': ['Campaign Architect Agent', 'Research Agent', 'Performance Agent'],
             'analyze-competitors': ['Competitive Intelligence Agent', 'Research Agent', 'Performance Agent'],
             'define-kpis': ['Performance Agent', 'Analytics Agent', 'Campaign Architect Agent'],
@@ -7222,6 +7222,10 @@ class MarketingSuperAgentV4 {
                 'Set up content approval workflow',
                 'Create content performance tracking',
                 'Plan cross-platform adaptations'
+            ],
+            'design-campaign-program': [
+                { text: 'Develop creative strategy', task: 'create-creative-brief' },
+                { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' }
             ]
         };
 
@@ -7232,7 +7236,45 @@ class MarketingSuperAgentV4 {
             'Set up performance monitoring'
         ];
 
-        this.addFollowUpSuggestions(suggestions);
+        // Handle both string and object suggestions
+        if (task === 'design-campaign-program') {
+            this.addTaskSuggestionButtons(suggestions);
+        } else {
+            this.addFollowUpSuggestions(suggestions);
+        }
+    }
+
+    addTaskSuggestionButtons(suggestions) {
+        const suggestionsHTML = `
+            <div class="next-steps-suggestions">
+                <div class="suggestions-header">
+                    <i class="fas fa-arrow-right"></i>
+                    <h4>Recommended Next Steps</h4>
+                </div>
+                <div class="suggestions-grid">
+                    ${suggestions.map(suggestion => `
+                        <div class="suggestion-card" onclick="app.handleTaskSuggestion('${suggestion.task}')">
+                            <div class="suggestion-icon">
+                                <i class="fas ${suggestion.task === 'create-creative-brief' ? 'fa-palette' : 'fa-share-alt-square'}"></i>
+                            </div>
+                            <div class="suggestion-content">
+                                <h5>${suggestion.text}</h5>
+                                <p>${suggestion.task === 'create-creative-brief' ? 'Create detailed creative briefs and asset specifications based on your strategic foundation' : 'Design comprehensive channel mix and customer journey mapping for optimal reach'}</p>
+                            </div>
+                            <div class="suggestion-action">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        this.addMessage(suggestionsHTML, 'agent', 'Campaign Architect Agent');
+    }
+
+    handleTaskSuggestion(task) {
+        this.handleTaskClick(task);
     }
 
     updateAgentStatusWithThought(agentName, thought, thoughtIndex) {
