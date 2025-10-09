@@ -4662,63 +4662,6 @@ class MarketingSuperAgentV4 {
                 </div>
 
                 <div class="creative-brief-grid">
-                    <div class="creative-card ideation-tools">
-                        <div class="creative-card-header">
-                            <div class="creative-icon tools">
-                                <i class="fas fa-tools"></i>
-                            </div>
-                            <h4>Smartwatch Video Ideation Tools</h4>
-                            <button class="btn-secondary refine-btn" onclick="refineWithAI('ideation-tools')">
-                                <i class="fas fa-magic"></i> Generate More
-                            </button>
-                        </div>
-                        <div class="insight-highlight">
-                            <i class="fas fa-cogs"></i>
-                            <span>Specialized tools for developing health tracking video concepts and holiday messaging</span>
-                        </div>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="triggerIdeationTool('health-scenarios')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-heartbeat"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h6>Health Scenario Generator</h6>
-                                    <p>Real-life tracking situations</p>
-                                    <div class="tool-visual">📊 Workout → Sleep → Daily Activity</div>
-                                </div>
-                            </div>
-                            <div class="tool-card" onclick="triggerIdeationTool('holiday-moments')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h6>Holiday Moment Mapping</h6>
-                                    <p>Seasonal touchpoint ideation</p>
-                                    <div class="tool-visual">🛍️ Black Friday → 🎄 Holidays → 🎊 New Year</div>
-                                </div>
-                            </div>
-                            <div class="tool-card" onclick="triggerIdeationTool('millennial-insights')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h6>Millennial Lifestyle Explorer</h6>
-                                    <p>Target audience deep dive</p>
-                                    <div class="tool-visual">💼 Work-Life Balance + 🏃‍♀️ Fitness Goals</div>
-                                </div>
-                            </div>
-                            <div class="tool-card" onclick="triggerIdeationTool('video-formats')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-video"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h6>Video Format Matrix</h6>
-                                    <p>Platform-specific concepts</p>
-                                    <div class="tool-visual">📱 Stories | 🖥️ Feed | ▶️ YouTube</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="creative-card concept-directions">
                         <div class="creative-card-header">
@@ -4736,48 +4679,66 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="directions-grid">
                             <div class="direction-card emotional">
-                                <div class="direction-header">
-                                    <span class="direction-type">Emotional</span>
-                                    <h6>"Health Journey Transformation"</h6>
+                                <div class="direction-background">
+                                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Emotional Health Journey" class="direction-bg-image" />
+                                    <div class="direction-overlay"></div>
                                 </div>
-                                <p>Show real people achieving fitness goals with smartwatch guidance. Focus on the emotional payoff of better health tracking.</p>
-                                <div class="direction-visual">
-                                    <div class="visual-concept">🏃‍♀️ Morning Run → 📱 Real-time Heart Rate → 😊 Achievement Unlocked</div>
-                                </div>
-                                <div class="direction-tags">
-                                    <span class="tag">Personal Victory</span>
-                                    <span class="tag">Health Progress</span>
-                                    <span class="tag">Motivation</span>
-                                </div>
-                            </div>
-                            <div class="direction-card rational">
-                                <div class="direction-header">
-                                    <span class="direction-type">Functional</span>
-                                    <h6>"Feature Demonstration"</h6>
-                                </div>
-                                <p>Product-focused videos showcasing specific health tracking capabilities: sleep monitoring, workout metrics, stress levels.</p>
-                                <div class="direction-visual">
-                                    <div class="visual-concept">⌚ Watch Interface → 📊 Data Visualization → ✅ Actionable Insights</div>
-                                </div>
-                                <div class="direction-tags">
-                                    <span class="tag">Tech Features</span>
-                                    <span class="tag">Data Accuracy</span>
-                                    <span class="tag">Productivity</span>
+                                <div class="direction-content">
+                                    <div class="direction-header">
+                                        <div class="direction-type-badge emotional-badge">
+                                            <i class="fas fa-heart"></i>
+                                            <span>Emotional</span>
+                                        </div>
+                                        <h6>"Health Journey Transformation"</h6>
+                                    </div>
+                                    <p>Show real people achieving fitness goals with smartwatch guidance. Focus on the emotional payoff of better health tracking.</p>
+                                    <div class="direction-tags">
+                                        <span class="tag emotional-tag">Personal Victory</span>
+                                        <span class="tag emotional-tag">Health Progress</span>
+                                        <span class="tag emotional-tag">Motivation</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="direction-card social">
-                                <div class="direction-header">
-                                    <span class="direction-type">Holiday</span>
-                                    <h6>"Perfect Gift for Achievers"</h6>
+                            <div class="direction-card functional">
+                                <div class="direction-background">
+                                    <img src="https://images.unsplash.com/photo-1544117519-31a4b719223d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Functional Interface Demo" class="direction-bg-image" />
+                                    <div class="direction-overlay"></div>
                                 </div>
-                                <p>Gift-giving narrative showing how smartwatch helps loved ones reach their health and productivity goals during the New Year.</p>
-                                <div class="direction-visual">
-                                    <div class="visual-concept">🎁 Holiday Gift → 💪 Fitness Motivation → 🎯 2025 Goals</div>
+                                <div class="direction-content">
+                                    <div class="direction-header">
+                                        <div class="direction-type-badge functional-badge">
+                                            <i class="fas fa-cog"></i>
+                                            <span>Functional</span>
+                                        </div>
+                                        <h6>"Feature Demonstration"</h6>
+                                    </div>
+                                    <p>Product-focused videos showcasing specific health tracking capabilities: sleep monitoring, workout metrics, stress levels.</p>
+                                    <div class="direction-tags">
+                                        <span class="tag functional-tag">Tech Features</span>
+                                        <span class="tag functional-tag">Data Accuracy</span>
+                                        <span class="tag functional-tag">Productivity</span>
+                                    </div>
                                 </div>
-                                <div class="direction-tags">
-                                    <span class="tag">Gift Giving</span>
-                                    <span class="tag">New Year Goals</span>
-                                    <span class="tag">Thoughtful Choice</span>
+                            </div>
+                            <div class="direction-card holiday">
+                                <div class="direction-background">
+                                    <img src="https://images.unsplash.com/photo-1576319155264-99536e0be1ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Holiday Gift Context" class="direction-bg-image" />
+                                    <div class="direction-overlay"></div>
+                                </div>
+                                <div class="direction-content">
+                                    <div class="direction-header">
+                                        <div class="direction-type-badge holiday-badge">
+                                            <i class="fas fa-gift"></i>
+                                            <span>Holiday</span>
+                                        </div>
+                                        <h6>"Perfect Gift for Achievers"</h6>
+                                    </div>
+                                    <p>Gift-giving narrative showing how smartwatch helps loved ones reach their health and productivity goals during the New Year.</p>
+                                    <div class="direction-tags">
+                                        <span class="tag holiday-tag">Gift Giving</span>
+                                        <span class="tag holiday-tag">New Year Goals</span>
+                                        <span class="tag holiday-tag">Thoughtful Choice</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4810,16 +4771,8 @@ class MarketingSuperAgentV4 {
                                     <div class="inspiration-showcase">
                                         <div class="showcase-image">
                                             <div class="campaign-thumbnail apple-watch">
-                                                <div class="campaign-visual">
-                                                    <div class="watch-mockup">⌚</div>
-                                                    <div class="ecg-visualization">
-                                                        <div class="heartbeat-line">
-                                                            <span class="beat-point"></span>
-                                                            <span class="beat-point"></span>
-                                                            <span class="beat-point"></span>
-                                                        </div>
-                                                        <div class="health-text">ECG Reading</div>
-                                                    </div>
+                                                <div class="campaign-image">
+                                                    <img src="https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Apple Watch ECG Health Monitoring" class="campaign-bg-image" />
                                                 </div>
                                                 <div class="thumbnail-overlay">
                                                     <i class="fab fa-apple"></i>
@@ -4847,20 +4800,11 @@ class MarketingSuperAgentV4 {
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="inspiration-showcase">
                                         <div class="showcase-image">
                                             <div class="campaign-thumbnail nike-london">
-                                                <div class="campaign-visual">
-                                                    <div class="athlete-silhouettes">
-                                                        <div class="runner">🏃‍♀️</div>
-                                                        <div class="boxer">🥊</div>
-                                                        <div class="cyclist">🚴‍♀️</div>
-                                                    </div>
-                                                    <div class="city-backdrop">
-                                                        <div class="london-skyline">🏙️</div>
-                                                        <div class="urban-text">London Athletics</div>
-                                                    </div>
+                                                <div class="campaign-image">
+                                                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Urban Athletes Training in City" class="campaign-bg-image" />
                                                 </div>
                                                 <div class="thumbnail-overlay">
                                                     <i class="fab fa-nike"></i>
@@ -4890,126 +4834,7 @@ class MarketingSuperAgentV4 {
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="inspiration-category">
-                                <div class="category-header">
-                                    <div class="category-icon">
-                                        <i class="fas fa-trending-up"></i>
-                                    </div>
-                                    <h6>Holiday Health & Tech Video Formats</h6>
-                                    <div class="category-description">Strategic video concepts for seasonal smartwatch campaigns</div>
-                                </div>
-                                <div class="format-showcase-grid">
-                                    <div class="format-showcase">
-                                        <div class="format-preview short-form">
-                                            <div class="video-frame">
-                                                <div class="video-content health-story">
-                                                    <div class="workout-scene">
-                                                        <div class="person-running">🏃‍♀️</div>
-                                                        <div class="smartwatch-ui">
-                                                            <div class="watch-face">⌚</div>
-                                                            <div class="data-rings">
-                                                                <div class="activity-ring red"></div>
-                                                                <div class="activity-ring green"></div>
-                                                                <div class="activity-ring blue"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="metrics-overlay">
-                                                        <span>❤️ 142 BPM</span>
-                                                        <span>🏃‍♀️ 5.2 km</span>
-                                                        <span>🔥 387 cal</span>
-                                                    </div>
-                                                </div>
-                                                <div class="video-duration">0:15</div>
-                                            </div>
-                                        </div>
-                                        <div class="format-details">
-                                            <h7><strong>Health Progress Stories</strong> - 15s Vertical</h7>
-                                            <p>Quick transformation moments with real-time data overlay showing health improvements</p>
-                                            <div class="format-specs">
-                                                <span class="spec">📱 Stories/Reels</span>
-                                                <span class="spec">⚡ High Engagement</span>
-                                                <span class="spec">📈 Before/After</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="format-showcase">
-                                        <div class="format-preview gift-guide">
-                                            <div class="video-frame horizontal">
-                                                <div class="video-content gift-scene">
-                                                    <div class="holiday-setting">
-                                                        <div class="christmas-tree">🎄</div>
-                                                        <div class="gift-unwrapping">
-                                                            <div class="gift-box">🎁</div>
-                                                            <div class="arrow-reveal">→</div>
-                                                            <div class="product-hero">⌚</div>
-                                                        </div>
-                                                        <div class="resolution-goals">
-                                                            <span>🎯 2025 Goals</span>
-                                                            <span>💪 Stay Healthy</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="lifestyle-context">
-                                                        <span>🏠 Holiday Morning</span>
-                                                        <span>☕ Coffee + Goals</span>
-                                                    </div>
-                                                </div>
-                                                <div class="video-duration">0:30</div>
-                                            </div>
-                                        </div>
-                                        <div class="format-details">
-                                            <h7><strong>Holiday Gift Positioning</strong> - 30s Horizontal</h7>
-                                            <p>Lifestyle integration showing smartwatch as thoughtful gift for health-conscious achievers</p>
-                                            <div class="format-specs">
-                                                <span class="spec">🖥️ Feed/YouTube</span>
-                                                <span class="spec">🎄 Seasonal Context</span>
-                                                <span class="spec">💝 Gift Narrative</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="format-showcase">
-                                        <div class="format-preview product-demo">
-                                            <div class="video-frame">
-                                                <div class="video-content demo-style">
-                                                    <div class="watch-interface-demo">
-                                                        <div class="watch-screen">
-                                                            <div class="screen-mockup">⌚</div>
-                                                            <div class="ui-elements">
-                                                                <div class="health-charts">
-                                                                    <div class="mini-chart">📊</div>
-                                                                    <div class="mini-chart">📈</div>
-                                                                </div>
-                                                                <div class="health-metrics">
-                                                                    <span class="metric">💤 8h 24m</span>
-                                                                    <span class="metric">❤️ 72 BPM</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="feature-callouts">
-                                                            <span>→ Sleep Quality</span>
-                                                            <span>→ Heart Rate Zones</span>
-                                                            <span>→ Workout Metrics</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="video-duration">0:20</div>
-                                            </div>
-                                        </div>
-                                        <div class="format-details">
-                                            <h7><strong>Feature Deep Dive</strong> - 20s Demo</h7>
-                                            <p>Screen recording style showcasing specific health tracking capabilities with clear benefit explanation</p>
-                                            <div class="format-specs">
-                                                <span class="spec">🖥️ All Platforms</span>
-                                                <span class="spec">🔍 Feature Focus</span>
-                                                <span class="spec">📊 Data Driven</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
 
                             <div class="inspiration-category">
                                 <div class="category-header">
@@ -5022,40 +4847,22 @@ class MarketingSuperAgentV4 {
                                 <div class="style-reference-grid">
                                     <div class="style-card health-data">
                                         <div class="style-preview">
-                                            <div class="visual-style-demo">
-                                                <div class="data-visualization">
-                                                    <div class="chart-element">📈</div>
-                                                    <div class="health-metrics">
-                                                        <span class="metric-point good">●</span>
-                                                        <span class="metric-point excellent">●</span>
-                                                        <span class="metric-point perfect">●</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" alt="Clean Health Data Dashboard" class="style-bg-image" />
                                         </div>
                                         <div class="style-info">
                                             <h7>Health Data Visualization</h7>
                                             <p>Clean, minimal charts with health-focused color coding (green = good, blue = excellent)</p>
                                             <div class="color-palette">
-                                                <span class="color-swatch health-green" title="Health Green">#10b981</span>
-                                                <span class="color-swatch tech-blue" title="Tech Blue">#3b82f6</span>
-                                                <span class="color-swatch bg-clean" title="Clean BG">#f8fafc</span>
+                                                <span class="color-swatch health-green" title="Health Green - #10b981"></span>
+                                                <span class="color-swatch tech-blue" title="Tech Blue - #3b82f6"></span>
+                                                <span class="color-swatch bg-clean" title="Clean BG - #f8fafc"></span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="style-card lifestyle-authentic">
                                         <div class="style-preview">
-                                            <div class="visual-style-demo">
-                                                <div class="lifestyle-scene">
-                                                    <div class="person-silhouette">🏃‍♀️</div>
-                                                    <div class="environment-elements">
-                                                        <span>🌅</span>
-                                                        <span>🏙️</span>
-                                                        <span>💪</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Natural Urban Fitness Lifestyle" class="style-bg-image" />
                                         </div>
                                         <div class="style-info">
                                             <h7>Authentic Lifestyle</h7>
@@ -5070,16 +4877,7 @@ class MarketingSuperAgentV4 {
 
                                     <div class="style-card holiday-seasonal">
                                         <div class="style-preview">
-                                            <div class="visual-style-demo">
-                                                <div class="holiday-scene">
-                                                    <div class="seasonal-elements">
-                                                        <span>🎄</span>
-                                                        <span>❄️</span>
-                                                        <span>✨</span>
-                                                    </div>
-                                                    <div class="gift-context">🎁</div>
-                                                </div>
-                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1576319155264-99536e0be1ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Cozy Holiday Workspace Motivation" class="style-bg-image" />
                                         </div>
                                         <div class="style-info">
                                             <h7>Subtle Holiday Touches</h7>
@@ -5096,128 +4894,97 @@ class MarketingSuperAgentV4 {
                         </div>
                     </div>
 
-                    <div class="creative-card collaboration-space">
+                    <div class="creative-card digital-ads-inspiration">
                         <div class="creative-card-header">
-                            <div class="creative-icon collaboration">
-                                <i class="fas fa-users"></i>
+                            <div class="creative-icon digital-ads">
+                                <i class="fas fa-bullhorn"></i>
                             </div>
-                            <h4>Smartwatch Creative Team Workshop</h4>
-                            <button class="btn-secondary refine-btn" onclick="refineWithAI('collaboration-space')">
-                                <i class="fas fa-magic"></i> Facilitate Session
+                            <h4>Digital Ads Inspirations</h4>
+                            <button class="btn-secondary refine-btn" onclick="refineWithAI('digital-ads-inspiration')">
+                                <i class="fas fa-magic"></i> Find More Examples
                             </button>
                         </div>
                         <div class="insight-highlight">
-                            <i class="fas fa-handshake"></i>
-                            <span>Collaborative framework for developing compelling health tracking video concepts</span>
+                            <i class="fas fa-target"></i>
+                            <span>Real campaign examples and creative concepts for smartwatch digital advertising</span>
                         </div>
-                        <div class="collaboration-tools">
-                            <div class="collab-section">
-                                <h6>Video Concept Building Framework</h6>
-                                <div class="framework-steps">
-                                    <div class="step">
-                                        <span class="step-number">1</span>
-                                        <p><strong>Health Scenario Setup:</strong> Choose real-life health tracking situation (workout, sleep, stress)</p>
-                                        <div class="step-visual">🏃‍♀️ → ⌚ → 📊</div>
+                        <div class="ads-inspiration-gallery">
+                            <div class="ad-concept-showcase">
+                                <div class="ad-preview">
+                                    <img src="https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Health Monitoring Facebook Ad" class="ad-bg-image" />
+                                    <div class="ad-overlay">
+                                        <div class="ad-format-label">Facebook Feed</div>
+                                        <div class="ad-cta">Shop Health Tech</div>
                                     </div>
-                                    <div class="step">
-                                        <span class="step-number">2</span>
-                                        <p><strong>Millennial Context:</strong> Add work-life balance or productivity angle</p>
-                                        <div class="step-visual">💼 + 🏃‍♀️ = ⚖️</div>
-                                    </div>
-                                    <div class="step">
-                                        <span class="step-number">3</span>
-                                        <p><strong>Holiday Hook:</strong> Layer in seasonal motivation or gift-giving narrative</p>
-                                        <div class="step-visual">🎁 → 💪 → 🎯</div>
-                                    </div>
-                                    <div class="step">
-                                        <span class="step-number">4</span>
-                                        <p><strong>Platform Optimization:</strong> Adapt concept for Google/Meta video formats</p>
-                                        <div class="step-visual">📱15s | 🖥️30s | ▶️Story</div>
+                                </div>
+                                <div class="ad-details">
+                                    <h7>Health Monitoring Focus</h7>
+                                    <p>Visual emphasis on health data and ECG features with clean, medical-inspired design</p>
+                                    <div class="ad-specs">
+                                        <span class="spec">1200x628px</span>
+                                        <span class="spec">Health Features</span>
+                                        <span class="spec">Trust Building</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="voting-system">
-                                <h6>Smartwatch Concept Evaluation Matrix</h6>
-                                <p>Rate each video concept on: <strong>Health Feature Clarity</strong> | <strong>Millennial Appeal</strong> | <strong>Holiday Relevance</strong> | <strong>4x ROAS Potential</strong></p>
-                                <div class="evaluation-visual">
-                                    <div class="eval-criteria">
-                                        <span class="criteria-item">💗 Health Impact</span>
-                                        <span class="criteria-item">👥 Target Fit</span>
-                                        <span class="criteria-item">🎄 Seasonal Appeal</span>
-                                        <span class="criteria-item">💰 Conversion Potential</span>
+                            <div class="ad-concept-showcase">
+                                <div class="ad-preview">
+                                    <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Lifestyle Instagram Ad" class="ad-bg-image" />
+                                    <div class="ad-overlay">
+                                        <div class="ad-format-label">Instagram Stories</div>
+                                        <div class="ad-cta">Transform Your Day</div>
+                                    </div>
+                                </div>
+                                <div class="ad-details">
+                                    <h7>Lifestyle Integration</h7>
+                                    <p>Authentic moments showing natural integration of smartwatch into daily fitness routines</p>
+                                    <div class="ad-specs">
+                                        <span class="spec">1080x1920px</span>
+                                        <span class="spec">Lifestyle Context</span>
+                                        <span class="spec">Aspiration</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ad-concept-showcase">
+                                <div class="ad-preview">
+                                    <img src="https://images.unsplash.com/photo-1512389098783-66b81f86e199?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Holiday Gift Google Ad" class="ad-bg-image" />
+                                    <div class="ad-overlay">
+                                        <div class="ad-format-label">Google Display</div>
+                                        <div class="ad-cta">Perfect Holiday Gift</div>
+                                    </div>
+                                </div>
+                                <div class="ad-details">
+                                    <h7>Holiday Gift Positioning</h7>
+                                    <p>Seasonal context emphasizing smartwatch as thoughtful tech gift for health-conscious recipients</p>
+                                    <div class="ad-specs">
+                                        <span class="spec">728x90px</span>
+                                        <span class="spec">Holiday Theme</span>
+                                        <span class="spec">Gift Angle</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ad-concept-showcase">
+                                <div class="ad-preview">
+                                    <img src="https://images.unsplash.com/photo-1576319155264-99536e0be1ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="New Year Resolution TikTok Ad" class="ad-bg-image" />
+                                    <div class="ad-overlay">
+                                        <div class="ad-format-label">TikTok Feed</div>
+                                        <div class="ad-cta">2025 Health Goals</div>
+                                    </div>
+                                </div>
+                                <div class="ad-details">
+                                    <h7>New Year Motivation</h7>
+                                    <p>Resolution-focused messaging with motivational tone and goal-achievement narrative</p>
+                                    <div class="ad-specs">
+                                        <span class="spec">1080x1350px</span>
+                                        <span class="spec">Resolution Hooks</span>
+                                        <span class="spec">Motivation</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="creative-card concept-development">
-                        <div class="creative-card-header">
-                            <div class="creative-icon development">
-                                <i class="fas fa-seedling"></i>
-                            </div>
-                            <h4>Smartwatch Video Concept Canvas</h4>
-                            <button class="btn-secondary refine-btn" onclick="refineWithAI('concept-development')">
-                                <i class="fas fa-magic"></i> Develop Further
-                            </button>
-                        </div>
-                        <div class="insight-highlight">
-                            <i class="fas fa-rocket"></i>
-                            <span>Structured framework to develop comprehensive smartwatch video concepts for holiday campaign</span>
-                        </div>
-                        <div class="development-framework">
-                            <div class="concept-canvas">
-                                <h6>Smartwatch Video Creative Canvas</h6>
-                                <div class="canvas-grid">
-                                    <div class="canvas-section">
-                                        <h7>Health Feature Focus</h7>
-                                        <p>Which tracking capability to highlight?</p>
-                                        <div class="canvas-example">💓 Heart Rate | 😴 Sleep | 🏃‍♀️ Workout | 🧘‍♀️ Stress</div>
-                                    </div>
-                                    <div class="canvas-section">
-                                        <h7>Millennial Context</h7>
-                                        <p>What life situation resonates?</p>
-                                        <div class="canvas-example">💼 Busy Professional | 🏋️‍♀️ Fitness Journey | ⚖️ Work-Life Balance</div>
-                                    </div>
-                                    <div class="canvas-section">
-                                        <h7>Holiday Angle</h7>
-                                        <p>How does it connect to the season?</p>
-                                        <div class="canvas-example">🎁 Perfect Gift | 🎯 New Year Goals | 🏃‍♀️ Holiday Fitness</div>
-                                    </div>
-                                    <div class="canvas-section">
-                                        <h7>Video Format</h7>
-                                        <p>What's the optimal presentation?</p>
-                                        <div class="canvas-example">📱 15s Demo | 🖥️ 30s Story | ▶️ Vertical Story</div>
-                                    </div>
-                                    <div class="canvas-section">
-                                        <h7>Success Metric</h7>
-                                        <p>How will you measure impact?</p>
-                                        <div class="canvas-example">🎯 4x ROAS | 📈 Video View Rate | 🛒 Conversion Rate</div>
-                                    </div>
-                                    <div class="canvas-section">
-                                        <h7>Unique Differentiator</h7>
-                                        <p>What makes this stand out?</p>
-                                        <div class="canvas-example">📊 Real Data Viz | 💪 Authentic Moments | 🔬 Advanced Features</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="example-concepts">
-                                <h6>Sample Developed Concepts</h6>
-                                <div class="sample-concept">
-                                    <div class="concept-header">
-                                        <span class="concept-number">💡 1</span>
-                                        <strong>"Morning Motivation Metrics"</strong>
-                                    </div>
-                                    <p><strong>Scenario:</strong> Busy millennial checks sleep quality and heart rate variability to optimize their morning workout. <strong>Holiday Hook:</strong> "Give yourself the gift of better mornings in 2025"</p>
-                                    <div class="concept-tags">
-                                        <span class="tag">📊 Sleep Data</span>
-                                        <span class="tag">🌅 Morning Routine</span>
-                                        <span class="tag">🎯 2025 Goals</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         `;
@@ -8942,6 +8709,11 @@ class MarketingSuperAgentV4 {
     }
 
     addTaskSpecificSuggestions(task) {
+        // Prevent duplicate suggestions
+        if (document.querySelector('.next-steps-suggestions')) {
+            return;
+        }
+
         const taskSuggestions = {
             'campaign-brief': [
                 'Add specific KPIs and success metrics',
