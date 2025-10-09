@@ -5827,6 +5827,130 @@ body {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Campaign Program Guide Styles */
+.campaign-guide-interface {
+    background: var(--card-bg);
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin: var(--space-lg) 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.guide-header h3 {
+    font-size: var(--h3);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-xl) 0;
+    line-height: 1.4;
+}
+
+.guide-example {
+    background: linear-gradient(135deg, #dbeafe 0%, #f8fafc 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+}
+
+.example-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.example-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.example-label {
+    font-size: var(--h4);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.example-content p {
+    font-size: var(--body);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+    font-style: italic;
+    padding: var(--space-md);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent-primary);
+}
+
+.guide-pro-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    background: linear-gradient(135deg, #fef3c7 0%, #f8fafc 100%);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin-top: var(--space-lg);
+}
+
+.pro-tip-icon {
+    width: 24px;
+    height: 24px;
+    background: var(--accent-orange);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pro-tip-content {
+    font-size: var(--body-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.pro-tip-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .campaign-guide-interface {
+        padding: var(--space-lg);
+        margin: var(--space-md) 0;
+    }
+
+    .guide-header h3 {
+        font-size: var(--h4);
+    }
+
+    .guide-example {
+        padding: var(--space-md);
+    }
+
+    .example-content p {
+        padding: var(--space-sm);
+        font-size: var(--body-sm);
+    }
+
+    .guide-pro-tip {
+        padding: var(--space-md);
+        gap: var(--space-sm);
+    }
+}
+
 @media (max-width: 768px) {
     .tools-grid,
     .directions-grid,

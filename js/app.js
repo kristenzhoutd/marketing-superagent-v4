@@ -1196,6 +1196,12 @@ class MarketingSuperAgentV4 {
             return;
         }
 
+        // Special handling for design campaign program - show guided example
+        if (task === 'design-campaign-program') {
+            this.showCampaignProgramGuide();
+            return;
+        }
+
         // Special handling for campaign strategy flow
 
         const taskPrompts = {
@@ -1439,6 +1445,66 @@ class MarketingSuperAgentV4 {
 
         // Add event listeners for example cards
         this.setupCampaignExampleListeners();
+    }
+
+    showCampaignProgramGuide() {
+        // Show working interface first
+        this.showWorkingInterface();
+
+        // Set task context for design-campaign-program
+        this.currentTaskAgents = ['Campaign Architect Agent', 'Persona Research Agent', 'Competitive Intelligence Agent'];
+        this.currentTask = 'design-campaign-program';
+
+        // Set AI suite title
+        this.currentSuiteTitle = 'Campaign Strategy';
+        const outputTitle = document.getElementById('output-title');
+        if (outputTitle) {
+            outputTitle.textContent = this.currentSuiteTitle;
+        }
+
+        // Add initial message
+        this.addMessage("Great! Let's design your campaign", 'agent', 'Campaign Architect Agent');
+
+        // Show guided example interface
+        const campaignGuideHTML = `
+            <div class="campaign-guide-interface">
+                <div class="guide-header">
+                    <h3>Tell me about your campaign goals, budget, target audience, and timeline - just like you're briefing a team member.</h3>
+                </div>
+
+                <div class="guide-example">
+                    <div class="example-header">
+                        <div class="example-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <span class="example-label">For example:</span>
+                    </div>
+
+                    <div class="example-content">
+                        <p>"I need to launch a holiday campaign for our new smartwatch. We're targeting tech-savvy millennials aged 25-40 who are interested in fitness and productivity. Our budget is $75K over 6 weeks, starting Black Friday through New Year's. Main goal is driving online sales with a target ROAS of 4x. We want to focus on Google Ads and Meta platforms, with video creative showcasing the health tracking features."</p>
+                    </div>
+                </div>
+
+                <div class="guide-pro-tip">
+                    <div class="pro-tip-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="pro-tip-content">
+                        <strong>Pro tip:</strong> The more details you provide, the more tailored and actionable your campaign strategy will be!
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Add guide as a chat message
+        this.addMessage(campaignGuideHTML, 'agent', 'Campaign Architect Agent');
+
+        // Enable input for user to describe their campaign
+        const inputField = document.getElementById('main-input');
+        if (inputField) {
+            inputField.placeholder = "Describe your campaign goals, budget, target audience, and timeline...";
+            inputField.focus();
+        }
     }
 
     generateCustomCampaignBrief(description) {
