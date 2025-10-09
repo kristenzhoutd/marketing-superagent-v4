@@ -4799,7 +4799,13 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="inspiration-categories">
                             <div class="inspiration-category">
-                                <h6><i class="fas fa-trophy"></i> Tech Product Success Stories</h6>
+                                <div class="category-header">
+                                    <div class="category-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <h6>Tech Product Success Stories</h6>
+                                    <div class="category-description">Award-winning campaigns that drove real results</div>
+                                </div>
                                 <div class="inspiration-gallery">
                                     <div class="inspiration-showcase">
                                         <div class="showcase-image">
@@ -4886,7 +4892,13 @@ class MarketingSuperAgentV4 {
                             </div>
 
                             <div class="inspiration-category">
-                                <h6><i class="fas fa-trending-up"></i> Holiday Health & Tech Video Formats</h6>
+                                <div class="category-header">
+                                    <div class="category-icon">
+                                        <i class="fas fa-trending-up"></i>
+                                    </div>
+                                    <h6>Holiday Health & Tech Video Formats</h6>
+                                    <div class="category-description">Strategic video concepts for seasonal smartwatch campaigns</div>
+                                </div>
                                 <div class="format-showcase-grid">
                                     <div class="format-showcase">
                                         <div class="format-preview short-form">
@@ -5000,7 +5012,13 @@ class MarketingSuperAgentV4 {
                             </div>
 
                             <div class="inspiration-category">
-                                <h6><i class="fas fa-palette"></i> Visual Style References</h6>
+                                <div class="category-header">
+                                    <div class="category-icon">
+                                        <i class="fas fa-palette"></i>
+                                    </div>
+                                    <h6>Visual Style References</h6>
+                                    <div class="category-description">Design patterns and aesthetic guidelines for health tech content</div>
+                                </div>
                                 <div class="style-reference-grid">
                                     <div class="style-card health-data">
                                         <div class="style-preview">
