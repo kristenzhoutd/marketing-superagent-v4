@@ -8778,7 +8778,6 @@ class MarketingSuperAgentV4 {
             ],
             'create-creative-brief': [
                 { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' },
-                { text: 'Creative Ideation', task: 'generate-creative' },
                 { text: 'Generate creative assets and mockups', task: 'generate-creative' },
                 { text: 'Set up creative approval workflow', task: 'content-calendar' }
             ],
