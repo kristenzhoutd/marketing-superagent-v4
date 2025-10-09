@@ -1203,7 +1203,7 @@ class MarketingSuperAgentV4 {
             'optimize-campaign': 'Analyze my current campaign performance and provide optimization recommendations',
             'campaign-insights': 'Generate detailed insights and analytics for my running campaigns',
             'setup-journey': 'Design an automated customer journey with email, SMS, and push notifications',
-            'generate-creative': 'Create multiple creative asset variants for A/B testing across platforms',
+            'generate-creative': 'Start an interactive creative ideation workshop to brainstorm and develop innovative concepts based on your brief',
             'audience-segments': 'Build detailed audience segments based on demographics, behavior, and preferences',
             'budget-allocation': 'Optimize my marketing budget allocation across channels for maximum ROI',
             'ab-test': 'Set up A/B testing framework for campaigns with statistical significance tracking',
