@@ -5211,20 +5211,24 @@ class MarketingSuperAgentV4 {
             <div class="enhanced-output">
                 <div class="output-header-section">
                     <div class="output-title-area">
-                        <h2><i class="fas fa-rocket" style="color: var(--accent-green);"></i> Campaign Strategy Overview</h2>
-                        <p class="output-subtitle">Comprehensive campaign strategy with strategic direction, messaging, and competitive intelligence</p>
+                        <h2><i class="fas fa-rocket" style="color: var(--accent-green);"></i> Holiday Smartwatch Campaign Strategy</h2>
+                        <p class="output-subtitle">Comprehensive strategy for targeting tech-savvy millennials during peak holiday shopping season</p>
                         <div class="output-stats">
                             <div class="stat-pill strategy-areas">
-                                <i class="fas fa-layer-group"></i>
-                                <span>5 Strategy Areas</span>
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>$75K Budget</span>
                             </div>
                             <div class="stat-pill specialist-agents">
-                                <i class="fas fa-users-cog"></i>
-                                <span>3 Specialist Agents</span>
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>6 Weeks (Black Friday - New Year)</span>
                             </div>
                             <div class="stat-pill strategic-insights">
-                                <i class="fas fa-lightbulb"></i>
-                                <span>15+ Strategic Insights</span>
+                                <i class="fas fa-chart-line"></i>
+                                <span>4x ROAS Target</span>
+                            </div>
+                            <div class="stat-pill target-audience">
+                                <i class="fas fa-users"></i>
+                                <span>Millennials 25-40</span>
                             </div>
                         </div>
                     </div>
@@ -5241,21 +5245,22 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-lightbulb"></i>
-                            <span>Integrated multi-channel approach targeting key customer segments with compelling value propositions</span>
+                            <span>Holiday-timed smartwatch launch targeting health-conscious millennials with video-first creative strategy</span>
                         </div>
                         <div class="strategy-content">
                             <h5>Primary Objective</h5>
-                            <p>Drive brand awareness and sales conversion through data-driven insights and personalized customer experiences across digital touchpoints.</p>
+                            <p>Drive online smartwatch sales during the holiday season by showcasing health tracking features to tech-savvy millennials aged 25-40 through Google Ads and Meta platforms.</p>
 
                             <h5>Core Strategy</h5>
-                            <p>Leverage competitive differentiators and product benefits to create authentic connections with target audiences through strategic channel optimization.</p>
+                            <p>Leverage holiday shopping momentum and fitness/productivity trends with video creative demonstrating health tracking capabilities, targeting peak shopping moments from Black Friday through New Year.</p>
 
                             <div class="success-metrics">
                                 <h5>Success Framework</h5>
                                 <div class="metric-tags">
-                                    <span class="metric-tag">Brand Awareness +25%</span>
-                                    <span class="metric-tag">Conversion Rate +15%</span>
-                                    <span class="metric-tag">Customer Acquisition</span>
+                                    <span class="metric-tag">4x ROAS Target</span>
+                                    <span class="metric-tag">Online Sales Focus</span>
+                                    <span class="metric-tag">Video Creative Priority</span>
+                                    <span class="metric-tag">Holiday Timing</span>
                                 </div>
                             </div>
                         </div>
@@ -5271,32 +5276,32 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-bullseye"></i>
-                            <span>Four core messaging pillars designed to resonate with target audience values and motivations</span>
+                            <span>Four smartwatch messaging pillars targeting health-conscious millennials during holiday season</span>
                         </div>
                         <div class="messaging-framework">
                             <div class="pillar-list">
                                 <div class="pillar-item">
                                     <div class="pillar-number">1</div>
                                     <div class="pillar-content">
-                                        <strong>Value Proposition:</strong> "Transform your experience with innovative solutions designed for modern needs"
+                                        <strong>Health & Fitness Innovation:</strong> "Advanced health tracking that keeps you ahead of your wellness goals"
                                     </div>
                                 </div>
                                 <div class="pillar-item">
                                     <div class="pillar-number">2</div>
                                     <div class="pillar-content">
-                                        <strong>Trust & Credibility:</strong> "Trusted by thousands of customers with proven results and exceptional support"
+                                        <strong>Productivity & Efficiency:</strong> "Smart features that seamlessly integrate with your busy lifestyle"
                                     </div>
                                 </div>
                                 <div class="pillar-item">
                                     <div class="pillar-number">3</div>
                                     <div class="pillar-content">
-                                        <strong>Innovation Leadership:</strong> "Leading the industry with cutting-edge technology and forward-thinking approach"
+                                        <strong>Holiday Gifting:</strong> "The perfect gift for the health-conscious achiever in your life"
                                     </div>
                                 </div>
                                 <div class="pillar-item">
                                     <div class="pillar-number">4</div>
                                     <div class="pillar-content">
-                                        <strong>Customer Success:</strong> "Your success is our priority - dedicated support every step of the way"
+                                        <strong>Tech-Forward Design:</strong> "Cutting-edge technology wrapped in sleek, modern design"
                                     </div>
                                 </div>
                             </div>
@@ -5313,39 +5318,40 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-bullseye"></i>
-                            <span>Two primary persona segments representing 100% of campaign targeting strategy</span>
+                            <span>Tech-savvy millennials aged 25-40 interested in fitness and productivity optimization</span>
                         </div>
                         <div class="audience-breakdown">
-                            <h5>Persona Distribution</h5>
+                            <h5>Target Audience Segments</h5>
                             <div class="segment-bars">
                                 <div class="segment-bar">
                                     <div class="segment-info">
-                                        <span class="segment-name">Growth-Oriented Professional</span>
-                                        <span class="segment-percentage">70%</span>
+                                        <span class="segment-name">Fitness Enthusiasts</span>
+                                        <span class="segment-percentage">60%</span>
                                     </div>
                                     <div class="segment-progress">
-                                        <div class="segment-fill" style="width: 70%; background: var(--accent-primary);"></div>
+                                        <div class="segment-fill" style="width: 60%; background: var(--accent-primary);"></div>
                                     </div>
                                 </div>
                                 <div class="segment-bar">
                                     <div class="segment-info">
-                                        <span class="segment-name">Value-Conscious Consumer</span>
-                                        <span class="segment-percentage">30%</span>
+                                        <span class="segment-name">Productivity Optimizers</span>
+                                        <span class="segment-percentage">40%</span>
                                     </div>
                                     <div class="segment-progress">
-                                        <div class="segment-fill" style="width: 30%; background: var(--accent-secondary);"></div>
+                                        <div class="segment-fill" style="width: 40%; background: var(--accent-secondary);"></div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="persona-details">
                                 <div class="persona-section">
-                                    <h6>Primary Persona Attributes</h6>
+                                    <h6>Primary Persona: Tech-Savvy Millennials (25-40)</h6>
                                     <ul>
-                                        <li><strong>Demographics:</strong> 28-45 years, college-educated, $60K+ income</li>
-                                        <li><strong>Psychographics:</strong> Values efficiency, seeks innovation, data-driven decisions</li>
-                                        <li><strong>Behaviors:</strong> Research-oriented, social media active, mobile-first</li>
-                                        <li><strong>Pain Points:</strong> Time constraints, information overload, solution complexity</li>
+                                        <li><strong>Demographics:</strong> Ages 25-40, college-educated, disposable income for tech</li>
+                                        <li><strong>Interests:</strong> Fitness tracking, productivity tools, health optimization, early tech adoption</li>
+                                        <li><strong>Behaviors:</strong> Research products online, influenced by video content, active on social media</li>
+                                        <li><strong>Holiday Shopping:</strong> Gift for themselves or health-conscious friends/family</li>
+                                        <li><strong>Pain Points:</strong> Managing health goals, staying productive, finding reliable health data</li>
                                     </ul>
                                 </div>
                             </div>
@@ -5362,45 +5368,27 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-chart-pie"></i>
-                            <span>Strategic budget allocation across 4 primary channels for maximum reach and conversion</span>
+                            <span>$75K budget allocated across Google Ads and Meta platforms with video creative focus</span>
                         </div>
                         <div class="channel-breakdown">
-                            <h5>Budget Allocation</h5>
+                            <h5>Budget Allocation ($75K Total)</h5>
                             <div class="segment-bars">
                                 <div class="segment-bar">
                                     <div class="segment-info">
-                                        <span class="segment-name">Digital Advertising</span>
-                                        <span class="segment-percentage">40%</span>
+                                        <span class="segment-name">Google Ads (Search + YouTube)</span>
+                                        <span class="segment-percentage">60% ($45K)</span>
                                     </div>
                                     <div class="segment-progress">
-                                        <div class="segment-fill" style="width: 40%; background: var(--accent-primary);"></div>
+                                        <div class="segment-fill" style="width: 60%; background: var(--accent-primary);"></div>
                                     </div>
                                 </div>
                                 <div class="segment-bar">
                                     <div class="segment-info">
-                                        <span class="segment-name">Content Marketing</span>
-                                        <span class="segment-percentage">25%</span>
+                                        <span class="segment-name">Meta Platforms (Facebook + Instagram)</span>
+                                        <span class="segment-percentage">40% ($30K)</span>
                                     </div>
                                     <div class="segment-progress">
-                                        <div class="segment-fill" style="width: 25%; background: var(--accent-green);"></div>
-                                    </div>
-                                </div>
-                                <div class="segment-bar">
-                                    <div class="segment-info">
-                                        <span class="segment-name">Email Marketing</span>
-                                        <span class="segment-percentage">20%</span>
-                                    </div>
-                                    <div class="segment-progress">
-                                        <div class="segment-fill" style="width: 20%; background: var(--accent-orange);"></div>
-                                    </div>
-                                </div>
-                                <div class="segment-bar">
-                                    <div class="segment-info">
-                                        <span class="segment-name">Social & Influencer</span>
-                                        <span class="segment-percentage">15%</span>
-                                    </div>
-                                    <div class="segment-progress">
-                                        <div class="segment-fill" style="width: 15%; background: var(--accent-purple);"></div>
+                                        <div class="segment-fill" style="width: 40%; background: var(--accent-green);"></div>
                                     </div>
                                 </div>
                             </div>
@@ -5408,12 +5396,12 @@ class MarketingSuperAgentV4 {
                             <div class="channel-tactics">
                                 <h5>Key Tactics</h5>
                                 <div class="tactic-grid">
-                                    <span class="tactic-tag">Search Campaigns</span>
-                                    <span class="tactic-tag">Display Retargeting</span>
-                                    <span class="tactic-tag">SEO Content</span>
-                                    <span class="tactic-tag">Welcome Series</span>
-                                    <span class="tactic-tag">Social Proof</span>
-                                    <span class="tactic-tag">Video Ads</span>
+                                    <span class="tactic-tag">Google Search Ads</span>
+                                    <span class="tactic-tag">YouTube Video Ads</span>
+                                    <span class="tactic-tag">Facebook Video Campaigns</span>
+                                    <span class="tactic-tag">Instagram Stories</span>
+                                    <span class="tactic-tag">Health Tracking Demos</span>
+                                    <span class="tactic-tag">Holiday Shopping Targeting</span>
                                 </div>
                             </div>
                         </div>
@@ -5429,36 +5417,36 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-search"></i>
-                            <span>Market analysis reveals differentiation opportunities in messaging and channel optimization</span>
+                            <span>Smartwatch market analysis reveals opportunities in health tracking and holiday positioning</span>
                         </div>
                         <div class="competitive-landscape">
-                            <h5>Market Leaders Analysis</h5>
+                            <h5>Smartwatch Market Leaders</h5>
                             <div class="competitor-cards">
                                 <div class="competitor-card">
                                     <div class="competitor-header">
-                                        <h6>Competitor A - Market Leader</h6>
-                                        <span class="market-share">35%</span>
+                                        <h6>Apple Watch - Premium Leader</h6>
+                                        <span class="market-share">50%</span>
                                     </div>
                                     <div class="competitor-insights">
                                         <div class="insight-item strength">
-                                            <strong>Strengths:</strong> Brand recognition, extensive distribution, premium positioning
+                                            <strong>Strengths:</strong> Ecosystem integration, brand loyalty, comprehensive health features
                                         </div>
                                         <div class="insight-item opportunity">
-                                            <strong>Opportunity:</strong> Limited personalization, higher price point, slower innovation
+                                            <strong>Opportunity:</strong> Premium pricing, iOS-only, complex feature set for casual users
                                         </div>
                                     </div>
                                 </div>
                                 <div class="competitor-card">
                                     <div class="competitor-header">
-                                        <h6>Competitor B - Fast Follower</h6>
-                                        <span class="market-share">22%</span>
+                                        <h6>Samsung Galaxy Watch - Android Leader</h6>
+                                        <span class="market-share">15%</span>
                                     </div>
                                     <div class="competitor-insights">
                                         <div class="insight-item strength">
-                                            <strong>Strengths:</strong> Competitive pricing, digital-first approach, rapid iteration
+                                            <strong>Strengths:</strong> Android integration, competitive pricing, fitness tracking features
                                         </div>
                                         <div class="insight-item opportunity">
-                                            <strong>Opportunity:</strong> Limited customer support, brand trust gaps, narrow feature set
+                                            <strong>Opportunity:</strong> Battery life concerns, limited ecosystem, smaller app selection
                                         </div>
                                     </div>
                                 </div>
@@ -5466,7 +5454,7 @@ class MarketingSuperAgentV4 {
 
                             <div class="positioning-recommendation">
                                 <h5>Recommended Positioning</h5>
-                                <p><strong>"The perfect balance of innovation and reliability"</strong> - Premium features at competitive prices with exceptional support, emphasizing customer success stories and proven ROI.</p>
+                                <p><strong>"Smart health tracking for the busy achiever"</strong> - Advanced health features that seamlessly integrate with active lifestyles, emphasizing accurate tracking and holiday gift appeal for tech-savvy millennials.</p>
                             </div>
                         </div>
                     </div>
@@ -5717,20 +5705,24 @@ class MarketingSuperAgentV4 {
             <div class="enhanced-output">
                 <div class="output-header-section">
                     <div class="output-title-area">
-                        <h2><i class="fas fa-palette" style="color: var(--accent-red);"></i> Creative Brief & Strategy</h2>
-                        <p class="output-subtitle">Comprehensive creative direction with visual concepts, messaging framework, and brand alignment</p>
+                        <h2><i class="fas fa-palette" style="color: var(--accent-red);"></i> Holiday Smartwatch Creative Brief</h2>
+                        <p class="output-subtitle">Video-first creative strategy for health tracking smartwatch targeting millennials during holiday season</p>
                         <div class="output-stats">
                             <div class="stat-pill creative-concepts">
-                                <i class="fas fa-lightbulb"></i>
-                                <span>8 Creative Concepts</span>
+                                <i class="fas fa-video"></i>
+                                <span>Video Creative Focus</span>
                             </div>
                             <div class="stat-pill brand-elements">
-                                <i class="fas fa-swatchbook"></i>
-                                <span>5 Brand Elements</span>
+                                <i class="fas fa-heartbeat"></i>
+                                <span>Health Tracking Hero</span>
                             </div>
                             <div class="stat-pill content-variants">
-                                <i class="fas fa-layer-group"></i>
-                                <span>12+ Content Variants</span>
+                                <i class="fas fa-gift"></i>
+                                <span>Holiday Positioning</span>
+                            </div>
+                            <div class="stat-pill target-audience">
+                                <i class="fas fa-users"></i>
+                                <span>Millennials 25-40</span>
                             </div>
                         </div>
                     </div>
@@ -5749,21 +5741,22 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-compass"></i>
-                            <span>Strategic creative direction designed to drive brand awareness and emotional connection</span>
+                            <span>Video-driven creative showcasing health tracking features to drive holiday smartwatch sales</span>
                         </div>
                         <div class="brief-content">
                             <h5>Primary Creative Goal</h5>
-                            <p>Create compelling visual and verbal narratives that resonate with target audiences while reinforcing brand values and driving specific business outcomes.</p>
+                            <p>Create compelling video content that demonstrates the smartwatch's health tracking capabilities while positioning it as the perfect holiday gift for tech-savvy millennials focused on fitness and productivity.</p>
 
                             <h5>Creative Challenge</h5>
-                            <p>How might we create memorable, authentic content that stands out in a crowded marketplace while maintaining brand consistency across all touchpoints?</p>
+                            <p>How might we showcase advanced health tracking features in an authentic, relatable way that resonates with busy millennials during the competitive holiday shopping season?</p>
 
                             <div class="success-metrics">
                                 <h5>Creative Success Metrics</h5>
                                 <div class="metric-tags">
-                                    <span class="metric-tag">Brand Recall +35%</span>
-                                    <span class="metric-tag">Engagement Rate +45%</span>
-                                    <span class="metric-tag">Share Rate +25%</span>
+                                    <span class="metric-tag">4x ROAS Target</span>
+                                    <span class="metric-tag">Video View Rate 30%+</span>
+                                    <span class="metric-tag">Holiday CTR +25%</span>
+                                    <span class="metric-tag">Health Feature Awareness</span>
                                 </div>
                             </div>
                         </div>
@@ -5781,7 +5774,7 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-palette"></i>
-                            <span>Cohesive visual system establishing brand recognition and emotional impact</span>
+                            <span>Sleek, tech-forward visual identity emphasizing health, fitness, and modern lifestyle</span>
                         </div>
                         <div class="brand-framework">
                             <div class="brand-elements-grid">
@@ -5791,7 +5784,7 @@ class MarketingSuperAgentV4 {
                                     </div>
                                     <div class="element-content">
                                         <h6>Visual Style</h6>
-                                        <p>Modern, clean aesthetic with bold typography and dynamic compositions that convey innovation and trust</p>
+                                        <p>Clean, minimalist aesthetic with dynamic motion graphics showcasing health data and smartwatch interface</p>
                                     </div>
                                 </div>
                                 <div class="brand-element">
@@ -5800,7 +5793,7 @@ class MarketingSuperAgentV4 {
                                     </div>
                                     <div class="element-content">
                                         <h6>Color Palette</h6>
-                                        <p>Primary: Deep blue (#1e40af), Secondary: Vibrant orange (#f59e0b), Accent: Emerald green (#10b981)</p>
+                                        <p>Primary: Health green (#10b981), Secondary: Tech blue (#3b82f6), Accent: Holiday red (#ef4444)</p>
                                     </div>
                                 </div>
                                 <div class="brand-element">
@@ -5809,7 +5802,7 @@ class MarketingSuperAgentV4 {
                                     </div>
                                     <div class="element-content">
                                         <h6>Typography</h6>
-                                        <p>Headlines: Bold sans-serif (Montserrat), Body: Clean, readable (Inter), Script: Elegant accent font</p>
+                                        <p>Headlines: Modern sans-serif (SF Pro), Body: Readable tech font (Inter), Data: Monospace (SF Mono)</p>
                                     </div>
                                 </div>
                                 <div class="brand-element">
@@ -5818,7 +5811,7 @@ class MarketingSuperAgentV4 {
                                     </div>
                                     <div class="element-content">
                                         <h6>Imagery Style</h6>
-                                        <p>Authentic lifestyle photography, diverse representation, bright natural lighting, aspirational settings</p>
+                                        <p>Active lifestyle footage, health tracking in action, diverse millennials in gym/work settings, close-ups of watch interface</p>
                                     </div>
                                 </div>
                             </div>
@@ -5837,32 +5830,32 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="insight-highlight">
                             <i class="fas fa-volume-up"></i>
-                            <span>Distinct brand voice that builds trust and drives action across all content</span>
+                            <span>Motivational, health-focused tone that inspires action and holiday gifting decisions</span>
                         </div>
                         <div class="messaging-content">
                             <div class="tone-attributes">
                                 <h5>Brand Voice Attributes</h5>
                                 <div class="attribute-grid">
                                     <div class="attribute-item">
-                                        <span class="attribute-label">Confident</span>
-                                        <div class="attribute-bar">
-                                            <div class="attribute-fill" style="width: 90%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="attribute-item">
-                                        <span class="attribute-label">Approachable</span>
-                                        <div class="attribute-bar">
-                                            <div class="attribute-fill" style="width: 85%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="attribute-item">
-                                        <span class="attribute-label">Innovative</span>
+                                        <span class="attribute-label">Motivational</span>
                                         <div class="attribute-bar">
                                             <div class="attribute-fill" style="width: 95%;"></div>
                                         </div>
                                     </div>
                                     <div class="attribute-item">
-                                        <span class="attribute-label">Authentic</span>
+                                        <span class="attribute-label">Tech-Savvy</span>
+                                        <div class="attribute-bar">
+                                            <div class="attribute-fill" style="width: 90%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="attribute-item">
+                                        <span class="attribute-label">Health-Focused</span>
+                                        <div class="attribute-bar">
+                                            <div class="attribute-fill" style="width: 92%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="attribute-item">
+                                        <span class="attribute-label">Relatable</span>
                                         <div class="attribute-bar">
                                             <div class="attribute-fill" style="width: 88%;"></div>
                                         </div>
@@ -5876,22 +5869,22 @@ class MarketingSuperAgentV4 {
                                     <div class="pillar-card">
                                         <div class="pillar-number">1</div>
                                         <div class="pillar-content">
-                                            <strong>Innovation Leadership</strong>
-                                            <p>"Leading the way with cutting-edge solutions that transform your experience"</p>
+                                            <strong>Health Empowerment</strong>
+                                            <p>"Take control of your wellness journey with advanced health tracking that actually works"</p>
                                         </div>
                                     </div>
                                     <div class="pillar-card">
                                         <div class="pillar-number">2</div>
                                         <div class="pillar-content">
-                                            <strong>Trusted Partnership</strong>
-                                            <p>"Your success is our mission - dedicated support every step of the journey"</p>
+                                            <strong>Productivity Partner</strong>
+                                            <p>"Stay connected and productive while prioritizing your health and fitness goals"</p>
                                         </div>
                                     </div>
                                     <div class="pillar-card">
                                         <div class="pillar-number">3</div>
                                         <div class="pillar-content">
-                                            <strong>Results Driven</strong>
-                                            <p>"Proven outcomes that matter - measurable impact on your business goals"</p>
+                                            <strong>Perfect Holiday Gift</strong>
+                                            <p>"Give the gift of health and innovation - perfect for the achiever in your life"</p>
                                         </div>
                                     </div>
                                 </div>
@@ -5917,37 +5910,37 @@ class MarketingSuperAgentV4 {
                             <div class="concept-card primary">
                                 <div class="concept-header">
                                     <span class="concept-priority">Primary</span>
-                                    <h6>Transform Your Story</h6>
+                                    <h6>"Health Tracking in Action"</h6>
                                 </div>
-                                <p>Narrative-driven campaign focusing on customer transformation journeys with before/after storytelling</p>
+                                <p>Dynamic video content showcasing real-time health tracking features during workouts, sleep, and daily activities to demonstrate smartwatch's capabilities</p>
                                 <div class="concept-formats">
-                                    <span class="format-tag">Video Series</span>
-                                    <span class="format-tag">Social Stories</span>
-                                    <span class="format-tag">Display Ads</span>
+                                    <span class="format-tag">15-30s Video Ads</span>
+                                    <span class="format-tag">Stories & Reels</span>
+                                    <span class="format-tag">YT Pre-roll</span>
                                 </div>
                             </div>
                             <div class="concept-card secondary">
                                 <div class="concept-header">
                                     <span class="concept-priority">Secondary</span>
-                                    <h6>Behind the Innovation</h6>
+                                    <h6>"Holiday Fitness Goals"</h6>
                                 </div>
-                                <p>Technology-focused content showcasing product development and innovation process</p>
+                                <p>Seasonal messaging around New Year's resolutions and staying healthy during holidays, positioning smartwatch as the perfect motivational tool</p>
                                 <div class="concept-formats">
-                                    <span class="format-tag">Tech Demos</span>
-                                    <span class="format-tag">Infographics</span>
-                                    <span class="format-tag">Interactive Content</span>
+                                    <span class="format-tag">Goal-Setting Videos</span>
+                                    <span class="format-tag">Gift Guides</span>
+                                    <span class="format-tag">Resolution Content</span>
                                 </div>
                             </div>
                             <div class="concept-card supporting">
                                 <div class="concept-header">
                                     <span class="concept-priority">Supporting</span>
-                                    <h6>Community Champions</h6>
+                                    <h6>"Millennial Productivity"</h6>
                                 </div>
-                                <p>User-generated content campaign highlighting real customer success stories and community</p>
+                                <p>Work-life balance content showing how smartwatch helps busy professionals stay connected while prioritizing health and fitness</p>
                                 <div class="concept-formats">
-                                    <span class="format-tag">UGC Campaign</span>
-                                    <span class="format-tag">Testimonials</span>
-                                    <span class="format-tag">Community Features</span>
+                                    <span class="format-tag">Lifestyle Videos</span>
+                                    <span class="format-tag">Productivity Tips</span>
+                                    <span class="format-tag">Day-in-Life</span>
                                 </div>
                             </div>
                         </div>
@@ -5969,61 +5962,69 @@ class MarketingSuperAgentV4 {
                         </div>
                         <div class="execution-content">
                             <div class="production-phases">
-                                <h5>Production Timeline</h5>
+                                <h5>6-Week Holiday Campaign Timeline</h5>
                                 <div class="phase-timeline">
                                     <div class="phase-step">
                                         <div class="step-number">1</div>
                                         <div class="step-content">
-                                            <h6>Creative Development</h6>
-                                            <span class="step-duration">Week 1-2</span>
-                                            <p>Concept refinement, design mockups, copy development</p>
+                                            <h6>Pre-Production & Casting</h6>
+                                            <span class="step-duration">Week 1</span>
+                                            <p>Talent casting, location scouting, video storyboards, smartwatch feature demonstrations prep</p>
                                         </div>
                                     </div>
                                     <div class="phase-step">
                                         <div class="step-number">2</div>
                                         <div class="step-content">
-                                            <h6>Asset Production</h6>
-                                            <span class="step-duration">Week 3-4</span>
-                                            <p>Photography, video production, graphic design, copywriting</p>
+                                            <h6>Video Production</h6>
+                                            <span class="step-duration">Week 2-3</span>
+                                            <p>Health tracking video shoots, lifestyle footage, product close-ups, motion graphics creation</p>
                                         </div>
                                     </div>
                                     <div class="phase-step">
                                         <div class="step-number">3</div>
                                         <div class="step-content">
-                                            <h6>Review & Optimization</h6>
-                                            <span class="step-duration">Week 5</span>
-                                            <p>Stakeholder review, revisions, final approvals, format optimization</p>
+                                            <h6>Post-Production & Launch</h6>
+                                            <span class="step-duration">Week 4</span>
+                                            <p>Video editing, sound design, format optimization for Google & Meta, campaign launch prep</p>
+                                        </div>
+                                    </div>
+                                    <div class="phase-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <h6>Campaign Execution</h6>
+                                            <span class="step-duration">Week 5-6</span>
+                                            <p>Black Friday launch, performance monitoring, creative optimization, New Year's resolution pivot</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="deliverables-checklist">
-                                <h5>Key Deliverables</h5>
+                                <h5>Holiday Smartwatch Campaign Deliverables</h5>
                                 <div class="checklist-grid">
                                     <div class="checklist-item">
                                         <i class="fas fa-check-circle"></i>
-                                        <span>Brand style guide & asset library</span>
+                                        <span>15s/30s health tracking video ads (Google & Meta)</span>
                                     </div>
                                     <div class="checklist-item">
                                         <i class="fas fa-check-circle"></i>
-                                        <span>Campaign creative assets (all formats)</span>
+                                        <span>Vertical video content for Stories & Reels</span>
                                     </div>
                                     <div class="checklist-item">
                                         <i class="fas fa-check-circle"></i>
-                                        <span>Copy variations & messaging templates</span>
+                                        <span>Static display ads featuring smartwatch interface</span>
                                     </div>
                                     <div class="checklist-item">
                                         <i class="fas fa-check-circle"></i>
-                                        <span>Social media content calendar</span>
+                                        <span>Holiday-themed copy variations & CTAs</span>
                                     </div>
                                     <div class="checklist-item">
                                         <i class="fas fa-check-circle"></i>
-                                        <span>Performance tracking framework</span>
+                                        <span>Product demonstration motion graphics</span>
                                     </div>
                                     <div class="checklist-item">
                                         <i class="fas fa-check-circle"></i>
-                                        <span>Brand compliance guidelines</span>
+                                        <span>Performance tracking for 4x ROAS target</span>
                                     </div>
                                 </div>
                             </div>

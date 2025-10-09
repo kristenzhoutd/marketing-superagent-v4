@@ -4933,6 +4933,12 @@ body {
     border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
+.stat-pill.target-audience {
+    background: rgba(139, 92, 246, 0.1);
+    color: #7c3aed;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
 .stat-pill:hover {
     transform: scale(1.05);
 }
@@ -4947,6 +4953,10 @@ body {
 
 .stat-pill.strategic-insights:hover {
     background: rgba(245, 158, 11, 0.15);
+}
+
+.stat-pill.target-audience:hover {
+    background: rgba(139, 92, 246, 0.15);
 }
 
 /* Next Steps Suggestions */
