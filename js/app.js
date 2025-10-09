@@ -8709,8 +8709,9 @@ class MarketingSuperAgentV4 {
     }
 
     addTaskSpecificSuggestions(task) {
-        // Prevent duplicate suggestions
-        if (document.querySelector('.next-steps-suggestions')) {
+        // Prevent duplicate suggestions for the same task
+        const existingSuggestions = document.querySelector('.next-steps-suggestions');
+        if (existingSuggestions && existingSuggestions.dataset.task === task) {
             return;
         }
 
@@ -8796,15 +8797,15 @@ class MarketingSuperAgentV4 {
 
         // Handle both string and object suggestions
         if (task === 'design-campaign-program' || task === 'create-creative-brief') {
-            this.addTaskSuggestionButtons(suggestions);
+            this.addTaskSuggestionButtons(suggestions, task);
         } else {
             this.addFollowUpSuggestions(suggestions);
         }
     }
 
-    addTaskSuggestionButtons(suggestions) {
+    addTaskSuggestionButtons(suggestions, task = '') {
         const suggestionsHTML = `
-            <div class="next-steps-suggestions">
+            <div class="next-steps-suggestions" data-task="${task}">
                 <div class="suggestions-header">
                     <i class="fas fa-arrow-right"></i>
                     <h4>Recommended Next Steps</h4>
