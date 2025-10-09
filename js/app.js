@@ -3785,10 +3785,11 @@ class MarketingSuperAgentV4 {
             }
         }, 100);
 
-        // Add universal suggested next steps to chat
-        setTimeout(() => {
-            try {
-            const nextStepsConfigs = {
+        // Add universal suggested next steps to chat (only if no task-specific suggestions)
+        if (!preservedTask || !preservedTaskAgents) {
+            setTimeout(() => {
+                try {
+                const nextStepsConfigs = {
                 'campaign-brief': [
                     'Generate creative assets for this campaign',
                     'Build target audiences for segments',
@@ -3862,6 +3863,7 @@ class MarketingSuperAgentV4 {
                 console.error('❌ Error in next steps timeout:', error);
             }
         }, 2000);
+        }
 
         // Add Export and Share buttons to output header
         this.addOutputActionButtons();
@@ -8778,7 +8780,7 @@ class MarketingSuperAgentV4 {
             ],
             'create-creative-brief': [
                 { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' },
-                { text: 'Generate creative assets and mockups', task: 'generate-creative' },
+                { text: 'Creative Ideation Workshop', task: 'generate-creative' },
                 { text: 'Set up creative approval workflow', task: 'content-calendar' }
             ],
             'design-campaign-program': [
