@@ -534,13 +534,21 @@ class MarketingSuperAgentV4 {
         // Add initial message to chat
         this.addMessage(message, 'user');
 
-        // Show processing indicator
-        this.showProcessingIndicator();
+        // Special handling for design-campaign-program - skip processing messages and go direct to output
+        if (this.currentTask === 'design-campaign-program') {
+            // Generate campaign strategy output directly
+            setTimeout(() => {
+                this.updateOutputPanel('strategy', message);
+            }, 500);
+        } else {
+            // Show processing indicator
+            this.showProcessingIndicator();
 
-        // Route to agents and generate response
-        setTimeout(() => {
-            this.routeToAgents(message);
-        }, 1000);
+            // Route to agents and generate response
+            setTimeout(() => {
+                this.routeToAgents(message);
+            }, 1000);
+        }
 
         // Clear task context after processing completes
         setTimeout(() => {
