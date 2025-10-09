@@ -4804,6 +4804,17 @@ class MarketingSuperAgentV4 {
                                     <div class="inspiration-showcase">
                                         <div class="showcase-image">
                                             <div class="campaign-thumbnail apple-watch">
+                                                <div class="campaign-visual">
+                                                    <div class="watch-mockup">⌚</div>
+                                                    <div class="ecg-visualization">
+                                                        <div class="heartbeat-line">
+                                                            <span class="beat-point"></span>
+                                                            <span class="beat-point"></span>
+                                                            <span class="beat-point"></span>
+                                                        </div>
+                                                        <div class="health-text">ECG Reading</div>
+                                                    </div>
+                                                </div>
                                                 <div class="thumbnail-overlay">
                                                     <i class="fab fa-apple"></i>
                                                     <span>Apple Watch</span>
@@ -4834,6 +4845,17 @@ class MarketingSuperAgentV4 {
                                     <div class="inspiration-showcase">
                                         <div class="showcase-image">
                                             <div class="campaign-thumbnail nike-london">
+                                                <div class="campaign-visual">
+                                                    <div class="athlete-silhouettes">
+                                                        <div class="runner">🏃‍♀️</div>
+                                                        <div class="boxer">🥊</div>
+                                                        <div class="cyclist">🚴‍♀️</div>
+                                                    </div>
+                                                    <div class="city-backdrop">
+                                                        <div class="london-skyline">🏙️</div>
+                                                        <div class="urban-text">London Athletics</div>
+                                                    </div>
+                                                </div>
                                                 <div class="thumbnail-overlay">
                                                     <i class="fab fa-nike"></i>
                                                     <span>Nike</span>
@@ -4869,9 +4891,18 @@ class MarketingSuperAgentV4 {
                                     <div class="format-showcase">
                                         <div class="format-preview short-form">
                                             <div class="video-frame">
-                                                <div class="video-content">
-                                                    <div class="progress-viz">📊</div>
-                                                    <div class="user-avatar">👤</div>
+                                                <div class="video-content health-story">
+                                                    <div class="workout-scene">
+                                                        <div class="person-running">🏃‍♀️</div>
+                                                        <div class="smartwatch-ui">
+                                                            <div class="watch-face">⌚</div>
+                                                            <div class="data-rings">
+                                                                <div class="activity-ring red"></div>
+                                                                <div class="activity-ring green"></div>
+                                                                <div class="activity-ring blue"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="metrics-overlay">
                                                         <span>❤️ 142 BPM</span>
                                                         <span>🏃‍♀️ 5.2 km</span>
@@ -4896,8 +4927,18 @@ class MarketingSuperAgentV4 {
                                         <div class="format-preview gift-guide">
                                             <div class="video-frame horizontal">
                                                 <div class="video-content gift-scene">
-                                                    <div class="gift-box">🎁</div>
-                                                    <div class="product-hero">⌚</div>
+                                                    <div class="holiday-setting">
+                                                        <div class="christmas-tree">🎄</div>
+                                                        <div class="gift-unwrapping">
+                                                            <div class="gift-box">🎁</div>
+                                                            <div class="arrow-reveal">→</div>
+                                                            <div class="product-hero">⌚</div>
+                                                        </div>
+                                                        <div class="resolution-goals">
+                                                            <span>🎯 2025 Goals</span>
+                                                            <span>💪 Stay Healthy</span>
+                                                        </div>
+                                                    </div>
                                                     <div class="lifestyle-context">
                                                         <span>🏠 Holiday Morning</span>
                                                         <span>☕ Coffee + Goals</span>
@@ -4921,8 +4962,20 @@ class MarketingSuperAgentV4 {
                                         <div class="format-preview product-demo">
                                             <div class="video-frame">
                                                 <div class="video-content demo-style">
-                                                    <div class="watch-interface">
-                                                        <div class="screen-recording">📱</div>
+                                                    <div class="watch-interface-demo">
+                                                        <div class="watch-screen">
+                                                            <div class="screen-mockup">⌚</div>
+                                                            <div class="ui-elements">
+                                                                <div class="health-charts">
+                                                                    <div class="mini-chart">📊</div>
+                                                                    <div class="mini-chart">📈</div>
+                                                                </div>
+                                                                <div class="health-metrics">
+                                                                    <span class="metric">💤 8h 24m</span>
+                                                                    <span class="metric">❤️ 72 BPM</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div class="feature-callouts">
                                                             <span>→ Sleep Quality</span>
                                                             <span>→ Heart Rate Zones</span>

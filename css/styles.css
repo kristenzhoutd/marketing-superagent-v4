@@ -1671,7 +1671,7 @@ body {
     display: grid;
     grid-template-columns: 400px 1fr;
     gap: 0;
-    padding: 0 var(--space-xl) 0 0;
+    padding: 0;
     overflow: hidden;
 }
 
@@ -13845,6 +13845,119 @@ body {
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
 }
 
+.campaign-visual {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    z-index: 1;
+}
+
+/* Apple Watch Campaign Visual */
+.watch-mockup {
+    font-size: 3rem;
+    margin-bottom: var(--space-sm);
+}
+
+.ecg-visualization {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.heartbeat-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    position: relative;
+}
+
+.beat-point {
+    width: 8px;
+    height: 8px;
+    background: #ff4444;
+    border-radius: 50%;
+    animation: heartbeat 1.5s infinite;
+}
+
+.beat-point:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.beat-point:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+.health-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Nike Campaign Visual */
+.athlete-silhouettes {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
+}
+
+.athlete-silhouettes div {
+    font-size: 2rem;
+    animation: athleteMove 2s infinite alternate;
+}
+
+.runner {
+    animation-delay: 0s;
+}
+
+.boxer {
+    animation-delay: 0.3s;
+}
+
+.cyclist {
+    animation-delay: 0.6s;
+}
+
+@keyframes athleteMove {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-10px); }
+}
+
+.city-backdrop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.london-skyline {
+    font-size: 1.5rem;
+}
+
+.urban-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 .thumbnail-overlay {
     position: absolute;
     top: var(--space-md);
@@ -14026,6 +14139,202 @@ body {
 
 .video-content.demo-style {
     background: linear-gradient(135deg, #065f46, #10b981);
+}
+
+.video-content.health-story {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+}
+
+/* Enhanced Video Content Elements */
+.workout-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    position: relative;
+}
+
+.person-running {
+    font-size: 4rem;
+    animation: runningBob 1.5s infinite ease-in-out;
+}
+
+@keyframes runningBob {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+.smartwatch-ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.watch-face {
+    font-size: 2rem;
+    position: relative;
+}
+
+.data-rings {
+    display: flex;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
+}
+
+.activity-ring {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    animation: ringFill 2s infinite;
+}
+
+.activity-ring.red {
+    border-color: #ff4444;
+    animation-delay: 0s;
+}
+
+.activity-ring.green {
+    border-color: #10b981;
+    animation-delay: 0.3s;
+}
+
+.activity-ring.blue {
+    border-color: #3b82f6;
+    animation-delay: 0.6s;
+}
+
+@keyframes ringFill {
+    0% {
+        border-width: 3px;
+        opacity: 0.5;
+    }
+    50% {
+        border-width: 5px;
+        opacity: 1;
+    }
+    100% {
+        border-width: 3px;
+        opacity: 0.5;
+    }
+}
+
+/* Holiday Gift Scene */
+.holiday-setting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.christmas-tree {
+    font-size: 2rem;
+    animation: treeGlow 3s infinite ease-in-out;
+}
+
+@keyframes treeGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+
+.gift-unwrapping {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    animation: revealSequence 4s infinite;
+}
+
+@keyframes revealSequence {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.arrow-reveal {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.5rem;
+    animation: arrowPulse 2s infinite;
+}
+
+@keyframes arrowPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.resolution-goals {
+    display: flex;
+    gap: var(--space-md);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Product Demo Interface */
+.watch-interface-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.watch-screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.screen-mockup {
+    font-size: 3rem;
+    position: relative;
+}
+
+.ui-elements {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.health-charts {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.mini-chart {
+    font-size: 1rem;
+    animation: chartPulse 2s infinite alternate;
+}
+
+.mini-chart:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+@keyframes chartPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+.health-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    text-align: center;
+}
+
+.health-metrics .metric {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
 .progress-viz, .user-avatar, .gift-box, .product-hero, .screen-recording {
