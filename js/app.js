@@ -383,7 +383,7 @@ class MarketingSuperAgentV4 {
             return {
                 task: 'budget-allocation',
                 agents: ['Deep Research Agent', 'Historical Performance Agent', 'Budget Optimization Agent'],
-                suiteTitle: 'Paid Media AI Suite',
+                suiteTitle: 'Campaign Strategy',
                 messageType: 'paid-media'
             };
         }
@@ -462,7 +462,7 @@ class MarketingSuperAgentV4 {
             return {
                 task: 'budget-allocation',
                 agents: ['Deep Research Agent', 'Historical Performance Agent', 'Budget Optimization Agent'],
-                suiteTitle: 'Paid Media AI Suite',
+                suiteTitle: 'Campaign Strategy',
                 messageType: 'paid-media'
             };
         }
@@ -515,7 +515,7 @@ class MarketingSuperAgentV4 {
             if (relevantSuite) {
                 const areaTitles = {
                     'engage': 'Engage AI Suite',
-                    'paid-media': 'Paid Media AI Suite',
+                    'paid-media': 'Campaign Strategy',
                     'personalization': 'Personalization AI Suite',
                     'service': 'Service AI Suite',
                     'creative': 'Creative Ideation'
@@ -534,7 +534,7 @@ class MarketingSuperAgentV4 {
         // Add initial message to chat
         this.addMessage(message, 'user');
 
-        // Special handling for design-campaign-program - skip processing messages and go direct to output
+        // Special handling for design-campaign-program - skip all processing messages and go direct to output
         if (this.currentTask === 'design-campaign-program') {
             // Generate campaign strategy output directly without any processing messages
             setTimeout(() => {
@@ -543,6 +543,18 @@ class MarketingSuperAgentV4 {
                 const outputTitle = document.getElementById('output-title');
                 if (outputTitle) {
                     outputTitle.textContent = this.currentSuiteTitle;
+                }
+
+                // Update workspace title
+                const workspaceTitle = document.getElementById('workspace-title');
+                if (workspaceTitle) {
+                    workspaceTitle.textContent = 'Campaign Strategy Overview';
+                }
+
+                // Update current task display
+                const currentTask = document.getElementById('current-task');
+                if (currentTask) {
+                    currentTask.textContent = 'Campaign Strategy';
                 }
 
                 // Generate the output content directly
@@ -555,11 +567,23 @@ class MarketingSuperAgentV4 {
                     outputContent.innerHTML = content;
                 }
 
+                // Update last updated time
+                const lastUpdated = document.getElementById('last-updated');
+                if (lastUpdated) {
+                    lastUpdated.textContent = 'Just now';
+                }
+
+                // Update agents used display
+                const agentsUsed = document.getElementById('agents-used');
+                if (agentsUsed) {
+                    agentsUsed.textContent = '3 agents';
+                }
+
                 // Add task-specific suggestions
                 setTimeout(() => {
                     this.addTaskSpecificSuggestions('design-campaign-program');
                 }, 1000);
-            }, 500);
+            }, 200);
         } else {
             // Show processing indicator
             this.showProcessingIndicator();
@@ -802,12 +826,12 @@ class MarketingSuperAgentV4 {
     getAISuiteFromMessageType(messageType) {
         // Map message types to AI suites to ensure we never show "Task Output"
         const messageTypeToSuite = {
-            'brief': 'Paid Media AI Suite',
+            'brief': 'Campaign Strategy',
             'creative': 'Creative Ideation',
             'journey': 'Engage AI Suite',
-            'performance': 'Paid Media AI Suite',
+            'performance': 'Campaign Strategy',
             'audience': 'Engage AI Suite',
-            'paid-media': 'Paid Media AI Suite',
+            'paid-media': 'Campaign Strategy',
             'general': 'Creative Ideation' // Default to Creative for general tasks
         };
 
@@ -880,7 +904,7 @@ class MarketingSuperAgentV4 {
         // Set output title based on selected AI suite
         const areaTitles = {
             'engage': 'Engage AI Suite',
-            'paid-media': 'Paid Media AI Suite',
+            'paid-media': 'Campaign Strategy',
             'personalization': 'Personalization AI Suite',
             'service': 'Service AI Suite',
             'creative': 'Creative AI Suite'
@@ -895,7 +919,7 @@ class MarketingSuperAgentV4 {
             return;
         }
 
-        // Special handling for Paid Media AI Suite
+        // Special handling for Campaign Strategy
         if (area === 'paid-media') {
             this.showPaidMediaInterface();
             return;
@@ -1305,7 +1329,7 @@ class MarketingSuperAgentV4 {
         if (directSuite) {
             const areaTitles = {
                 'engage': 'Engage AI Suite',
-                'paid-media': 'Paid Media AI Suite',
+                'paid-media': 'Campaign Strategy',
                 'personalization': 'Personalization AI Suite',
                 'service': 'Service AI Suite',
                 'creative': 'Creative AI Suite'
@@ -4001,7 +4025,8 @@ class MarketingSuperAgentV4 {
             'competitor-analysis': () => this.generateCompetitorAnalysisOutput(context, userMessage),
             'content-calendar': () => this.generateContentCalendarOutput(context, userMessage),
             'design-campaign-program': () => this.generateCampaignStrategyOutput(context, userMessage),
-            'create-creative-brief': () => this.generateCreativeBriefOutput(context, userMessage)
+            'create-creative-brief': () => this.generateCreativeBriefOutput(context, userMessage),
+            'pick-channel-mix': () => this.generateChannelStrategyOutput(context, userMessage)
         };
 
         const generator = taskOutputGenerators[task];
@@ -6995,6 +7020,712 @@ class MarketingSuperAgentV4 {
         `;
     }
 
+    generateChannelStrategyOutput(context, userMessage) {
+        // Extract smartwatch campaign details from context
+        const budget = context.budget || '$75K';
+        const timeframe = context.timeframe || '6 weeks (Black Friday - New Year)';
+        const target = context.target_audience || 'Tech-savvy millennials (25-40)';
+        const goal = context.goal || 'Drive online sales with 4x ROAS';
+
+        return `
+            <div class="enhanced-output">
+                <div class="output-header-section">
+                    <div class="output-title-area">
+                        <h2><i class="fas fa-broadcast-tower" style="color: var(--accent-orange);"></i> Holiday Smartwatch Channel Strategy</h2>
+                        <p class="output-subtitle">Comprehensive multi-channel distribution strategy optimized for tech-savvy millennials during peak holiday season</p>
+                        <div class="output-stats">
+                            <div class="stat-pill channels">
+                                <i class="fas fa-share-alt"></i>
+                                <span>2 Primary Channels</span>
+                            </div>
+                            <div class="stat-pill budget">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>${budget} Total Budget</span>
+                            </div>
+                            <div class="stat-pill timeline">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>${timeframe}</span>
+                            </div>
+                            <div class="stat-pill target-roas">
+                                <i class="fas fa-chart-line"></i>
+                                <span>4x ROAS Target</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-overview-section">
+                    <div class="overview-grid">
+                        <div class="overview-card primary">
+                            <div class="card-icon google">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Google Ads - Performance Driver</h3>
+                                <div class="budget-allocation">$45K (60%)</div>
+                                <p>Search & YouTube campaigns targeting high-intent fitness and productivity keywords</p>
+                                <div class="channel-metrics">
+                                    <span class="metric"><i class="fas fa-target"></i> Conversion-focused</span>
+                                    <span class="metric"><i class="fas fa-clock"></i> Always-on + peak moments</span>
+                                </div>
+                                <button class="btn-refine-ai" onclick="refineWithAI('google-strategy')">
+                                    <i class="fas fa-magic"></i> Refine with AI
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overview-card secondary">
+                            <div class="card-icon meta">
+                                <i class="fab fa-meta"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Meta Platforms - Awareness & Engagement</h3>
+                                <div class="budget-allocation">$30K (40%)</div>
+                                <p>Video-first campaigns showcasing health tracking features to fitness enthusiasts</p>
+                                <div class="channel-metrics">
+                                    <span class="metric"><i class="fas fa-eye"></i> Brand awareness</span>
+                                    <span class="metric"><i class="fas fa-heart"></i> Community building</span>
+                                </div>
+                                <button class="btn-refine-ai" onclick="refineWithAI('meta-strategy')">
+                                    <i class="fas fa-magic"></i> Refine with AI
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="channel-deep-dive">
+                    <div class="section-header-with-refine">
+                        <h3><i class="fas fa-search"></i> Google Ads Strategy - $45K (60%)</h3>
+                        <button class="btn-refine-ai" onclick="refineWithAI('google-deep-dive')">
+                            <i class="fas fa-magic"></i> Refine with AI
+                        </button>
+                    </div>
+                    <div class="channel-breakdown">
+                        <div class="channel-section search-campaigns">
+                            <div class="section-header">
+                                <h4><i class="fas fa-search"></i> Search Campaigns - $30K</h4>
+                                <div class="section-actions">
+                                    <span class="budget-split">67% of Google budget</span>
+                                    <button class="btn-refine-ai small" onclick="refineWithAI('search-campaigns')">
+                                        <i class="fas fa-magic"></i> Refine
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="campaign-details">
+                                <div class="campaign-type">
+                                    <strong>High-Intent Keywords:</strong>
+                                    <ul class="keyword-list">
+                                        <li>"smartwatch fitness tracking"</li>
+                                        <li>"best smartwatch for health"</li>
+                                        <li>"productivity smartwatch 2024"</li>
+                                        <li>"fitness tracker with notifications"</li>
+                                    </ul>
+                                </div>
+                                <div class="targeting-strategy">
+                                    <strong>Targeting Strategy:</strong>
+                                    <span class="target-badge">Ages 25-40</span>
+                                    <span class="target-badge">Fitness enthusiasts</span>
+                                    <span class="target-badge">Tech early adopters</span>
+                                    <span class="target-badge">High income</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="channel-section youtube-campaigns">
+                            <div class="section-header">
+                                <h4><i class="fab fa-youtube"></i> YouTube Campaigns - $15K</h4>
+                                <div class="section-actions">
+                                    <span class="budget-split">33% of Google budget</span>
+                                    <button class="btn-refine-ai small" onclick="refineWithAI('youtube-campaigns')">
+                                        <i class="fas fa-magic"></i> Refine
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="campaign-details">
+                                <div class="video-strategy">
+                                    <strong>Video Creative Strategy:</strong>
+                                    <ul class="creative-list">
+                                        <li>30s product demos showcasing health tracking</li>
+                                        <li>15s efficiency testimonials from millennials</li>
+                                        <li>6s bumper ads for retargeting</li>
+                                    </ul>
+                                </div>
+                                <div class="placement-strategy">
+                                    <strong>Placement Strategy:</strong>
+                                    <span class="placement-badge">Fitness channels</span>
+                                    <span class="placement-badge">Tech reviews</span>
+                                    <span class="placement-badge">Productivity content</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="channel-deep-dive">
+                    <div class="section-header-with-refine">
+                        <h3><i class="fab fa-meta"></i> Meta Platforms Strategy - $30K (40%)</h3>
+                        <button class="btn-refine-ai" onclick="refineWithAI('meta-deep-dive')">
+                            <i class="fas fa-magic"></i> Refine with AI
+                        </button>
+                    </div>
+                    <div class="channel-breakdown">
+                        <div class="channel-section facebook-campaigns">
+                            <div class="section-header">
+                                <h4><i class="fab fa-facebook"></i> Facebook Campaigns - $18K</h4>
+                                <div class="section-actions">
+                                    <span class="budget-split">60% of Meta budget</span>
+                                    <button class="btn-refine-ai small" onclick="refineWithAI('facebook-campaigns')">
+                                        <i class="fas fa-magic"></i> Refine
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="campaign-details">
+                                <div class="audience-strategy">
+                                    <strong>Custom Audiences:</strong>
+                                    <ul class="audience-list">
+                                        <li>Fitness app users</li>
+                                        <li>Wearable device shoppers</li>
+                                        <li>Health & wellness enthusiasts</li>
+                                        <li>Productivity tool users</li>
+                                    </ul>
+                                </div>
+                                <div class="creative-format">
+                                    <strong>Creative Formats:</strong>
+                                    <span class="format-badge">Video ads (health tracking demo)</span>
+                                    <span class="format-badge">Carousel (feature showcase)</span>
+                                    <span class="format-badge">Collection ads (shop experience)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="channel-section instagram-campaigns">
+                            <div class="section-header">
+                                <h4><i class="fab fa-instagram"></i> Instagram Campaigns - $12K</h4>
+                                <div class="section-actions">
+                                    <span class="budget-split">40% of Meta budget</span>
+                                    <button class="btn-refine-ai small" onclick="refineWithAI('instagram-campaigns')">
+                                        <i class="fas fa-magic"></i> Refine
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="campaign-details">
+                                <div class="content-strategy">
+                                    <strong>Content Strategy:</strong>
+                                    <ul class="content-list">
+                                        <li>Stories: Quick feature highlights</li>
+                                        <li>Reels: Lifestyle integration videos</li>
+                                        <li>Feed: High-quality product shots</li>
+                                    </ul>
+                                </div>
+                                <div class="influencer-integration">
+                                    <strong>Micro-Influencer Partnership:</strong>
+                                    <span class="influencer-badge">Fitness micro-influencers</span>
+                                    <span class="influencer-badge">Tech reviewers</span>
+                                    <span class="influencer-badge">Productivity coaches</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-strategy">
+                    <div class="section-header-with-refine">
+                        <h3><i class="fas fa-calendar-check"></i> 6-Week Execution Timeline</h3>
+                        <button class="btn-refine-ai" onclick="refineWithAI('timeline-strategy')">
+                            <i class="fas fa-magic"></i> Refine with AI
+                        </button>
+                    </div>
+                    <div class="timeline-grid">
+                        <div class="timeline-week">
+                            <div class="week-header">
+                                <span class="week-number">Week 1-2</span>
+                                <span class="week-period">Black Friday - Cyber Monday</span>
+                            </div>
+                            <div class="week-activities">
+                                <div class="activity google">
+                                    <i class="fab fa-google"></i>
+                                    <span>Launch high-intent search campaigns</span>
+                                    <span class="budget-note">40% of Google budget</span>
+                                </div>
+                                <div class="activity meta">
+                                    <i class="fab fa-meta"></i>
+                                    <span>Video campaign launch + influencer content</span>
+                                    <span class="budget-note">30% of Meta budget</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-week">
+                            <div class="week-header">
+                                <span class="week-number">Week 3-4</span>
+                                <span class="week-period">Holiday Shopping Peak</span>
+                            </div>
+                            <div class="week-activities">
+                                <div class="activity google">
+                                    <i class="fab fa-google"></i>
+                                    <span>Scale winning search + YouTube retargeting</span>
+                                    <span class="budget-note">35% of Google budget</span>
+                                </div>
+                                <div class="activity meta">
+                                    <i class="fab fa-meta"></i>
+                                    <span>Lookalike expansion + gift messaging</span>
+                                    <span class="budget-note">45% of Meta budget</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-week">
+                            <div class="week-header">
+                                <span class="week-number">Week 5-6</span>
+                                <span class="week-period">New Year Resolution</span>
+                            </div>
+                            <div class="week-activities">
+                                <div class="activity google">
+                                    <i class="fab fa-google"></i>
+                                    <span>Fitness resolution targeting</span>
+                                    <span class="budget-note">25% of Google budget</span>
+                                </div>
+                                <div class="activity meta">
+                                    <i class="fab fa-meta"></i>
+                                    <span>Health goal inspiration content</span>
+                                    <span class="budget-note">25% of Meta budget</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="customer-journey-design">
+                    <div class="section-header-with-refine">
+                        <h3><i class="fas fa-route"></i> Customer Journey Design</h3>
+                        <button class="btn-refine-ai" onclick="refineWithAI('journey-design')">
+                            <i class="fas fa-magic"></i> Refine with AI
+                        </button>
+                    </div>
+                    <div class="journey-overview">
+                        <p class="journey-intro">Multi-touchpoint journey optimized for tech-savvy millennials during holiday shopping season</p>
+                        <div class="journey-stats">
+                            <div class="journey-stat">
+                                <i class="fas fa-layer-group"></i>
+                                <span>5 Journey Stages</span>
+                            </div>
+                            <div class="journey-stat">
+                                <i class="fas fa-touchpad"></i>
+                                <span>12+ Touchpoints</span>
+                            </div>
+                            <div class="journey-stat">
+                                <i class="fas fa-clock"></i>
+                                <span>14-day cycle</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-flow">
+                        <div class="journey-stage awareness">
+                            <div class="stage-header">
+                                <div class="stage-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="stage-info">
+                                    <h4>Awareness</h4>
+                                    <span class="stage-timeframe">Days 1-3</span>
+                                </div>
+                                <button class="btn-refine-ai small" onclick="refineWithAI('awareness-stage')">
+                                    <i class="fas fa-magic"></i> Refine
+                                </button>
+                            </div>
+                            <div class="stage-content">
+                                <div class="touchpoints">
+                                    <div class="touchpoint youtube">
+                                        <i class="fab fa-youtube"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>YouTube Video Ads</strong>
+                                            <p>30s product demos on fitness/tech channels</p>
+                                            <span class="touchpoint-goal">Generate interest & product awareness</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint instagram">
+                                        <i class="fab fa-instagram"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Instagram Stories</strong>
+                                            <p>Fitness influencer partnerships showcasing features</p>
+                                            <span class="touchpoint-goal">Build trust through social proof</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stage-metrics">
+                                    <span class="metric-item">Reach: 500K</span>
+                                    <span class="metric-item">CTR: 3.2%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+
+                        <div class="journey-stage consideration">
+                            <div class="stage-header">
+                                <div class="stage-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="stage-info">
+                                    <h4>Consideration</h4>
+                                    <span class="stage-timeframe">Days 4-7</span>
+                                </div>
+                                <button class="btn-refine-ai small" onclick="refineWithAI('consideration-stage')">
+                                    <i class="fas fa-magic"></i> Refine
+                                </button>
+                            </div>
+                            <div class="stage-content">
+                                <div class="touchpoints">
+                                    <div class="touchpoint google">
+                                        <i class="fab fa-google"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Google Search Ads</strong>
+                                            <p>Target "smartwatch fitness tracking" keywords</p>
+                                            <span class="touchpoint-goal">Capture high-intent searches</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint facebook">
+                                        <i class="fab fa-facebook"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Facebook Retargeting</strong>
+                                            <p>Video ads showing health tracking features</p>
+                                            <span class="touchpoint-goal">Re-engage interested prospects</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint email">
+                                        <i class="fas fa-envelope"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Email Nurture</strong>
+                                            <p>Fitness tips + product benefits series</p>
+                                            <span class="touchpoint-goal">Educate on unique features</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stage-metrics">
+                                    <span class="metric-item">Engagement: 8.5%</span>
+                                    <span class="metric-item">Time on Site: 3:45</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+
+                        <div class="journey-stage intent">
+                            <div class="stage-header">
+                                <div class="stage-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="stage-info">
+                                    <h4>Purchase Intent</h4>
+                                    <span class="stage-timeframe">Days 8-10</span>
+                                </div>
+                                <button class="btn-refine-ai small" onclick="refineWithAI('intent-stage')">
+                                    <i class="fas fa-magic"></i> Refine
+                                </button>
+                            </div>
+                            <div class="stage-content">
+                                <div class="touchpoints">
+                                    <div class="touchpoint google-shopping">
+                                        <i class="fas fa-shopping-bag"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Google Shopping Ads</strong>
+                                            <p>Product listing with holiday offers</p>
+                                            <span class="touchpoint-goal">Drive qualified traffic to product page</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint comparison">
+                                        <i class="fas fa-chart-bar"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Comparison Content</strong>
+                                            <p>Feature comparison vs competitors</p>
+                                            <span class="touchpoint-goal">Address objections & differentiate</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint reviews">
+                                        <i class="fas fa-star"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Customer Reviews</strong>
+                                            <p>Social proof from verified buyers</p>
+                                            <span class="touchpoint-goal">Build confidence in purchase decision</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stage-metrics">
+                                    <span class="metric-item">Add to Cart: 12%</span>
+                                    <span class="metric-item">Page Views: 4.2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+
+                        <div class="journey-stage purchase">
+                            <div class="stage-header">
+                                <div class="stage-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="stage-info">
+                                    <h4>Purchase</h4>
+                                    <span class="stage-timeframe">Days 11-12</span>
+                                </div>
+                                <button class="btn-refine-ai small" onclick="refineWithAI('purchase-stage')">
+                                    <i class="fas fa-magic"></i> Refine
+                                </button>
+                            </div>
+                            <div class="stage-content">
+                                <div class="touchpoints">
+                                    <div class="touchpoint checkout">
+                                        <i class="fas fa-lock"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Optimized Checkout</strong>
+                                            <p>Streamlined 2-step purchase process</p>
+                                            <span class="touchpoint-goal">Minimize cart abandonment</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint urgency">
+                                        <i class="fas fa-clock"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Limited-Time Offers</strong>
+                                            <p>Holiday countdown + free shipping</p>
+                                            <span class="touchpoint-goal">Create purchase urgency</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint support">
+                                        <i class="fas fa-headset"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Live Chat Support</strong>
+                                            <p>Real-time purchase assistance</p>
+                                            <span class="touchpoint-goal">Remove final barriers to purchase</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stage-metrics">
+                                    <span class="metric-item">Conversion: 4.8%</span>
+                                    <span class="metric-item">AOV: $240</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+
+                        <div class="journey-stage retention">
+                            <div class="stage-header">
+                                <div class="stage-icon">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="stage-info">
+                                    <h4>Post-Purchase</h4>
+                                    <span class="stage-timeframe">Days 13-14+</span>
+                                </div>
+                                <button class="btn-refine-ai small" onclick="refineWithAI('retention-stage')">
+                                    <i class="fas fa-magic"></i> Refine
+                                </button>
+                            </div>
+                            <div class="stage-content">
+                                <div class="touchpoints">
+                                    <div class="touchpoint onboarding">
+                                        <i class="fas fa-play-circle"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Product Onboarding</strong>
+                                            <p>Setup guides + feature tutorials</p>
+                                            <span class="touchpoint-goal">Ensure successful product adoption</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint community">
+                                        <i class="fas fa-users"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Fitness Community</strong>
+                                            <p>Exclusive access to health challenges</p>
+                                            <span class="touchpoint-goal">Build long-term engagement</span>
+                                        </div>
+                                    </div>
+                                    <div class="touchpoint referral">
+                                        <i class="fas fa-gift"></i>
+                                        <div class="touchpoint-details">
+                                            <strong>Referral Program</strong>
+                                            <p>Rewards for successful referrals</p>
+                                            <span class="touchpoint-goal">Drive word-of-mouth growth</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stage-metrics">
+                                    <span class="metric-item">Satisfaction: 4.6/5</span>
+                                    <span class="metric-item">Referrals: 18%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-optimization">
+                        <h4><i class="fas fa-cogs"></i> Journey Optimization Strategy</h4>
+                        <div class="optimization-grid">
+                            <div class="optimization-item">
+                                <div class="optimization-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="optimization-content">
+                                    <h5>Attribution Tracking</h5>
+                                    <p>Multi-touch attribution to understand channel interactions and optimize budget allocation across touchpoints</p>
+                                </div>
+                            </div>
+                            <div class="optimization-item">
+                                <div class="optimization-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="optimization-content">
+                                    <h5>Audience Segmentation</h5>
+                                    <p>Dynamic segmentation based on engagement level and journey stage for personalized messaging</p>
+                                </div>
+                            </div>
+                            <div class="optimization-item">
+                                <div class="optimization-icon">
+                                    <i class="fas fa-sync"></i>
+                                </div>
+                                <div class="optimization-content">
+                                    <h5>Real-time Optimization</h5>
+                                    <p>Automated bid adjustments and creative rotation based on journey stage performance</p>
+                                </div>
+                            </div>
+                            <div class="optimization-item">
+                                <div class="optimization-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="optimization-content">
+                                    <h5>Cross-device Tracking</h5>
+                                    <p>Seamless experience across mobile, desktop, and tablet throughout the customer journey</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="performance-projections">
+                    <div class="section-header-with-refine">
+                        <h3><i class="fas fa-chart-line"></i> Performance Projections & KPIs</h3>
+                        <button class="btn-refine-ai" onclick="refineWithAI('performance-projections')">
+                            <i class="fas fa-magic"></i> Refine with AI
+                        </button>
+                    </div>
+                    <div class="projections-grid">
+                        <div class="projection-card revenue">
+                            <div class="projection-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="projection-data">
+                                <div class="projection-number">$300K</div>
+                                <div class="projection-label">Projected Revenue</div>
+                                <div class="projection-detail">4x ROAS on $75K spend</div>
+                            </div>
+                        </div>
+
+                        <div class="projection-card conversions">
+                            <div class="projection-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="projection-data">
+                                <div class="projection-number">1,250</div>
+                                <div class="projection-label">Total Conversions</div>
+                                <div class="projection-detail">$240 avg order value</div>
+                            </div>
+                        </div>
+
+                        <div class="projection-card reach">
+                            <div class="projection-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="projection-data">
+                                <div class="projection-number">2.5M</div>
+                                <div class="projection-label">Total Reach</div>
+                                <div class="projection-detail">Primary audience 25-40</div>
+                            </div>
+                        </div>
+
+                        <div class="projection-card engagement">
+                            <div class="projection-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="projection-data">
+                                <div class="projection-number">125K</div>
+                                <div class="projection-label">Engagements</div>
+                                <div class="projection-detail">5% engagement rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="optimization-recommendations">
+                    <div class="section-header-with-refine">
+                        <h3><i class="fas fa-cogs"></i> Optimization & Monitoring Strategy</h3>
+                        <button class="btn-refine-ai" onclick="refineWithAI('optimization-recommendations')">
+                            <i class="fas fa-magic"></i> Refine with AI
+                        </button>
+                    </div>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-category">
+                            <h4><i class="fas fa-chart-bar"></i> Weekly Performance Reviews</h4>
+                            <ul class="recommendation-list">
+                                <li>Monitor ROAS by channel and adjust budget allocation</li>
+                                <li>A/B test video creative performance on YouTube</li>
+                                <li>Optimize Meta audience segments based on conversion data</li>
+                                <li>Scale highest-performing search keywords</li>
+                            </ul>
+                        </div>
+
+                        <div class="recommendation-category">
+                            <h4><i class="fas fa-target"></i> Key Success Metrics</h4>
+                            <ul class="recommendation-list">
+                                <li>Overall campaign ROAS: Target 4x minimum</li>
+                                <li>Google Ads CPA: Target under $60</li>
+                                <li>Meta CTR: Target 2.5%+ for video ads</li>
+                                <li>YouTube view-through rate: Target 30%+</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <div class="section-header-with-refine">
+                        <h3><i class="fas fa-rocket"></i> Immediate Next Steps</h3>
+                        <button class="btn-refine-ai" onclick="refineWithAI('next-steps')">
+                            <i class="fas fa-magic"></i> Refine with AI
+                        </button>
+                    </div>
+                    <div class="steps-checklist">
+                        <div class="step-item priority-high">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Set up Google Ads account structure and tracking</span>
+                            <span class="step-timeline">This week</span>
+                        </div>
+                        <div class="step-item priority-high">
+                            <i class="fas fa-video"></i>
+                            <span>Finalize video creative showcasing health tracking features</span>
+                            <span class="step-timeline">This week</span>
+                        </div>
+                        <div class="step-item priority-medium">
+                            <i class="fas fa-users"></i>
+                            <span>Identify and outreach to fitness micro-influencers</span>
+                            <span class="step-timeline">Next week</span>
+                        </div>
+                        <div class="step-item priority-medium">
+                            <i class="fas fa-cog"></i>
+                            <span>Configure conversion tracking and attribution models</span>
+                            <span class="step-timeline">Next week</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     generateDefaultTaskOutput(task, context, userMessage) {
         const taskName = task.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         const agents = this.currentTaskAgents || [];
@@ -7634,7 +8365,7 @@ class MarketingSuperAgentV4 {
         if (relevantSuite) {
             const areaTitles = {
                 'engage': 'Engage AI Suite',
-                'paid-media': 'Paid Media AI Suite',
+                'paid-media': 'Campaign Strategy',
                 'personalization': 'Personalization AI Suite',
                 'service': 'Service AI Suite',
                 'creative': 'Creative AI Suite'
