@@ -4800,44 +4800,225 @@ class MarketingSuperAgentV4 {
                         <div class="inspiration-categories">
                             <div class="inspiration-category">
                                 <h6><i class="fas fa-trophy"></i> Tech Product Success Stories</h6>
-                                <div class="inspiration-items">
-                                    <div class="inspiration-item">
-                                        <div class="inspiration-visual">🍎 <strong>"Heart Month"</strong> - Apple Watch</div>
-                                        <p>Real health stories + Data visualization + Personal testimonials</p>
-                                        <div class="reference-link">📹 Focus: ECG readings saving lives, emotional storytelling</div>
+                                <div class="inspiration-gallery">
+                                    <div class="inspiration-showcase">
+                                        <div class="showcase-image">
+                                            <div class="campaign-thumbnail apple-watch">
+                                                <div class="thumbnail-overlay">
+                                                    <i class="fab fa-apple"></i>
+                                                    <span>Apple Watch</span>
+                                                </div>
+                                                <div class="campaign-stats">
+                                                    <span class="stat">❤️ 2.1M Views</span>
+                                                    <span class="stat">📈 +47% Sales</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="showcase-content">
+                                            <div class="campaign-title">
+                                                <strong>"Heart Month Stories"</strong> - Apple Watch Series 8
+                                                <span class="campaign-year">2023</span>
+                                            </div>
+                                            <p><strong>Strategy:</strong> Real customer testimonials showing how Apple Watch ECG detected heart conditions, combining emotional storytelling with medical credibility</p>
+                                            <div class="creative-elements">
+                                                <div class="element-tag medical">📋 Medical Testimonials</div>
+                                                <div class="element-tag data">📊 Real Health Data</div>
+                                                <div class="element-tag emotional">💝 Life-Saving Stories</div>
+                                            </div>
+                                            <div class="takeaway-box">
+                                                <strong>Key Takeaway:</strong> Use real health outcomes and medical validation to build trust and emotional connection
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="inspiration-item">
-                                        <div class="inspiration-visual">🏃‍♀️ <strong>"Nothing Beats a Londoner"</strong> - Nike</div>
-                                        <p>Urban fitness culture + Diverse representation + Motivation</p>
-                                        <div class="reference-link">📹 Focus: Real athletes, authentic moments, community</div>
+
+                                    <div class="inspiration-showcase">
+                                        <div class="showcase-image">
+                                            <div class="campaign-thumbnail nike-london">
+                                                <div class="thumbnail-overlay">
+                                                    <i class="fab fa-nike"></i>
+                                                    <span>Nike</span>
+                                                </div>
+                                                <div class="campaign-stats">
+                                                    <span class="stat">🎬 150M Views</span>
+                                                    <span class="stat">🏆 Cannes Gold</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="showcase-content">
+                                            <div class="campaign-title">
+                                                <strong>"Nothing Beats a Londoner"</strong> - Nike Run Club
+                                                <span class="campaign-year">2018</span>
+                                            </div>
+                                            <p><strong>Strategy:</strong> Authentic London athletes overcoming urban challenges, showcasing diverse fitness culture and community motivation</p>
+                                            <div class="creative-elements">
+                                                <div class="element-tag community">👥 Real Athletes</div>
+                                                <div class="element-tag authentic">🎬 Documentary Style</div>
+                                                <div class="element-tag urban">🏙️ Urban Fitness</div>
+                                            </div>
+                                            <div class="takeaway-box">
+                                                <strong>Key Takeaway:</strong> Feature real people in authentic environments to build relatability and motivation
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="inspiration-category">
-                                <h6><i class="fas fa-trending-up"></i> Holiday Health & Tech Trends</h6>
-                                <div class="inspiration-items">
-                                    <div class="inspiration-item">
-                                        <div class="inspiration-visual">📱 <strong>Health Data Stories</strong> - Short-Form Video</div>
-                                        <p>Quick health wins + Progress visualization + Before/after</p>
-                                        <div class="reference-link">📊 15-30s videos showing real health tracking results</div>
+                                <h6><i class="fas fa-trending-up"></i> Holiday Health & Tech Video Formats</h6>
+                                <div class="format-showcase-grid">
+                                    <div class="format-showcase">
+                                        <div class="format-preview short-form">
+                                            <div class="video-frame">
+                                                <div class="video-content">
+                                                    <div class="progress-viz">📊</div>
+                                                    <div class="user-avatar">👤</div>
+                                                    <div class="metrics-overlay">
+                                                        <span>❤️ 142 BPM</span>
+                                                        <span>🏃‍♀️ 5.2 km</span>
+                                                        <span>🔥 387 cal</span>
+                                                    </div>
+                                                </div>
+                                                <div class="video-duration">0:15</div>
+                                            </div>
+                                        </div>
+                                        <div class="format-details">
+                                            <h7><strong>Health Progress Stories</strong> - 15s Vertical</h7>
+                                            <p>Quick transformation moments with real-time data overlay showing health improvements</p>
+                                            <div class="format-specs">
+                                                <span class="spec">📱 Stories/Reels</span>
+                                                <span class="spec">⚡ High Engagement</span>
+                                                <span class="spec">📈 Before/After</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="inspiration-item">
-                                        <div class="inspiration-visual">🎁 <strong>Gift Guide Content</strong> - Lifestyle Integration</div>
-                                        <p>Product in context + Holiday moments + Gifting scenarios</p>
-                                        <div class="reference-link">🎄 Smartwatch as thoughtful gift for health-conscious loved ones</div>
+
+                                    <div class="format-showcase">
+                                        <div class="format-preview gift-guide">
+                                            <div class="video-frame horizontal">
+                                                <div class="video-content gift-scene">
+                                                    <div class="gift-box">🎁</div>
+                                                    <div class="product-hero">⌚</div>
+                                                    <div class="lifestyle-context">
+                                                        <span>🏠 Holiday Morning</span>
+                                                        <span>☕ Coffee + Goals</span>
+                                                    </div>
+                                                </div>
+                                                <div class="video-duration">0:30</div>
+                                            </div>
+                                        </div>
+                                        <div class="format-details">
+                                            <h7><strong>Holiday Gift Positioning</strong> - 30s Horizontal</h7>
+                                            <p>Lifestyle integration showing smartwatch as thoughtful gift for health-conscious achievers</p>
+                                            <div class="format-specs">
+                                                <span class="spec">🖥️ Feed/YouTube</span>
+                                                <span class="spec">🎄 Seasonal Context</span>
+                                                <span class="spec">💝 Gift Narrative</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="format-showcase">
+                                        <div class="format-preview product-demo">
+                                            <div class="video-frame">
+                                                <div class="video-content demo-style">
+                                                    <div class="watch-interface">
+                                                        <div class="screen-recording">📱</div>
+                                                        <div class="feature-callouts">
+                                                            <span>→ Sleep Quality</span>
+                                                            <span>→ Heart Rate Zones</span>
+                                                            <span>→ Workout Metrics</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="video-duration">0:20</div>
+                                            </div>
+                                        </div>
+                                        <div class="format-details">
+                                            <h7><strong>Feature Deep Dive</strong> - 20s Demo</h7>
+                                            <p>Screen recording style showcasing specific health tracking capabilities with clear benefit explanation</p>
+                                            <div class="format-specs">
+                                                <span class="spec">🖥️ All Platforms</span>
+                                                <span class="spec">🔍 Feature Focus</span>
+                                                <span class="spec">📊 Data Driven</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="inspiration-category">
-                                <h6><i class="fas fa-video"></i> Video Format Inspiration</h6>
-                                <div class="inspiration-items">
-                                    <div class="inspiration-item">
-                                        <div class="inspiration-visual">⌚ <strong>Product Demo Style</strong> - Screen Recording + VO</div>
-                                        <p>Clear interface walkthrough + Health data focus + Benefit explanation</p>
+                                <h6><i class="fas fa-palette"></i> Visual Style References</h6>
+                                <div class="style-reference-grid">
+                                    <div class="style-card health-data">
+                                        <div class="style-preview">
+                                            <div class="visual-style-demo">
+                                                <div class="data-visualization">
+                                                    <div class="chart-element">📈</div>
+                                                    <div class="health-metrics">
+                                                        <span class="metric-point good">●</span>
+                                                        <span class="metric-point excellent">●</span>
+                                                        <span class="metric-point perfect">●</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="style-info">
+                                            <h7>Health Data Visualization</h7>
+                                            <p>Clean, minimal charts with health-focused color coding (green = good, blue = excellent)</p>
+                                            <div class="color-palette">
+                                                <span class="color-swatch health-green" title="Health Green">#10b981</span>
+                                                <span class="color-swatch tech-blue" title="Tech Blue">#3b82f6</span>
+                                                <span class="color-swatch bg-clean" title="Clean BG">#f8fafc</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="inspiration-item">
-                                        <div class="inspiration-visual">🏋️‍♀️ <strong>Lifestyle Integration</strong> - Day-in-the-Life</div>
-                                        <p>Real usage scenarios + Seamless integration + Authentic moments</p>
+
+                                    <div class="style-card lifestyle-authentic">
+                                        <div class="style-preview">
+                                            <div class="visual-style-demo">
+                                                <div class="lifestyle-scene">
+                                                    <div class="person-silhouette">🏃‍♀️</div>
+                                                    <div class="environment-elements">
+                                                        <span>🌅</span>
+                                                        <span>🏙️</span>
+                                                        <span>💪</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="style-info">
+                                            <h7>Authentic Lifestyle</h7>
+                                            <p>Real people in natural environments, soft lighting, aspirational but achievable moments</p>
+                                            <div class="style-tags">
+                                                <span class="style-tag">Natural Lighting</span>
+                                                <span class="style-tag">Diverse Cast</span>
+                                                <span class="style-tag">Urban/Gym</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="style-card holiday-seasonal">
+                                        <div class="style-preview">
+                                            <div class="visual-style-demo">
+                                                <div class="holiday-scene">
+                                                    <div class="seasonal-elements">
+                                                        <span>🎄</span>
+                                                        <span>❄️</span>
+                                                        <span>✨</span>
+                                                    </div>
+                                                    <div class="gift-context">🎁</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="style-info">
+                                            <h7>Subtle Holiday Touches</h7>
+                                            <p>Warm, cozy environments with understated seasonal elements, focusing on new year motivation</p>
+                                            <div class="mood-indicators">
+                                                <span class="mood warm">Warm</span>
+                                                <span class="mood cozy">Cozy</span>
+                                                <span class="mood motivational">Motivational</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
