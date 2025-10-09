@@ -1462,14 +1462,12 @@ class MarketingSuperAgentV4 {
             outputTitle.textContent = this.currentSuiteTitle;
         }
 
-        // Add initial message
-        this.addMessage("Great! Let's design your campaign", 'agent', 'Campaign Architect Agent');
-
         // Show guided example interface
         const campaignGuideHTML = `
             <div class="campaign-guide-interface">
                 <div class="guide-header">
-                    <h3>Tell me about your campaign goals, budget, target audience, and timeline - just like you're briefing a team member.</h3>
+                    <h2>Great! Let's design your campaign</h2>
+                    <p>Tell me about your campaign goals, budget, target audience, and timeline - just like you're briefing a team member.</p>
                 </div>
 
                 <div class="guide-example">
@@ -3717,6 +3715,13 @@ class MarketingSuperAgentV4 {
         // Restore original context
         this.currentTask = originalTask;
         this.currentTaskAgents = originalTaskAgents;
+
+        // Add task-specific suggestions if this is a task-specific output
+        if (preservedTask && preservedTaskAgents) {
+            setTimeout(() => {
+                this.addTaskSpecificSuggestions(preservedTask);
+            }, 2500);
+        }
 
         // Add export button to the output content
         outputContent.innerHTML = content;
