@@ -536,9 +536,29 @@ class MarketingSuperAgentV4 {
 
         // Special handling for design-campaign-program - skip processing messages and go direct to output
         if (this.currentTask === 'design-campaign-program') {
-            // Generate campaign strategy output directly
+            // Generate campaign strategy output directly without any processing messages
             setTimeout(() => {
-                this.updateOutputPanel('strategy', message);
+                // Set the correct title for campaign strategy
+                this.currentSuiteTitle = 'Campaign Strategy';
+                const outputTitle = document.getElementById('output-title');
+                if (outputTitle) {
+                    outputTitle.textContent = this.currentSuiteTitle;
+                }
+
+                // Generate the output content directly
+                const context = this.extractContextFromMessage(message);
+                const content = this.generateCampaignStrategyOutput(context, message);
+
+                // Update the output panel directly
+                const outputContent = document.getElementById('output-content');
+                if (outputContent) {
+                    outputContent.innerHTML = content;
+                }
+
+                // Add task-specific suggestions
+                setTimeout(() => {
+                    this.addTaskSpecificSuggestions('design-campaign-program');
+                }, 1000);
             }, 500);
         } else {
             // Show processing indicator
