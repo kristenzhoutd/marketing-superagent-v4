@@ -1262,6 +1262,7 @@ class MarketingSuperAgentV4 {
             'campaign-insights': 'Generate detailed insights and analytics for my running campaigns',
             'setup-journey': 'Design an automated customer journey with email, SMS, and push notifications',
             'generate-creative': 'Start an interactive creative ideation workshop to brainstorm and develop innovative concepts based on your brief',
+            'brainstorm-creative-ideas': 'Start an interactive creative ideation workshop to brainstorm and develop innovative concepts based on your brief',
             'audience-segments': 'Build detailed audience segments based on demographics, behavior, and preferences',
             'budget-allocation': 'Optimize my marketing budget allocation across channels for maximum ROI',
             'ab-test': 'Set up A/B testing framework for campaigns with statistical significance tracking',
@@ -1285,6 +1286,7 @@ class MarketingSuperAgentV4 {
             'campaign-insights': ['Analytics Agent', 'Performance Agent', 'Historical Agent'],
             'setup-journey': ['Journey Agent', 'Audience Agent', 'Personalization Agent'],
             'generate-creative': ['Creative Agent', 'Research Agent', 'Audience Agent'],
+            'brainstorm-creative-ideas': ['Creative Agent', 'Research Agent', 'Audience Agent'],
             'audience-segments': ['Audience Agent', 'Analytics Agent', 'Research Agent'],
             'budget-allocation': ['Deep Research Agent', 'Historical Performance Agent', 'Budget Optimization Agent'],
             'ab-test': ['Creative Agent', 'Performance Agent', 'Analytics Agent'],
@@ -1308,6 +1310,7 @@ class MarketingSuperAgentV4 {
             'campaign-insights': 'paid-media',
             'setup-journey': 'engage',
             'generate-creative': 'creative',
+            'brainstorm-creative-ideas': 'creative',
             'audience-segments': 'engage',
             'budget-allocation': 'paid-media',
             'ab-test': 'creative',
@@ -4021,6 +4024,7 @@ class MarketingSuperAgentV4 {
             'campaign-insights': () => this.generateInsightsOutput(context, userMessage),
             'setup-journey': () => this.generateJourneySetupOutput(context, userMessage),
             'generate-creative': () => this.generateCreativeIdeationOutput(context, userMessage),
+            'brainstorm-creative-ideas': () => this.generateCreativeIdeationOutput(context, userMessage),
             'audience-segments': () => this.generateAudienceSegmentsOutput(context, userMessage),
             'budget-allocation': () => this.generateBudgetAllocationOutput(context, userMessage),
             'ab-test': () => this.generateABTestOutput(context, userMessage),
@@ -13681,11 +13685,11 @@ class MarketingSuperAgentV4 {
         };
 
         this.taskToKnowledgeMapping = {
-            'campaign_launch': ['brand-guidelines', 'product-catalog', 'creative-assets', 'customer-personas'],
-            'paid_media': ['media-guidelines', 'audience-segments', 'conversion-tracking', 'budget-parameters'],
-            'creative': ['brand-guidelines', 'creative-assets', 'tone-voice', 'visual-standards'],
+            'campaign_launch': ['brand-guidelines', 'product-catalog', 'campaign-objectives', 'target-markets'],
+            'paid_media': ['channel-strategies', 'platform-specs', 'budget-allocation', 'media-plans'],
+            'creative': ['visual-assets', 'ad-templates', 'copy-frameworks', 'creative-specs'],
             'personalization': ['customer-personas', 'behavioral-data', 'content-library', 'segmentation-rules'],
-            'lifecycle': ['customer-journey', 'email-templates', 'automation-rules', 'retention-metrics'],
+            'lifecycle': ['journey-maps', 'touchpoint-design', 'flow-automation', 'engagement-metrics'],
             'analytics': ['tracking-setup', 'kpi-definitions', 'dashboard-config', 'reporting-templates']
         };
 
@@ -14038,11 +14042,11 @@ class MarketingSuperAgentV4 {
         if (!taskOption) return;
 
         const taskNames = {
-            'campaign_launch': 'Campaign Launch',
-            'paid_media': 'Paid Media',
+            'campaign_launch': 'Campaign Planning',
+            'paid_media': 'Channel Planning',
             'creative': 'Creative Brief',
-            'personalization': 'Personalization',
-            'lifecycle': 'Lifecycle Setup',
+            'personalization': 'Ad Creatives',
+            'lifecycle': 'Journey Design',
             'analytics': 'Performance Analysis'
         };
 
@@ -14149,11 +14153,11 @@ class MarketingSuperAgentV4 {
 
         // Provide confirmation message
         const taskNames = {
-            'campaign_launch': 'Campaign Launch',
-            'paid_media': 'Paid Media',
+            'campaign_launch': 'Campaign Planning',
+            'paid_media': 'Channel Planning',
             'creative': 'Creative Brief',
-            'personalization': 'Personalization',
-            'lifecycle': 'Lifecycle Setup',
+            'personalization': 'Ad Creatives',
+            'lifecycle': 'Journey Design',
             'analytics': 'Performance Analysis'
         };
 
@@ -14510,11 +14514,11 @@ class MarketingSuperAgentV4 {
         taskOptionsDiv.style.transition = 'all 0.3s ease-out';
 
         const taskOptions = [
-            { id: 'campaign_launch', name: 'Campaign Launch', icon: 'bullhorn', color: '#3b82f6', desc: 'Multi-channel campaign planning' },
-            { id: 'paid_media', name: 'Paid Media', icon: 'dollar-sign', color: '#059669', desc: 'Ad optimization & budget management' },
+            { id: 'campaign_launch', name: 'Campaign Planning', icon: 'bullhorn', color: '#3b82f6', desc: 'Strategic campaign development & goal setting' },
+            { id: 'paid_media', name: 'Channel Planning', icon: 'dollar-sign', color: '#059669', desc: 'Multi-channel strategy & platform selection' },
             { id: 'creative', name: 'Creative Brief', icon: 'palette', color: '#dc2626', desc: 'Asset creation & brand guidelines' },
-            { id: 'personalization', name: 'Personalization', icon: 'user-cog', color: '#7c3aed', desc: 'Targeted experiences & segmentation' },
-            { id: 'lifecycle', name: 'Lifecycle Setup', icon: 'sync-alt', color: '#ea580c', desc: 'Customer journey automation' },
+            { id: 'personalization', name: 'Ad Creatives', icon: 'user-cog', color: '#7c3aed', desc: 'Dynamic ad content & visual assets' },
+            { id: 'lifecycle', name: 'Journey Design', icon: 'sync-alt', color: '#ea580c', desc: 'Customer experience mapping & flow design' },
             { id: 'analytics', name: 'Performance Analysis', icon: 'chart-line', color: '#0891b2', desc: 'Reporting & ROI tracking' }
         ];
 
@@ -14723,11 +14727,11 @@ class MarketingSuperAgentV4 {
 
         // Add chat message about task selection
         const taskNames = {
-            'campaign_launch': 'Campaign Launch',
-            'paid_media': 'Paid Media Optimization',
+            'campaign_launch': 'Campaign Planning',
+            'paid_media': 'Channel Planning',
             'creative': 'Creative Brief Creation',
-            'personalization': 'Personalization Planning',
-            'lifecycle': 'Lifecycle Setup',
+            'personalization': 'Ad Creatives',
+            'lifecycle': 'Journey Design',
             'analytics': 'Performance Analysis'
         };
 
