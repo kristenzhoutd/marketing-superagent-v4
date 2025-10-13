@@ -2461,6 +2461,61 @@ body {
     background: linear-gradient(135deg, var(--accent-orange), #ea580c);
 }
 
+/* Direction-specific tag styles */
+.emotional-tag {
+    background: linear-gradient(135deg, #e34850, #dc2626);
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.functional-tag {
+    background: linear-gradient(135deg, #1957db, #1d4ed8);
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.holiday-tag {
+    background: linear-gradient(135deg, #e68619, #ea580c);
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.lifestyle-tag {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.social-tag {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.professional-tag {
+    background: linear-gradient(135deg, #4b5563, #374151);
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
 .pack-stats {
     font-size: var(--label);
     color: var(--text-secondary);
@@ -5706,6 +5761,21 @@ body {
 
 .holiday-badge {
     background: rgba(230, 134, 25, 0.9);
+    color: white;
+}
+
+.lifestyle-badge {
+    background: rgba(139, 92, 246, 0.9);
+    color: white;
+}
+
+.social-badge {
+    background: rgba(16, 185, 129, 0.9);
+    color: white;
+}
+
+.professional-badge {
+    background: rgba(75, 85, 99, 0.9);
     color: white;
 }
 

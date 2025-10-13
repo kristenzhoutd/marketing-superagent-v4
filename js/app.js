@@ -15094,8 +15094,141 @@ function refineWithAI(cardType) {
         }
     }, 3000);
 
-    // Here you could add actual AI refinement logic
+    // Add specific functionality for concept-directions expansion
+    if (cardType === 'concept-directions') {
+        setTimeout(() => {
+            expandConceptDirections();
+        }, 1000);
+    }
+
+    // Here you could add actual AI refinement logic for other types
     // For now, this serves as a placeholder for the functionality
+}
+
+function expandConceptDirections() {
+    console.log('🎯 Expanding concept directions with new video ideas...');
+
+    const directionsGrid = document.querySelector('.directions-grid');
+    if (!directionsGrid) {
+        console.error('Directions grid not found');
+        return;
+    }
+
+    // New expanded concept directions
+    const expandedDirections = [
+        {
+            type: 'lifestyle',
+            badge: 'Lifestyle',
+            title: '"Daily Life Integration"',
+            description: 'Seamless integration of health tracking into everyday activities - work, commute, social life.',
+            image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            tags: ['Work-Life Balance', 'Social Proof', 'Everyday Moments']
+        },
+        {
+            type: 'social',
+            badge: 'Social',
+            title: '"Shared Achievement Stories"',
+            description: 'Friends and families celebrating health milestones together, emphasizing community support.',
+            image: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            tags: ['Community', 'Family Moments', 'Shared Goals']
+        },
+        {
+            type: 'professional',
+            badge: 'Professional',
+            title: '"Workplace Wellness"',
+            description: 'Professional millennials using smartwatch for productivity, stress management, and work-life balance.',
+            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            tags: ['Productivity', 'Stress Management', 'Professional Life']
+        }
+    ];
+
+    // Add animation class to existing cards
+    const existingCards = directionsGrid.querySelectorAll('.direction-card');
+    existingCards.forEach(card => {
+        card.style.transform = 'scale(0.95)';
+        card.style.transition = 'transform 0.3s ease';
+    });
+
+    // Add new direction cards with animation
+    expandedDirections.forEach((direction, index) => {
+        setTimeout(() => {
+            const newCard = createDirectionCard(direction);
+            newCard.style.opacity = '0';
+            newCard.style.transform = 'translateY(20px)';
+            directionsGrid.appendChild(newCard);
+
+            // Animate in
+            setTimeout(() => {
+                newCard.style.transition = 'all 0.5s ease';
+                newCard.style.opacity = '1';
+                newCard.style.transform = 'translateY(0)';
+            }, 100);
+        }, index * 200);
+    });
+
+    // Reset existing cards scale
+    setTimeout(() => {
+        existingCards.forEach(card => {
+            card.style.transform = 'scale(1)';
+        });
+    }, 600);
+
+    // Update the insight highlight
+    setTimeout(() => {
+        const insightSpan = document.querySelector('.insight-highlight span');
+        if (insightSpan) {
+            insightSpan.textContent = 'Expanded strategic video concepts covering emotional, functional, holiday, lifestyle, social, and professional themes';
+        }
+    }, 1200);
+
+    // Change button text to indicate completion
+    setTimeout(() => {
+        const expandButton = document.querySelector('.refine-btn');
+        if (expandButton) {
+            expandButton.innerHTML = '<i class="fas fa-check"></i> Ideas Expanded';
+            expandButton.style.background = 'var(--accent-green)';
+            expandButton.disabled = true;
+        }
+    }, 1500);
+}
+
+function createDirectionCard(direction) {
+    const card = document.createElement('div');
+    card.className = `direction-card ${direction.type}`;
+
+    card.innerHTML = `
+        <div class="direction-background">
+            <img src="${direction.image}" alt="${direction.title}" class="direction-bg-image" />
+            <div class="direction-overlay"></div>
+        </div>
+        <div class="direction-content">
+            <div class="direction-header">
+                <div class="direction-type-badge ${direction.type}-badge">
+                    <i class="fas fa-${getDirectionIcon(direction.type)}"></i>
+                    <span>${direction.badge}</span>
+                </div>
+                <h6>${direction.title}</h6>
+            </div>
+            <p>${direction.description}</p>
+            <div class="direction-tags">
+                ${direction.tags.map(tag => `<span class="tag ${direction.type}-tag">${tag}</span>`).join('')}
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+function getDirectionIcon(type) {
+    const icons = {
+        lifestyle: 'clock',
+        social: 'users',
+        professional: 'briefcase',
+        emotional: 'heart',
+        functional: 'cog',
+        holiday: 'gift'
+    };
+    return icons[type] || 'star';
 }
 
 // Initialize the app when DOM is loaded
