@@ -4902,8 +4902,8 @@ class MarketingSuperAgentV4 {
                                 <i class="fas fa-bullhorn"></i>
                             </div>
                             <h4>Digital Ads Inspirations</h4>
-                            <button class="btn-secondary refine-btn" onclick="refineWithAI('digital-ads-inspiration')">
-                                <i class="fas fa-magic"></i> Find More Examples
+                            <button class="btn-secondary refine-btn" onclick="ideateWithAI('digital-ads-inspiration')">
+                                <i class="fas fa-magic"></i> Ideate with AI
                             </button>
                         </div>
                         <div class="insight-highlight">
@@ -15130,6 +15130,8 @@ function ideateWithAI(cardType) {
     setTimeout(() => {
         if (cardType === 'concept-directions') {
             showConceptIdeationOptions();
+        } else if (cardType === 'digital-ads-inspiration') {
+            showDigitalAdsIdeationOptions();
         }
     }, 1500);
 }
@@ -15201,6 +15203,73 @@ function showConceptIdeationOptions() {
     }
 }
 
+function showDigitalAdsIdeationOptions() {
+    // Add AI assistant message with digital ads ideation options
+    const optionsMessage = `
+        <div class="ai-ideation-message">
+            <div class="ai-assistant-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="ai-identity">
+                    <h5>Digital Ads AI Assistant</h5>
+                    <span>Campaign Inspiration Specialist</span>
+                </div>
+            </div>
+            <div class="ai-message-content">
+                <p>I can help enhance your digital ads inspiration collection. What would you like me to focus on?</p>
+
+                <div class="ideation-options">
+                    <button class="ideation-option-btn" onclick="handleDigitalAdsChoice('find-more-examples')">
+                        <div class="option-icon expand">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Find More Examples</h6>
+                            <p>Discover additional smartwatch ad campaigns across different platforms and formats</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleDigitalAdsChoice('analyze-trends')">
+                        <div class="option-icon refine">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Analyze Trends</h6>
+                            <p>Identify current design trends and performance patterns in wearable tech advertising</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleDigitalAdsChoice('generate-variations')">
+                        <div class="option-icon direction">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Generate Variations</h6>
+                            <p>Create alternative versions of existing ads with different messaging and visuals</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Use the existing addMessage method if available, or add to chat directly
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(optionsMessage, 'agent', 'Digital Ads AI Assistant');
+    } else {
+        // Fallback to direct chat insertion
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant-message';
+            messageDiv.innerHTML = `<div class="message-content">${optionsMessage}</div>`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+}
+
 function handleIdeationChoice(choice) {
     console.log(`🎯 User selected: ${choice}`);
 
@@ -15226,6 +15295,36 @@ function handleIdeationChoice(choice) {
                 break;
             case 'refine-creative-direction':
                 refineCreativeDirection();
+                break;
+        }
+    }, 500);
+}
+
+function handleDigitalAdsChoice(choice) {
+    console.log(`🎯 User selected digital ads: ${choice}`);
+
+    // Add user message showing their choice
+    const userMessages = {
+        'find-more-examples': 'Find More Examples - Show me additional smartwatch ad campaigns',
+        'analyze-trends': 'Analyze Trends - Identify current patterns in wearable tech advertising',
+        'generate-variations': 'Generate Variations - Create alternative versions of existing ads'
+    };
+
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(userMessages[choice], 'user');
+    }
+
+    // Handle the specific choice
+    setTimeout(() => {
+        switch (choice) {
+            case 'find-more-examples':
+                findMoreAdExamples();
+                break;
+            case 'analyze-trends':
+                analyzeAdTrends();
+                break;
+            case 'generate-variations':
+                generateAdVariations();
                 break;
         }
     }, 500);
@@ -15307,15 +15406,7 @@ function expandConceptDirections() {
         }
     }, 1200);
 
-    // Change button text to indicate completion
-    setTimeout(() => {
-        const expandButton = document.querySelector('.refine-btn');
-        if (expandButton) {
-            expandButton.innerHTML = '<i class="fas fa-check"></i> Ideas Expanded';
-            expandButton.style.background = 'var(--accent-green)';
-            expandButton.disabled = true;
-        }
-    }, 1500);
+    // Keep button unchanged to allow multiple uses
 
     // Add completion message to chat
     setTimeout(() => {
@@ -15410,6 +15501,90 @@ function refineCreativeDirection() {
             <div class="refine-toast-content">
                 <i class="fas fa-palette"></i>
                 <span>Creative direction optimized for better impact</span>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }, 1000);
+}
+
+function findMoreAdExamples() {
+    console.log('🎯 Finding more ad examples...');
+
+    // Add AI response
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage('🔍 I\'ve discovered 6 additional smartwatch ad campaigns across TikTok, YouTube, and Pinterest. These examples showcase innovative approaches to health tracking messaging, seasonal positioning, and lifestyle integration that align with your target audience.', 'agent', 'Digital Ads AI Assistant');
+    }
+
+    // Show success message
+    setTimeout(() => {
+        const toast = document.createElement('div');
+        toast.className = 'refine-toast success';
+        toast.innerHTML = `
+            <div class="refine-toast-content">
+                <i class="fas fa-search-plus"></i>
+                <span>Found 6 new ad campaign examples</span>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }, 1000);
+}
+
+function analyzeAdTrends() {
+    console.log('🎯 Analyzing ad trends...');
+
+    // Add AI response
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage('📈 I\'ve analyzed current trends in wearable tech advertising and identified key patterns: minimalist design focus, authentic lifestyle integration, health data visualization, and community-driven messaging. These insights can enhance your campaign positioning and creative direction.', 'agent', 'Digital Ads AI Assistant');
+    }
+
+    // Show success message
+    setTimeout(() => {
+        const toast = document.createElement('div');
+        toast.className = 'refine-toast success';
+        toast.innerHTML = `
+            <div class="refine-toast-content">
+                <i class="fas fa-chart-line"></i>
+                <span>Trend analysis completed with insights</span>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }, 1000);
+}
+
+function generateAdVariations() {
+    console.log('🎯 Generating ad variations...');
+
+    // Add AI response
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage('🎨 I\'ve created 4 alternative versions of your existing ad concepts with different messaging approaches: emotion-focused, feature-driven, social-proof, and urgency-based. Each variation includes optimized copy, visual suggestions, and platform-specific adaptations.', 'agent', 'Digital Ads AI Assistant');
+    }
+
+    // Show success message
+    setTimeout(() => {
+        const toast = document.createElement('div');
+        toast.className = 'refine-toast success';
+        toast.innerHTML = `
+            <div class="refine-toast-content">
+                <i class="fas fa-layer-group"></i>
+                <span>Generated 4 ad variations with different approaches</span>
             </div>
         `;
         document.body.appendChild(toast);
