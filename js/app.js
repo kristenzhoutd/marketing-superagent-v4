@@ -15521,6 +15521,11 @@ function findMoreAdExamples() {
         window.app.addMessage('🔍 I\'ve discovered 6 additional smartwatch ad campaigns across TikTok, YouTube, and Pinterest. These examples showcase innovative approaches to health tracking messaging, seasonal positioning, and lifestyle integration that align with your target audience.', 'agent', 'Digital Ads AI Assistant');
     }
 
+    // Find the ads inspiration gallery and add new examples
+    setTimeout(() => {
+        addNewAdExamples();
+    }, 1000);
+
     // Show success message
     setTimeout(() => {
         const toast = document.createElement('div');
@@ -15528,7 +15533,7 @@ function findMoreAdExamples() {
         toast.innerHTML = `
             <div class="refine-toast-content">
                 <i class="fas fa-search-plus"></i>
-                <span>Found 6 new ad campaign examples</span>
+                <span>Added 6 new ad campaign examples</span>
             </div>
         `;
         document.body.appendChild(toast);
@@ -15538,7 +15543,7 @@ function findMoreAdExamples() {
                 toast.parentNode.removeChild(toast);
             }
         }, 3000);
-    }, 1000);
+    }, 2500);
 }
 
 function analyzeAdTrends() {
@@ -15595,6 +15600,124 @@ function generateAdVariations() {
             }
         }, 3000);
     }, 1000);
+}
+
+function addNewAdExamples() {
+    console.log('🎯 Adding new ad examples to gallery...');
+
+    const adsGallery = document.querySelector('.ads-inspiration-gallery');
+    if (!adsGallery) {
+        console.error('Ads inspiration gallery not found');
+        return;
+    }
+
+    // New ad examples to add
+    const newAdExamples = [
+        {
+            image: 'https://images.unsplash.com/photo-1611068813504-88dc6c04322e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            platform: 'YouTube Shorts',
+            cta: 'Track Your Progress',
+            title: 'Fitness Journey Documentation',
+            description: 'Short-form video content showing real fitness transformations tracked with smartwatch data and insights',
+            dimensions: '1080x1920px',
+            specs: ['Video Content', 'Progress Tracking', 'Authenticity']
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            platform: 'Pinterest Pins',
+            cta: 'Shop Smart Tech',
+            title: 'Minimalist Health Tech',
+            description: 'Clean, minimalist design showcasing smartwatch as lifestyle accessory with health benefits focus',
+            dimensions: '600x900px',
+            specs: ['Minimalist Design', 'Lifestyle Focus', 'Pinterest Optimized']
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            platform: 'LinkedIn Carousel',
+            cta: 'Optimize Productivity',
+            title: 'Professional Wellness',
+            description: 'Business-focused messaging highlighting productivity and wellness benefits for working professionals',
+            dimensions: '1080x1080px',
+            specs: ['Professional Context', 'Productivity', 'B2B Focus']
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            platform: 'Instagram Reels',
+            cta: 'Join the Community',
+            title: 'Social Fitness Challenge',
+            description: 'Community-driven content showing groups of friends using smartwatch for shared fitness challenges',
+            dimensions: '1080x1920px',
+            specs: ['Community Focus', 'Social Proof', 'Challenge Format']
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            platform: 'Twitter Video',
+            cta: 'Start Today',
+            title: 'Quick Health Tips',
+            description: 'Bite-sized health insights and tips powered by smartwatch data analytics and personalized recommendations',
+            dimensions: '1200x675px',
+            specs: ['Quick Tips', 'Data Insights', 'Actionable Content']
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            platform: 'Snapchat Ads',
+            cta: 'Level Up Health',
+            title: 'Mobile-First Wellness',
+            description: 'Mobile-native design with AR elements showcasing smartwatch integration with daily health routines',
+            dimensions: '1080x1920px',
+            specs: ['Mobile Native', 'AR Integration', 'Gen Z Appeal']
+        }
+    ];
+
+    // Add each new example with animation
+    newAdExamples.forEach((example, index) => {
+        setTimeout(() => {
+            const newAdCard = createAdExampleCard(example);
+            newAdCard.style.opacity = '0';
+            newAdCard.style.transform = 'translateY(20px) scale(0.95)';
+            adsGallery.appendChild(newAdCard);
+
+            // Animate in
+            setTimeout(() => {
+                newAdCard.style.transition = 'all 0.5s ease';
+                newAdCard.style.opacity = '1';
+                newAdCard.style.transform = 'translateY(0) scale(1)';
+            }, 100);
+        }, index * 150); // Staggered animation
+    });
+
+    // Update insight text
+    setTimeout(() => {
+        const insightSpan = document.querySelector('.digital-ads-inspiration .insight-highlight span');
+        if (insightSpan) {
+            insightSpan.textContent = 'Expanded collection with 10 real campaign examples across multiple platforms and formats';
+        }
+    }, 1000);
+}
+
+function createAdExampleCard(example) {
+    const card = document.createElement('div');
+    card.className = 'ad-concept-showcase new-example';
+
+    card.innerHTML = `
+        <div class="ad-preview">
+            <img src="${example.image}" alt="${example.title}" class="ad-bg-image" />
+            <div class="ad-overlay">
+                <div class="ad-format-label">${example.platform}</div>
+                <div class="ad-cta">${example.cta}</div>
+            </div>
+        </div>
+        <div class="ad-details">
+            <h7>${example.title}</h7>
+            <p>${example.description}</p>
+            <div class="ad-specs">
+                <span class="spec-dimension">${example.dimensions}</span>
+                ${example.specs.map(spec => `<span class="spec">${spec}</span>`).join('')}
+            </div>
+        </div>
+    `;
+
+    return card;
 }
 
 // Initialize the app when DOM is loaded

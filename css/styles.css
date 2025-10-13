@@ -2576,6 +2576,27 @@ body {
     background: linear-gradient(135deg, var(--accent-green), #059669);
 }
 
+/* New example card styling */
+.ad-concept-showcase.new-example {
+    border: 2px solid var(--accent-green);
+    border-radius: var(--radius-lg);
+    position: relative;
+}
+
+.ad-concept-showcase.new-example::before {
+    content: "NEW";
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    background: var(--accent-green);
+    color: white;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 10px;
+    font-weight: 600;
+    z-index: 10;
+}
+
 /* Direction-specific tag styles */
 .emotional-tag {
     background: linear-gradient(135deg, #e34850, #dc2626);
