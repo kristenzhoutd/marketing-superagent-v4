@@ -2461,6 +2461,121 @@ body {
     background: linear-gradient(135deg, var(--accent-orange), #ea580c);
 }
 
+/* AI Ideation Chat Interface Styles */
+.ai-ideation-message {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin: var(--space-md) 0;
+    border: 1px solid var(--border-color);
+}
+
+.ai-assistant-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.ai-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.ai-identity h5 {
+    margin: 0;
+    font-size: var(--h3);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ai-identity span {
+    font-size: var(--label);
+    color: var(--text-secondary);
+}
+
+.ai-message-content p {
+    margin: 0 0 var(--space-lg) 0;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.ideation-options {
+    display: grid;
+    gap: var(--space-sm);
+}
+
+.ideation-option-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+    width: 100%;
+}
+
+.ideation-option-btn:hover {
+    background: var(--gray-50);
+    border-color: var(--accent-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.option-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.option-icon.expand {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.option-icon.refine {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.option-icon.direction {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.option-content h6 {
+    margin: 0 0 var(--space-xs) 0;
+    font-size: var(--h4);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.option-content p {
+    margin: 0;
+    font-size: var(--body-xs);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Success toast variant */
+.refine-toast.success .refine-toast-content {
+    background: linear-gradient(135deg, var(--accent-green), #059669);
+}
+
 /* Direction-specific tag styles */
 .emotional-tag {
     background: linear-gradient(135deg, #e34850, #dc2626);

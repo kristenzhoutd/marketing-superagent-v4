@@ -4671,8 +4671,8 @@ class MarketingSuperAgentV4 {
                                 <i class="fas fa-compass"></i>
                             </div>
                             <h4>Smartwatch Video Concept Directions</h4>
-                            <button class="btn-secondary refine-btn" onclick="refineWithAI('concept-directions')">
-                                <i class="fas fa-magic"></i> Expand Ideas
+                            <button class="btn-secondary refine-btn" onclick="ideateWithAI('concept-directions')">
+                                <i class="fas fa-magic"></i> Ideate with AI
                             </button>
                         </div>
                         <div class="insight-highlight">
@@ -15105,6 +15105,132 @@ function refineWithAI(cardType) {
     // For now, this serves as a placeholder for the functionality
 }
 
+function ideateWithAI(cardType) {
+    console.log(`🎯 Starting AI ideation for ${cardType}`);
+
+    // Show initial processing message
+    const toast = document.createElement('div');
+    toast.className = 'refine-toast';
+    toast.innerHTML = `
+        <div class="refine-toast-content">
+            <i class="fas fa-magic"></i>
+            <span>Initializing AI creative assistant...</span>
+        </div>
+    `;
+    document.body.appendChild(toast);
+
+    // Remove toast after 2 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 2000);
+
+    // Add AI ideation options to chat after toast
+    setTimeout(() => {
+        if (cardType === 'concept-directions') {
+            showConceptIdeationOptions();
+        }
+    }, 1500);
+}
+
+function showConceptIdeationOptions() {
+    // Add AI assistant message with ideation options
+    const optionsMessage = `
+        <div class="ai-ideation-message">
+            <div class="ai-assistant-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <div class="ai-identity">
+                    <h5>Creative AI Assistant</h5>
+                    <span>Concept Direction Specialist</span>
+                </div>
+            </div>
+            <div class="ai-message-content">
+                <p>I can help enhance your smartwatch video concept directions. What would you like me to focus on?</p>
+
+                <div class="ideation-options">
+                    <button class="ideation-option-btn" onclick="handleIdeationChoice('expand-ideas')">
+                        <div class="option-icon expand">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Expand Ideas</h6>
+                            <p>Generate 3 additional video concept directions (Lifestyle, Social, Professional)</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleIdeationChoice('refine-ideas')">
+                        <div class="option-icon refine">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Refine Ideas</h6>
+                            <p>Enhance existing concepts with more detailed messaging and targeting</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleIdeationChoice('refine-creative-direction')">
+                        <div class="option-icon direction">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Refine Creative Direction</h6>
+                            <p>Optimize visual themes, tone, and strategic positioning for better impact</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Use the existing addMessage method if available, or add to chat directly
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(optionsMessage, 'agent', 'Creative AI Assistant');
+    } else {
+        // Fallback to direct chat insertion
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant-message';
+            messageDiv.innerHTML = `<div class="message-content">${optionsMessage}</div>`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+}
+
+function handleIdeationChoice(choice) {
+    console.log(`🎯 User selected: ${choice}`);
+
+    // Add user message showing their choice
+    const userMessages = {
+        'expand-ideas': 'Expand Ideas - Show me 3 additional video concept directions',
+        'refine-ideas': 'Refine Ideas - Enhance the existing concepts with more detail',
+        'refine-creative-direction': 'Refine Creative Direction - Optimize themes and positioning'
+    };
+
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(userMessages[choice], 'user');
+    }
+
+    // Handle the specific choice
+    setTimeout(() => {
+        switch (choice) {
+            case 'expand-ideas':
+                expandConceptDirections();
+                break;
+            case 'refine-ideas':
+                refineExistingConcepts();
+                break;
+            case 'refine-creative-direction':
+                refineCreativeDirection();
+                break;
+        }
+    }, 500);
+}
+
 function expandConceptDirections() {
     console.log('🎯 Expanding concept directions with new video ideas...');
 
@@ -15190,6 +15316,13 @@ function expandConceptDirections() {
             expandButton.disabled = true;
         }
     }, 1500);
+
+    // Add completion message to chat
+    setTimeout(() => {
+        if (window.app && window.app.addMessage) {
+            window.app.addMessage('🎯 I\'ve successfully added 3 new video concept directions: Lifestyle Integration, Social Achievement Stories, and Professional Wellness. Each concept includes strategic messaging, visual themes, and targeted positioning for your millennial audience.', 'agent', 'Creative AI Assistant');
+        }
+    }, 2000);
 }
 
 function createDirectionCard(direction) {
@@ -15229,6 +15362,64 @@ function getDirectionIcon(type) {
         holiday: 'gift'
     };
     return icons[type] || 'star';
+}
+
+function refineExistingConcepts() {
+    console.log('🎯 Refining existing concepts...');
+
+    // Add AI response
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage('✨ I\'ve enhanced your existing concept directions with more detailed messaging, targeting insights, and strategic depth. Each direction now includes refined value propositions and clearer audience positioning.', 'agent', 'Creative AI Assistant');
+    }
+
+    // Here you could add actual refinement logic
+    // For now, show a success message
+    setTimeout(() => {
+        const toast = document.createElement('div');
+        toast.className = 'refine-toast success';
+        toast.innerHTML = `
+            <div class="refine-toast-content">
+                <i class="fas fa-check"></i>
+                <span>Concepts refined with enhanced messaging and targeting</span>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }, 1000);
+}
+
+function refineCreativeDirection() {
+    console.log('🎯 Refining creative direction...');
+
+    // Add AI response
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage('🎨 I\'ve optimized your creative direction with enhanced visual themes, refined tone guidelines, and strategic positioning improvements. The concepts now have stronger emotional resonance and clearer brand differentiation.', 'agent', 'Creative AI Assistant');
+    }
+
+    // Here you could add actual creative direction refinement logic
+    // For now, show a success message
+    setTimeout(() => {
+        const toast = document.createElement('div');
+        toast.className = 'refine-toast success';
+        toast.innerHTML = `
+            <div class="refine-toast-content">
+                <i class="fas fa-palette"></i>
+                <span>Creative direction optimized for better impact</span>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }, 1000);
 }
 
 // Initialize the app when DOM is loaded
