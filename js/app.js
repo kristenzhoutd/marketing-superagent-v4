@@ -8711,96 +8711,31 @@ class MarketingSuperAgentV4 {
     }
 
     addTaskSpecificSuggestions(task) {
-        // Prevent duplicate suggestions for the same task
-        const existingSuggestions = document.querySelector('.next-steps-suggestions');
-        if (existingSuggestions && existingSuggestions.dataset.task === task) {
+        // Check if this exact task's suggestions already exist
+        const existingSuggestions = document.querySelectorAll('.next-steps-suggestions');
+        const taskAlreadyExists = Array.from(existingSuggestions).some(el => el.dataset.task === task);
+
+        if (taskAlreadyExists) {
+            console.log('✋ Suggestions for this specific task already exist, keeping them in place');
             return;
         }
 
+        // Define specific next steps based on output type
         const taskSuggestions = {
-            'campaign-brief': [
-                'Add specific KPIs and success metrics',
-                'Define budget parameters and constraints',
-                'Include competitor positioning analysis',
-                'Set campaign timeline and milestones'
-            ],
-            'optimize-campaign': [
-                'Review ad creative performance',
-                'Analyze audience segment effectiveness',
-                'Adjust budget allocation by channel',
-                'Test new bidding strategies'
-            ],
-            'campaign-insights': [
-                'Export performance report',
-                'Set up automated monitoring',
-                'Create custom dashboard',
-                'Schedule weekly insights review'
-            ],
-            'setup-journey': [
-                'Define entry and exit criteria',
-                'Set up conversion tracking',
-                'Create journey analytics dashboard',
-                'Test journey with sample audience'
-            ],
-            'generate-creative': [
-                'Create additional creative variations',
-                'Develop mobile-optimized versions',
-                'Generate copy variations',
-                'Design seasonal adaptations'
-            ],
-            'audience-segments': [
-                'Create lookalike audiences',
-                'Set up dynamic segmentation',
-                'Export segments to ad platforms',
-                'Create audience overlap analysis'
-            ],
-            'budget-allocation': [
-                'Set up budget alerts',
-                'Create scenario planning',
-                'Implement auto-bidding rules',
-                'Schedule budget reviews'
-            ],
-            'ab-test': [
-                'Set up additional test variations',
-                'Create test monitoring dashboard',
-                'Plan follow-up experiments',
-                'Document testing methodology'
-            ],
-            'competitor-analysis': [
-                'Set up competitor monitoring',
-                'Create competitive positioning map',
-                'Analyze competitor ad creative',
-                'Track competitor pricing changes'
-            ],
-            'content-calendar': [
-                'Add seasonal content themes',
-                'Set up content approval workflow',
-                'Create content performance tracking',
-                'Plan cross-platform adaptations'
-            ],
-            'create-creative-brief': [
-                { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' },
-                { text: 'Creative Ideation Workshop', task: 'generate-creative' },
-                { text: 'Set up creative approval workflow', task: 'content-calendar' }
-            ],
             'design-campaign-program': [
                 { text: 'Develop creative strategy', task: 'create-creative-brief' },
+                { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' }
+            ],
+            'create-creative-brief': [
+                { text: 'Creative Ideation Workshop', task: 'generate-creative' },
                 { text: 'Create Channel Strategy & Journey design', task: 'pick-channel-mix' }
             ]
         };
 
-        const suggestions = taskSuggestions[task] || [
-            'Refine the strategy further',
-            'Add more specific requirements',
-            'Create implementation timeline',
-            'Set up performance monitoring'
-        ];
-
-        // Handle both string and object suggestions
-        if (task === 'design-campaign-program' || task === 'create-creative-brief') {
+        const suggestions = taskSuggestions[task];
+        if (suggestions) {
+            // Always add new suggestions without removing existing ones - keep all in chat history
             this.addTaskSuggestionButtons(suggestions, task);
-        } else {
-            this.addFollowUpSuggestions(suggestions);
         }
     }
 
@@ -8845,7 +8780,31 @@ class MarketingSuperAgentV4 {
 
     handleTaskSuggestion(task) {
         console.log('🎯 handleTaskSuggestion called with task:', task);
+
+        // Mark the clicked suggestion as completed before proceeding
+        this.markSuggestionAsCompleted(task);
+
         this.handleTaskClick(task);
+    }
+
+    markSuggestionAsCompleted(clickedTask) {
+        // Find the suggestion card that was clicked and mark it as completed
+        const suggestionCards = document.querySelectorAll('.suggestion-card');
+        suggestionCards.forEach(card => {
+            const onclick = card.getAttribute('onclick');
+            if (onclick && onclick.includes(`'${clickedTask}'`)) {
+                // Mark this specific card as completed
+                card.style.opacity = '0.7';
+                card.style.cursor = 'default';
+                card.removeAttribute('onclick');
+
+                // Replace action arrow with check mark
+                const actionElement = card.querySelector('.suggestion-action');
+                if (actionElement) {
+                    actionElement.innerHTML = '<i class="fas fa-check-circle" style="color: var(--accent-green);"></i>';
+                }
+            }
+        });
     }
 
     updateAgentStatusWithThought(agentName, thought, thoughtIndex) {
@@ -15614,7 +15573,7 @@ function addNewAdExamples() {
     // New ad examples to add
     const newAdExamples = [
         {
-            image: 'https://images.unsplash.com/photo-1611068813504-88dc6c04322e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             platform: 'YouTube Shorts',
             cta: 'Track Your Progress',
             title: 'Fitness Journey Documentation',
