@@ -1254,6 +1254,24 @@ class MarketingSuperAgentV4 {
             return;
         }
 
+        // Special handling for tasks that need campaign confirmation
+        // Skip campaign selection for campaign-brief as it's creating a new strategy
+        // Also skip if create-creative-brief comes from campaign strategy flow
+        // Also skip if pick-channel-mix comes from campaign strategy or creative brief flows
+        const skipCampaignSelection = task === 'campaign-brief' ||
+                                     (task === 'create-creative-brief' && this.sourceTask === 'design-campaign-program') ||
+                                     (task === 'pick-channel-mix' && (this.sourceTask === 'design-campaign-program' || this.sourceTask === 'create-creative-brief'));
+
+        if ((task === 'pick-channel-mix' || task === 'create-creative-brief') && !skipCampaignSelection) {
+            this.showCampaignConfirmation(task);
+            return;
+        }
+
+        // Clear source task after checking
+        if (this.sourceTask) {
+            this.sourceTask = null;
+        }
+
         // Special handling for campaign strategy flow
 
         const taskPrompts = {
@@ -1350,6 +1368,103 @@ class MarketingSuperAgentV4 {
         });
 
         const prompt = taskPrompts[task] || `Help me ${task.replace(/-/g, ' ')}`;
+        this.handleMainInput(prompt);
+    }
+
+    showCampaignConfirmation(task) {
+        console.log('Showing campaign confirmation for task:', task);
+
+        // Show working interface
+        this.showWorkingInterface();
+
+        // Add initial message asking for campaign confirmation
+        this.addMessage('I can help you with this task. First, let me confirm - which existing campaign would you like me to work on?', 'agent');
+
+        // Add campaign selection options
+        setTimeout(() => {
+            const campaignOptions = `
+                <div class="campaign-confirmation-options">
+                    <h4>Select Campaign to Work On</h4>
+                    <div class="campaign-options-grid">
+                        <button class="campaign-option-btn active" onclick="handleCampaignSelection('smartwatch', '${task}')">
+                            <div class="campaign-details">
+                                <h5>Holiday Smartwatch Campaign</h5>
+                                <p>Premium wearables for tech-savvy millennials</p>
+                                <div class="campaign-meta">
+                                    <span class="campaign-status active">Active</span>
+                                    <span class="campaign-timeframe">Black Friday - New Year</span>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button class="campaign-option-btn" onclick="handleCampaignSelection('new', '${task}')">
+                            <div class="campaign-details">
+                                <h5>Create New Campaign</h5>
+                                <p>Start fresh with a new campaign strategy</p>
+                                <div class="campaign-meta">
+                                    <span class="campaign-status new">New</span>
+                                    <span class="campaign-timeframe">Define later</span>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            this.addMessage(campaignOptions, 'agent');
+        }, 1000);
+    }
+
+    handleCampaignConfirmation(campaignType, task) {
+        if (campaignType === 'smartwatch') {
+            // Confirm selection and proceed with smartwatch campaign
+            this.addMessage('Working on Holiday Smartwatch Campaign', 'user');
+
+            setTimeout(() => {
+                this.addMessage('Perfect! I\'ll work on the Holiday Smartwatch Campaign. Let me generate the output for you.', 'agent');
+
+                // Proceed with the original task
+                setTimeout(() => {
+                    this.proceedWithConfirmedTask(task, 'smartwatch');
+                }, 1500);
+            }, 500);
+        } else {
+            // Handle new campaign creation
+            this.addMessage('Create New Campaign', 'user');
+            this.addMessage('I\'d be happy to help you create a new campaign! For now, let me show you an example using our Holiday Smartwatch Campaign as a template.', 'agent');
+
+            setTimeout(() => {
+                this.proceedWithConfirmedTask(task, 'smartwatch');
+            }, 2000);
+        }
+    }
+
+    proceedWithConfirmedTask(task, campaignType) {
+        // Set up task context exactly like the normal flow
+        const taskToAgents = {
+            'pick-channel-mix': ['Campaign Architect Agent', 'Channel Strategy Agent', 'Persona Research Agent'],
+            'create-creative-brief': ['Creative Brief Agent', 'Creative Ideation Agent', 'Campaign Architect Agent']
+        };
+
+        const taskPrompts = {
+            'pick-channel-mix': 'Recommend the optimal channel mix and budget allocation for campaign success',
+            'create-creative-brief': 'Create a detailed creative brief with messaging, visual direction, and brand guidelines'
+        };
+
+        // Set the context exactly as the normal handleTaskClick flow would
+        this.currentTaskAgents = taskToAgents[task] || [];
+        this.currentTask = task;
+
+        console.log('🎯 Proceeding with confirmed task using normal flow:', {
+            task: this.currentTask,
+            campaign: campaignType,
+            agents: this.currentTaskAgents
+        });
+
+        // Use the exact same flow as handleTaskClick - call handleMainInput with the task prompt
+        const prompt = taskPrompts[task] || `Help me ${task.replace(/-/g, ' ')}`;
+
+        // This will trigger the normal agent activation, thought process, and output generation
         this.handleMainInput(prompt);
     }
 
@@ -8761,7 +8876,7 @@ class MarketingSuperAgentV4 {
                         const config = taskConfig[suggestion.task] || { icon: 'fa-arrow-right', desc: 'Continue with next steps in your marketing workflow' };
 
                         return `
-                        <div class="suggestion-card" onclick="app.handleTaskSuggestion('${suggestion.task}')">
+                        <div class="suggestion-card" onclick="app.handleTaskSuggestion('${suggestion.task}', '${task}')">
                             <div class="suggestion-icon">
                                 <i class="fas ${config.icon}"></i>
                             </div>
@@ -8782,11 +8897,16 @@ class MarketingSuperAgentV4 {
         this.addMessage(suggestionsHTML, 'agent', 'Campaign Architect Agent');
     }
 
-    handleTaskSuggestion(task) {
-        console.log('🎯 handleTaskSuggestion called with task:', task);
+    handleTaskSuggestion(task, sourceTask = null) {
+        console.log('🎯 handleTaskSuggestion called with task:', task, 'source:', sourceTask);
 
         // Mark the clicked suggestion as completed before proceeding
         this.markSuggestionAsCompleted(task);
+
+        // Store the source task to skip campaign selection if needed
+        if (sourceTask) {
+            this.sourceTask = sourceTask;
+        }
 
         this.handleTaskClick(task);
     }
@@ -16334,6 +16454,14 @@ function rejectMessagingEnhancement(cardType) {
     // Add notification to chat
     if (window.app && window.app.addMessage) {
         window.app.addMessage('Original messaging maintained. No changes were applied to your campaign strategy.', 'agent', 'Messaging AI Assistant');
+    }
+}
+
+// Global function for campaign selection
+function handleCampaignSelection(campaignType, task) {
+    console.log(`Campaign selection: ${campaignType} for task: ${task}`);
+    if (window.app && window.app.handleCampaignConfirmation) {
+        window.app.handleCampaignConfirmation(campaignType, task);
     }
 }
 
