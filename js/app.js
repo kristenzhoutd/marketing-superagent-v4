@@ -15019,53 +15019,40 @@ function testCreativeBrief() {
 function refineWithAI(cardType) {
     console.log(`Refining ${cardType} with AI`);
 
-    const refinements = {
-        strategy: 'Refining strategic direction with enhanced market insights and competitive positioning...',
-        messaging: 'Optimizing messaging pillars with advanced sentiment analysis and audience psychology...',
-        audience: 'Enhancing audience segmentation with predictive analytics and behavioral modeling...',
-        channels: 'Optimizing channel strategy with real-time performance data and attribution modeling...',
-        competitive: 'Deepening competitive analysis with market intelligence and positioning opportunities...',
-        'creative-objective': 'Refining creative objectives with strategic alignment and outcome optimization...',
-        'brand-identity': 'Enhancing brand identity framework with visual consistency and emotional impact analysis...',
-        'messaging-framework': 'Optimizing messaging framework with tone calibration and audience resonance testing...',
-        'creative-concepts': 'Expanding creative concepts with innovative approaches and format optimization...',
-        'execution-guide': 'Refining execution guidelines with production best practices and workflow optimization...',
-        'ideation-tools': 'Generating additional brainstorming methods and creative thinking techniques...',
-        'concept-directions': 'Expanding creative directions with new approaches and angles...',
-        'inspiration-sources': 'Finding more inspirational references and creative examples...',
-        'collaboration-space': 'Enhancing team collaboration tools and facilitation methods...',
-        'concept-development': 'Developing concepts further with detailed frameworks and canvases...'
-    };
-
-    const message = refinements[cardType] || 'Refining analysis with AI-powered insights...';
-
-    // Show a toast notification or progress indicator
+    // Show initial processing message
     const toast = document.createElement('div');
     toast.className = 'refine-toast';
     toast.innerHTML = `
         <div class="refine-toast-content">
             <i class="fas fa-magic"></i>
-            <span>${message}</span>
+            <span>Initializing AI strategy assistant...</span>
         </div>
     `;
     document.body.appendChild(toast);
 
-    // Remove toast after 3 seconds
+    // Remove toast after 2 seconds
     setTimeout(() => {
         if (toast.parentNode) {
             toast.parentNode.removeChild(toast);
         }
-    }, 3000);
+    }, 2000);
 
-    // Add specific functionality for concept-directions expansion
-    if (cardType === 'concept-directions') {
-        setTimeout(() => {
+    // Show refinement options for campaign strategy cards
+    setTimeout(() => {
+        if (cardType === 'strategy') {
+            showStrategyRefinementOptions();
+        } else if (cardType === 'messaging') {
+            showMessagingCardOptions();
+        } else if (cardType === 'audience') {
+            showAudienceRefinementOptions();
+        } else if (cardType === 'channels') {
+            showChannelsRefinementOptions();
+        } else if (cardType === 'competitive') {
+            showCompetitiveRefinementOptions();
+        } else if (cardType === 'concept-directions') {
             expandConceptDirections();
-        }, 1000);
-    }
-
-    // Here you could add actual AI refinement logic for other types
-    // For now, this serves as a placeholder for the functionality
+        }
+    }, 1500);
 }
 
 function ideateWithAI(cardType) {
@@ -15681,6 +15668,673 @@ function createAdExampleCard(example) {
     `;
 
     return card;
+}
+
+// Campaign Strategy Refinement Options Functions
+function showStrategyRefinementOptions() {
+    const optionsMessage = `
+        <div class="ai-ideation-message">
+            <div class="ai-assistant-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <div class="ai-identity">
+                    <h5>Strategy AI Assistant</h5>
+                    <span>Strategic Direction Specialist</span>
+                </div>
+            </div>
+            <div class="ai-message-content">
+                <p>I can help enhance your strategic direction for the smartwatch campaign. What would you like me to focus on?</p>
+
+                <div class="ideation-options">
+                    <button class="ideation-option-btn" onclick="handleStrategyChoice('market-analysis')">
+                        <div class="option-icon expand">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Deepen Market Analysis</h6>
+                            <p>Add competitive landscape insights and market opportunity sizing for smartwatch category</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleStrategyChoice('positioning-strategy')">
+                        <div class="option-icon refine">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Refine Positioning Strategy</h6>
+                            <p>Optimize brand positioning against Apple Watch and other premium wearables</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleStrategyChoice('success-metrics')">
+                        <div class="option-icon direction">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Enhance Success Metrics</h6>
+                            <p>Define advanced KPIs and attribution models for holiday campaign performance</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(optionsMessage, 'agent', 'Strategy AI Assistant');
+    }
+}
+
+function showMessagingRefinementOptions() {
+    const optionsMessage = `
+        <div class="ai-ideation-message">
+            <div class="ai-assistant-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <div class="ai-identity">
+                    <h5>Messaging AI Assistant</h5>
+                    <span>Brand Voice & Messaging Specialist</span>
+                </div>
+            </div>
+            <div class="ai-message-content">
+                <p>I can help optimize your messaging pillars for the smartwatch campaign. What aspect would you like me to enhance?</p>
+
+                <div class="ideation-options">
+                    <button class="ideation-option-btn" onclick="handleMessagingChoice('emotional-hooks')">
+                        <div class="option-icon expand">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Strengthen Emotional Hooks</h6>
+                            <p>Develop more compelling emotional triggers around health, achievement, and lifestyle</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleMessagingChoice('value-propositions')">
+                        <div class="option-icon refine">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Refine Value Propositions</h6>
+                            <p>Sharpen unique selling points and differentiation from competitor messaging</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleMessagingChoice('tone-variations')">
+                        <div class="option-icon direction">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Create Tone Variations</h6>
+                            <p>Adapt messaging tone for different platforms and audience segments</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(optionsMessage, 'agent', 'Messaging AI Assistant');
+    }
+}
+
+function showAudienceRefinementOptions() {
+    const optionsMessage = `
+        <div class="ai-ideation-message">
+            <div class="ai-assistant-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="ai-identity">
+                    <h5>Audience AI Assistant</h5>
+                    <span>Consumer Insights & Targeting Specialist</span>
+                </div>
+            </div>
+            <div class="ai-message-content">
+                <p>I can help refine your audience targeting for the smartwatch campaign. What would you like me to analyze?</p>
+
+                <div class="ideation-options">
+                    <button class="ideation-option-btn" onclick="handleAudienceChoice('persona-deep-dive')">
+                        <div class="option-icon expand">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Persona Deep Dive</h6>
+                            <p>Create detailed user personas with behavioral patterns and purchase motivations</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleAudienceChoice('segmentation-strategy')">
+                        <div class="option-icon refine">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Advanced Segmentation</h6>
+                            <p>Develop micro-segments based on health goals, tech adoption, and lifestyle factors</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleAudienceChoice('lookalike-expansion')">
+                        <div class="option-icon direction">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Lookalike Expansion</h6>
+                            <p>Identify additional audience segments similar to core millennials for scale</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(optionsMessage, 'agent', 'Audience AI Assistant');
+    }
+}
+
+function showChannelsRefinementOptions() {
+    const optionsMessage = `
+        <div class="ai-ideation-message">
+            <div class="ai-assistant-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <div class="ai-identity">
+                    <h5>Channel AI Assistant</h5>
+                    <span>Media Strategy & Optimization Specialist</span>
+                </div>
+            </div>
+            <div class="ai-message-content">
+                <p>I can help optimize your channel strategy for the smartwatch campaign. What area would you like me to enhance?</p>
+
+                <div class="ideation-options">
+                    <button class="ideation-option-btn" onclick="handleChannelsChoice('budget-optimization')">
+                        <div class="option-icon expand">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Budget Optimization</h6>
+                            <p>Refine budget allocation across Google Ads and Meta based on performance data</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleChannelsChoice('channel-expansion')">
+                        <div class="option-icon refine">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Explore Additional Channels</h6>
+                            <p>Evaluate TikTok, YouTube, and Amazon Ads for millennial smartwatch shoppers</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleChannelsChoice('timing-strategy')">
+                        <div class="option-icon direction">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Optimize Timing Strategy</h6>
+                            <p>Fine-tune ad scheduling for peak shopping moments during holiday season</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(optionsMessage, 'agent', 'Channel AI Assistant');
+    }
+}
+
+function showCompetitiveRefinementOptions() {
+    const optionsMessage = `
+        <div class="ai-ideation-message">
+            <div class="ai-assistant-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-chess"></i>
+                </div>
+                <div class="ai-identity">
+                    <h5>Competitive AI Assistant</h5>
+                    <span>Market Intelligence & Positioning Specialist</span>
+                </div>
+            </div>
+            <div class="ai-message-content">
+                <p>I can help deepen your competitive analysis for the smartwatch campaign. What would you like me to investigate?</p>
+
+                <div class="ideation-options">
+                    <button class="ideation-option-btn" onclick="handleCompetitiveChoice('campaign-analysis')">
+                        <div class="option-icon expand">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Campaign Analysis</h6>
+                            <p>Analyze current holiday campaigns from Apple, Samsung, and Fitbit for insights</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleCompetitiveChoice('pricing-strategy')">
+                        <div class="option-icon refine">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Pricing & Promotion Strategy</h6>
+                            <p>Compare holiday pricing strategies and identify optimal promotion opportunities</p>
+                        </div>
+                    </button>
+
+                    <button class="ideation-option-btn" onclick="handleCompetitiveChoice('whitespace-opportunities')">
+                        <div class="option-icon direction">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Find Whitespace Opportunities</h6>
+                            <p>Identify underserved market segments and messaging gaps to exploit</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(optionsMessage, 'agent', 'Competitive AI Assistant');
+    }
+}
+
+function showMessagingCardOptions() {
+    // Find the messaging card
+    const messagingCard = document.querySelector('.agent-analysis-card.messaging');
+    if (!messagingCard) {
+        console.error('Messaging card not found');
+        return;
+    }
+
+    const cardContent = messagingCard.querySelector('.messaging-content, .strategy-content');
+    if (cardContent) {
+        cardContent.innerHTML = `
+            <div class="refinement-options-overlay">
+                <div class="options-header">
+                    <i class="fas fa-comment-dots" style="color: var(--accent-primary);"></i>
+                    <h6>Choose Messaging Enhancement</h6>
+                    <p>Select how you'd like to enhance your messaging pillars</p>
+                </div>
+
+                <div class="refinement-options-grid">
+                    <button class="refinement-option" onclick="handleMessagingChoice('emotional-hooks')">
+                        <div class="option-icon">
+                            <i class="fas fa-heart" style="color: #ef4444;"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Strengthen Emotional Hooks</h6>
+                            <p>Develop more compelling emotional triggers around health, achievement, and lifestyle</p>
+                        </div>
+                    </button>
+
+                    <button class="refinement-option" onclick="handleMessagingChoice('value-propositions')">
+                        <div class="option-icon">
+                            <i class="fas fa-gem" style="color: #8b5cf6;"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Refine Value Propositions</h6>
+                            <p>Sharpen unique selling points and differentiation from competitor messaging</p>
+                        </div>
+                    </button>
+
+                    <button class="refinement-option" onclick="handleMessagingChoice('tone-variations')">
+                        <div class="option-icon">
+                            <i class="fas fa-volume-up" style="color: #f59e0b;"></i>
+                        </div>
+                        <div class="option-content">
+                            <h6>Create Tone Variations</h6>
+                            <p>Adapt messaging tone for different platforms and audience segments</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Handler functions for refinement choices
+function handleMessagingChoice(choice) {
+    console.log(`🎯 Handling messaging choice: ${choice}`);
+
+    // Find the messaging card
+    const messagingCard = document.querySelector('.agent-analysis-card.messaging');
+    if (!messagingCard) {
+        console.error('Messaging card not found');
+        return;
+    }
+
+    // Show processing state
+    showCardProcessing(messagingCard, 'Enhancing messaging pillars...');
+
+    // Generate updated content based on choice
+    setTimeout(() => {
+        if (choice === 'emotional-hooks') {
+            updateMessagingCardWithEmotionalHooks(messagingCard);
+        } else if (choice === 'value-propositions') {
+            updateMessagingCardWithValueProps(messagingCard);
+        } else if (choice === 'tone-variations') {
+            updateMessagingCardWithToneVariations(messagingCard);
+        }
+    }, 2000);
+}
+
+function showCardProcessing(card, message) {
+    const cardContent = card.querySelector('.messaging-content, .strategy-content');
+    if (cardContent) {
+        cardContent.innerHTML = `
+            <div class="processing-state">
+                <div class="processing-animation">
+                    <i class="fas fa-magic spinning"></i>
+                </div>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+}
+
+function updateMessagingCardWithEmotionalHooks(card) {
+    const cardContent = card.querySelector('.messaging-content, .strategy-content');
+    const originalContent = cardContent.innerHTML;
+
+    cardContent.innerHTML = `
+        <div class="ai-enhancement-preview">
+            <div class="enhancement-header">
+                <i class="fas fa-heart" style="color: #ef4444;"></i>
+                <span>Enhanced with Emotional Hooks</span>
+            </div>
+
+            <h5>Primary Messaging Pillars - Emotionally Enhanced</h5>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Health Intelligence & Personal Empowerment</strong>
+                    <span class="enhancement-badge">Enhanced</span>
+                </div>
+                <div class="pillar-content">
+                    <p><strong>Core Message:</strong> "Your healthiest year starts now - unlock what your body is telling you"</p>
+                    <p><strong>Emotional Trigger:</strong> New Year psychology + curiosity about self-knowledge</p>
+                    <div class="message-variations">
+                        <div class="variation"><strong>Short:</strong> "Never miss a beat of your best life"</div>
+                        <div class="variation"><strong>Action:</strong> "See what your body is telling you"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Achievement & Progress Tracking</strong>
+                    <span class="enhancement-badge">Enhanced</span>
+                </div>
+                <div class="pillar-content">
+                    <p><strong>Core Message:</strong> "Turn every step into progress with your personal coach, always with you"</p>
+                    <p><strong>Emotional Trigger:</strong> Achievement psychology + supportive companion positioning</p>
+                    <div class="message-variations">
+                        <div class="variation"><strong>Short:</strong> "Unlock your potential, one day at a time"</div>
+                        <div class="variation"><strong>Action:</strong> "Your personal coach, always with you"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Lifestyle Integration & Connection</strong>
+                    <span class="enhancement-badge">Enhanced</span>
+                </div>
+                <div class="pillar-content">
+                    <p><strong>Core Message:</strong> "Designed for the life you're building - stay connected to what matters most"</p>
+                    <p><strong>Emotional Trigger:</strong> Intentional living + meaningful relationships balance</p>
+                    <div class="message-variations">
+                        <div class="variation"><strong>Short:</strong> "The smartwatch that gets smarter about you"</div>
+                        <div class="variation"><strong>Action:</strong> "Stay connected to what matters most"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="enhancement-actions">
+                <button class="btn-primary accept-enhancement" onclick="acceptMessagingEnhancement('${card.classList[1]}', 'emotional-hooks')">
+                    <i class="fas fa-check"></i> Accept Enhanced Messaging
+                </button>
+                <button class="btn-secondary reject-enhancement" onclick="rejectMessagingEnhancement('${card.classList[1]}')">
+                    <i class="fas fa-times"></i> Keep Original
+                </button>
+            </div>
+        </div>
+    `;
+
+    // Store original content for potential restoration
+    card.dataset.originalContent = originalContent;
+}
+
+function updateMessagingCardWithValueProps(card) {
+    const cardContent = card.querySelector('.messaging-content, .strategy-content');
+    const originalContent = cardContent.innerHTML;
+
+    cardContent.innerHTML = `
+        <div class="ai-enhancement-preview">
+            <div class="enhancement-header">
+                <i class="fas fa-gem" style="color: #8b5cf6;"></i>
+                <span>Enhanced with Refined Value Propositions</span>
+            </div>
+
+            <h5>Primary Messaging Pillars - Value-Focused</h5>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>The Balanced Choice</strong>
+                    <span class="enhancement-badge">Enhanced</span>
+                </div>
+                <div class="pillar-content">
+                    <p><strong>Core Message:</strong> "Premium smartwatch features without the premium ecosystem requirements or daily charging hassle"</p>
+                    <p><strong>Value Differentiation:</strong> Better value than Apple Watch, universal compatibility vs Samsung</p>
+                    <div class="competitive-advantages">
+                        <div class="advantage">✓ 7-day battery vs. daily charging</div>
+                        <div class="advantage">✓ Works with all phones seamlessly</div>
+                        <div class="advantage">✓ Premium features at accessible pricing</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Health Intelligence That Adapts</strong>
+                    <span class="enhancement-badge">Enhanced</span>
+                </div>
+                <div class="pillar-content">
+                    <p><strong>Core Message:</strong> "Advanced biometric tracking that learns your patterns and provides personalized insights"</p>
+                    <p><strong>Value Differentiation:</strong> Health focus vs Apple, smart features beyond fitness vs Fitbit</p>
+                    <div class="competitive-advantages">
+                        <div class="advantage">✓ Advanced sleep & stress tracking</div>
+                        <div class="advantage">✓ Clinical-grade accuracy</div>
+                        <div class="advantage">✓ Personalized health insights</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Seamless Life Integration</strong>
+                    <span class="enhancement-badge">Enhanced</span>
+                </div>
+                <div class="pillar-content">
+                    <p><strong>Core Message:</strong> "Fits naturally into your routine - from workout to boardroom to weekend adventures"</p>
+                    <p><strong>Value Differentiation:</strong> Professional & lifestyle versatility vs fitness-only competitors</p>
+                    <div class="competitive-advantages">
+                        <div class="advantage">✓ Style options for every occasion</div>
+                        <div class="advantage">✓ Full smartwatch capabilities</div>
+                        <div class="advantage">✓ Seamless ecosystem integration</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="enhancement-actions">
+                <button class="btn-primary accept-enhancement" onclick="acceptMessagingEnhancement('${card.classList[1]}', 'value-propositions')">
+                    <i class="fas fa-check"></i> Accept Enhanced Messaging
+                </button>
+                <button class="btn-secondary reject-enhancement" onclick="rejectMessagingEnhancement('${card.classList[1]}')">
+                    <i class="fas fa-times"></i> Keep Original
+                </button>
+            </div>
+        </div>
+    `;
+
+    card.dataset.originalContent = originalContent;
+}
+
+function updateMessagingCardWithToneVariations(card) {
+    const cardContent = card.querySelector('.messaging-content, .strategy-content');
+    const originalContent = cardContent.innerHTML;
+
+    cardContent.innerHTML = `
+        <div class="ai-enhancement-preview">
+            <div class="enhancement-header">
+                <i class="fas fa-volume-up" style="color: #f59e0b;"></i>
+                <span>Enhanced with Platform-Specific Tone Variations</span>
+            </div>
+
+            <h5>Primary Messaging Pillars - Platform Optimized</h5>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Health Intelligence & Personal Empowerment</strong>
+                    <span class="enhancement-badge">Multi-Platform</span>
+                </div>
+                <div class="pillar-content">
+                    <div class="platform-variations">
+                        <div class="platform-variation">
+                            <strong>Google Ads:</strong> "Smartwatch with Clinical-Grade Health Tracking | 7-Day Battery"
+                            <span class="tone-note">Direct, benefit-focused, search-optimized</span>
+                        </div>
+                        <div class="platform-variation">
+                            <strong>Meta/Facebook:</strong> "Ready to make 2024 your healthiest year yet? 💪"
+                            <span class="tone-note">Encouraging, community-focused, achievable goals</span>
+                        </div>
+                        <div class="platform-variation">
+                            <strong>Instagram:</strong> "Your wrist, your world, your way ✨"
+                            <span class="tone-note">Lifestyle-oriented, aesthetic, personal empowerment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Achievement & Progress Tracking</strong>
+                    <span class="enhancement-badge">Multi-Platform</span>
+                </div>
+                <div class="pillar-content">
+                    <div class="platform-variations">
+                        <div class="platform-variation">
+                            <strong>Google Ads:</strong> "Advanced Progress Tracking | Personal Coach on Your Wrist"
+                            <span class="tone-note">Professional confidence, clear value proposition</span>
+                        </div>
+                        <div class="platform-variation">
+                            <strong>Meta/Facebook:</strong> "Turn every step into progress with your personal coach"
+                            <span class="tone-note">Motivational, achievement-focused</span>
+                        </div>
+                        <div class="platform-variation">
+                            <strong>Mobile/App:</strong> "Upgrade your wrist game 🎯"
+                            <span class="tone-note">Casual, trendy, immediate appeal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messaging-pillar enhanced">
+                <div class="pillar-header">
+                    <strong>Lifestyle Integration & Style</strong>
+                    <span class="enhancement-badge">Multi-Platform</span>
+                </div>
+                <div class="pillar-content">
+                    <div class="platform-variations">
+                        <div class="platform-variation">
+                            <strong>Google Ads:</strong> "Professional Style Meets Smart Technology | All-Day Battery"
+                            <span class="tone-note">Feature-focused, professional positioning</span>
+                        </div>
+                        <div class="platform-variation">
+                            <strong>Meta/Facebook:</strong> "Designed for the life you're building"
+                            <span class="tone-note">Aspirational, intentional living focus</span>
+                        </div>
+                        <div class="platform-variation">
+                            <strong>Video/Display:</strong> "See what you've been missing"
+                            <span class="tone-note">Curiosity-driven, discovery-focused</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="enhancement-actions">
+                <button class="btn-primary accept-enhancement" onclick="acceptMessagingEnhancement('${card.classList[1]}', 'tone-variations')">
+                    <i class="fas fa-check"></i> Accept Enhanced Messaging
+                </button>
+                <button class="btn-secondary reject-enhancement" onclick="rejectMessagingEnhancement('${card.classList[1]}')">
+                    <i class="fas fa-times"></i> Keep Original
+                </button>
+            </div>
+        </div>
+    `;
+
+    card.dataset.originalContent = originalContent;
+}
+
+// Accept/Reject Enhancement Handlers
+function acceptMessagingEnhancement(cardType, enhancementType) {
+    console.log(`✅ Accepting ${enhancementType} enhancement for ${cardType}`);
+
+    // Show success state
+    const card = document.querySelector(`.agent-analysis-card.${cardType}`);
+    if (card) {
+        const cardContent = card.querySelector('.messaging-content, .strategy-content');
+        cardContent.innerHTML = `
+            <div class="enhancement-accepted">
+                <div class="success-header">
+                    <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                    <span>Enhancement Applied Successfully</span>
+                </div>
+                <p>Your messaging pillars have been enhanced with ${enhancementType.replace('-', ' ')}. The new messaging is now active in your campaign strategy.</p>
+                <div class="enhancement-summary">
+                    <strong>Enhancement Type:</strong> ${enhancementType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                </div>
+            </div>
+        `;
+
+        // Update the card header to show it's enhanced
+        const cardHeader = card.querySelector('.agent-card-header h4');
+        if (cardHeader && !cardHeader.textContent.includes('Enhanced')) {
+            cardHeader.innerHTML = `${cardHeader.textContent} <span class="enhanced-indicator">Enhanced</span>`;
+        }
+
+        // Remove original content data
+        delete card.dataset.originalContent;
+    }
+
+    // Add notification to chat
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage(`✅ Messaging enhancement applied! Your ${enhancementType.replace('-', ' ')} updates are now active in the campaign strategy.`, 'agent', 'Messaging AI Assistant');
+    }
+}
+
+function rejectMessagingEnhancement(cardType) {
+    console.log(`❌ Rejecting enhancement for ${cardType}`);
+
+    const card = document.querySelector(`.agent-analysis-card.${cardType}`);
+    if (card && card.dataset.originalContent) {
+        const cardContent = card.querySelector('.messaging-content, .strategy-content');
+        cardContent.innerHTML = card.dataset.originalContent;
+        delete card.dataset.originalContent;
+    }
+
+    // Add notification to chat
+    if (window.app && window.app.addMessage) {
+        window.app.addMessage('Original messaging maintained. No changes were applied to your campaign strategy.', 'agent', 'Messaging AI Assistant');
+    }
 }
 
 // Initialize the app when DOM is loaded
